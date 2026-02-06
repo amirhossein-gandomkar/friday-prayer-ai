@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ابزار تولید خلاصه خطبه‌های نماز جمعه</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Vazirmatn', sans-serif; }
+        .loader {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #3498db;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <div class="container mx-auto p-4 md:p-8">
+        <header class="text-center mb-8">
+            <h1 class="text-3xl md:text-4xl font-bold text-gray-900">ابزار هوشمند خلاصه‌سازی خطبه‌های نماز جمعه</h1>
+            <p class="text-gray-600 mt-2">نسخه بدون محدودیت IP (سرور واسطه)</p>
+        </header>
+
+        <main class="bg-white p-6 rounded-2xl shadow-lg border border-gray-200">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <div>
+                    <label for="khutbah1" class="block mb-2 font-bold text-gray-700">متن خطبه اول (مذهبی)</label>
+                    <textarea id="khutbah1" rows="10" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 transition-shadow" placeholder="متن کامل خطبه اول..."></textarea>
+                </div>
+                <div>
+                    <label for="khutbah2" class="block mb-2 font-bold text-gray-700">متن خطبه دوم (سیاسی)</label>
+                    <textarea id="khutbah2" rows="10" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 transition-shadow" placeholder="متن کامل خطبه دوم..."></textarea>
+                </div>
+            </div>
+
+            <div class="text-center mb-8">
+                <button id="generateBtn" class="bg-blue-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-blue-700 transition-all transform hover:scale-105 shadow-md flex items-center justify-center mx-auto">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                    تولید خلاصه
+                </button>
+            </div>
+            
+            <div id="loading" class="hidden flex-col items-center justify-center my-6">
+                <div class="loader"></div>
+                <p class="mt-4 text-gray-600">در حال ارتباط با سرور و پردازش...</p>
+            </div>
+
+            <div id="resultContainer" class="hidden">
+                <div class="flex justify-between items-center mb-4 border-b pb-2">
+                    <h2 class="text-2xl font-bold text-gray-800">خروجی نهایی</h2>
+                    <button id="copyBtn" class="bg-gray-200 text-gray-700 font-bold py-2 px-4 rounded-lg hover:bg-gray-300 transition-colors">کپی متن</button>
+                </div>
+                <div id="output" class="bg-gray-50 p-6 rounded-lg border whitespace-pre-wrap text-base leading-relaxed"></div>
+                <textarea id="copyHelper" style="opacity: 0; position: absolute; z-index: -1;"></textarea>
+            </div>
+
+             <div id="error" class="hidden bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg relative" role="alert">
+                <strong class="font-bold">خطا!</strong>
+                <span class="block sm:inline" id="errorMessage"></span>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const generateBtn = document.getElementById('generateBtn');
+        const khutbah1Input = document.getElementById('khutbah1');
+        const khutbah2Input = document.getElementById('khutbah2');
+        const loadingDiv = document.getElementById('loading');
+        const resultContainer = document.getElementById('resultContainer');
+        const outputDiv = document.getElementById('output');
+        const copyBtn = document.getElementById('copyBtn');
+        const copyHelper = document.getElementById('copyHelper');
+        const errorDiv = document.getElementById('error');
+        const errorMessageSpan = document.getElementById('errorMessage');
+
+        generateBtn.addEventListener('click', handleGeneration);
+        copyBtn.addEventListener('click', copyOutputToClipboard);
+
+        async function handleGeneration() {
+            resultContainer.classList.add('hidden');
+            errorDiv.classList.add('hidden');
+            loadingDiv.classList.remove('hidden'); 
+            loadingDiv.classList.add('flex');
+            generateBtn.disabled = true;
+
+            const khutbah1Text = khutbah1Input.value.trim();
+            const khutbah2Text = khutbah2Input.value.trim();
+
+            if (!khutbah1Text || !khutbah2Text) {
+                showError("لطفاً متن هر دو خطبه را وارد کنید.");
+                loadingDiv.classList.remove('flex');
+                loadingDiv.classList.add('hidden');
+                generateBtn.disabled = false;
+                return;
+            }
+
+            const prompt = `
+                شما یک دستیار متخصص در خلاصه‌سازی خطبه‌های نماز جمعه هستید.
+                **متن خطبه اول:** ${khutbah1Text}
+                **متن خطبه دوم:** ${khutbah2Text}
+                **دستورالعمل‌ها:**
+                1. impactfulTitle: تیتر جذاب کلی.
+                2. khutbah1.title: تیتر کوتاه خطبه اول.
+                3. khutbah1.summary: خلاصه خطبه اول (مذهبی/اخلاقی) با آرایه ای از بخش ها (heading, explanation).
+                4. khutbah2.title: تیتر کوتاه خطبه دوم.
+                5. khutbah2.summary: خلاصه خطبه دوم (سیاسی/اجتماعی) با آرایه ای از بخش ها (heading, explanation).
+                6. overallSummary: تیتر و متن خلاصه کلی.
+                خروجی فقط JSON معتبر باشد.
+            `;
+
+            const schema = {
+                type: "OBJECT",
+                properties: {
+                    "impactfulTitle": { "type": "STRING" },
+                    "khutbah1": {
+                        "type": "OBJECT",
+                        "properties": {
+                            "title": { "type": "STRING" },
+                            "summary": { "type": "ARRAY", "items": { "type": "OBJECT", "properties": { "heading": { "type": "STRING" }, "explanation": { "type": "STRING" } } } }
+                        }
+                    },
+                    "khutbah2": {
+                        "type": "OBJECT",
+                        "properties": {
+                            "title": { "type": "STRING" },
+                            "summary": { "type": "ARRAY", "items": { "type": "OBJECT", "properties": { "heading": { "type": "STRING" }, "explanation": { "type": "STRING" } } } }
+                        }
+                    },
+                    "overallSummary": {
+                        "type": "OBJECT",
+                        "properties": { "title": { "type": "STRING" }, "text": { "type": "STRING" } }
+                    }
+                }
+            };
+            
+            try {
+                // ساخت Payload برای ارسال به سرور خودمان
+                const payload = {
+                    contents: [{ role: "user", parts: [{ text: prompt }] }],
+                    generationConfig: {
+                        responseMimeType: "application/json",
+                        responseSchema: schema,
+                    }
+                };
+
+                // --- تغییر مهم: ارسال به مسیر داخلی /api/proxy ---
+                // اگر فایل را لوکال باز کنید، باید آدرس کامل سرور ورسل را بدهید.
+                // اما وقتی روی ورسل آپلود شود، همین آدرس نسبی کافی است.
+                // برای اطمینان، کد زیر سعی می‌کند آدرس را تشخیص دهد.
+                
+                let endpoint = '/api/proxy';
+                
+                // اگر فایل را مستقیم با درایو C باز کردید، باید آدرس کامل سایت ورسل را اینجا دستی بنویسید
+                // فعلا فرض میکنیم روی سایت اجرا میشود.
+                
+                const response = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    const errorBody = await response.json();
+                    throw new Error(errorBody.error || response.statusText);
+                }
+                
+                const result = await response.json();
+
+                if (result.candidates?.[0]?.content?.parts?.[0]?.text) {
+                    const data = JSON.parse(result.candidates[0].content.parts[0].text);
+                    displayResult(data);
+                } else {
+                      throw new Error("پاسخ نامعتبر از هوش مصنوعی");
+                }
+
+            } catch (err) {
+                console.error(err);
+                showError(`خطا: ${err.message}. (اگر فایل را از روی کامپیوتر اجرا میکنید، مطمئن شوید پروژه روی ورسل دیپلوی شده باشد)`);
+            } finally {
+                loadingDiv.classList.remove('flex');
+                loadingDiv.classList.add('hidden');
+                generateBtn.disabled = false;
+            }
+        }
+
+        function displayResult(data) {
+            const intro = "به گزارش معاونت ارتباطات و رسانه دفتر امام جمعه دهستان میانکاله (زاغمرز)، حجت الاسلام والمسلمین حاج حسین انزائی در خطبه‌های این هفته از نماز جمعه، ضمن سفارش به تقوا اظهار کرد:";
+            
+            let k1 = `خطبه اول: ${data.khutbah1.title}\n`;
+            data.khutbah1.summary?.forEach((i, x) => k1 += `${x + 1}.\t${i.heading}\n${i.explanation}\n\n`);
+
+            let k2 = `خطبه دوم: ${data.khutbah2.title}\n`;
+            data.khutbah2.summary?.forEach((i, x) => k2 += `${x + 1}.\t${i.heading}\n${i.explanation}\n\n`);
+
+            const output = `بِسْمِ اللهِ الرَّحْمنِ الرَّحِیم\n\n"${data.impactfulTitle}"\n\n${intro}\n\n${k1.trim()}\n\n---\n\n${k2.trim()}\n\n---\n\n${data.overallSummary.title}\n${data.overallSummary.text}`;
+            outputDiv.innerText = output;
+            resultContainer.classList.remove('hidden');
+        }
+
+        function showError(msg) { errorMessageSpan.textContent = msg; errorDiv.classList.remove('hidden'); }
+        function copyOutputToClipboard() {
+            copyHelper.value = outputDiv.innerText; copyHelper.select(); document.execCommand('copy');
+            copyBtn.innerText = 'کپی شد!'; setTimeout(() => copyBtn.innerText = 'کپی متن', 2000);
+        }
+    </script>
+</body>
+</html>
