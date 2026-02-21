@@ -2,7 +2,6 @@
 <html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <!-- جلوگیری از زوم خودکار کیبورد در گوشی که باعث بهم ریختگی قالب می‌شود -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>دستیار هوشمند خطبه‌های نماز جمعه</title>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -14,23 +13,24 @@
             --dark-glass: rgba(15, 23, 42, 0.7);
         }
 
-        body {
+        /* قفل کردن قطعی عرض صفحه برای جلوگیری از بیرون زدگی در گوشی */
+        html, body {
+            width: 100vw;
+            max-width: 100%;
+            overflow-x: hidden !important; /* کلید اصلی حل مشکل بیرون زدگی */
             font-family: 'Vazirmatn', sans-serif;
             margin: 0;
-            overflow-x: hidden;
+            padding: 0;
             background-color: #020617;
             color: #e2e8f0;
         }
 
-        /* ----- بوم شبکه عصبی در پس زمینه ----- */
         #particle-canvas {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -2; pointer-events: none;
         }
 
-        /* ----- هسته هوش مصنوعی ----- */
         #ai-core {
             position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            /* اصلاح سایز برای گوشی */
             width: 90vw; max-width: 400px; height: 90vw; max-height: 400px; 
             z-index: -1; pointer-events: none; opacity: 0.15;
             transition: transform 0.1s ease-out; filter: drop-shadow(0 0 30px var(--primary));
@@ -38,64 +38,61 @@
         }
         @keyframes float { 0% { top: 50%; } 50% { top: 48%; } 100% { top: 50%; } }
 
-        /* ----- شیشه تاریک ----- */
         .glass-panel {
             background: var(--dark-glass); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
             border: 1px solid rgba(255, 255, 255, 0.05);
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7), inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+            overflow: hidden; /* جلوگیری از بیرون زدن هاله نور از کادر */
         }
         .glass-panel::before {
-            content: ""; position: absolute; top: var(--mouse-y, 0); left: var(--mouse-x, 0);
+            content: ""; position: absolute; top: var(--mouse-y, 50%); left: var(--mouse-x, 50%);
             transform: translate(-50%, -50%); 
-            /* اصلاح هاله نوری برای جلوگیری از بیرون زدگی در موبایل */
-            width: 100vw; height: 100vw; max-width: 500px; max-height: 500px;
-            background: radial-gradient(circle, rgba(14, 165, 233, 0.1) 0%, transparent 70%);
+            width: 200vw; height: 200vw; max-width: 600px; max-height: 600px;
+            background: radial-gradient(circle, rgba(14, 165, 233, 0.15) 0%, transparent 60%);
             pointer-events: none; z-index: 0; transition: opacity 0.3s;
         }
         .glass-panel > * { position: relative; z-index: 1; }
 
-        /* ----- ورودی های متنی ----- */
         .neon-input {
-            background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.1); color: #f8fafc; transition: all 0.4s;
+            background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(255, 255, 255, 0.1); color: #f8fafc; transition: all 0.4s;
         }
         .neon-input:focus {
-            background: rgba(0, 0, 0, 0.5); border-color: var(--primary);
-            box-shadow: 0 0 20px rgba(14, 165, 233, 0.2), inset 0 0 10px rgba(14, 165, 233, 0.1); transform: translateY(-2px);
+            background: rgba(0, 0, 0, 0.6); border-color: var(--primary);
+            box-shadow: 0 0 15px rgba(14, 165, 233, 0.2); transform: translateY(-2px);
         }
         
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #020617; }
         ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--primary); box-shadow: 0 0 10px var(--primary); }
+        ::-webkit-scrollbar-thumb:hover { background: var(--primary); }
 
-        /* ----- دکمه ها و انیمیشن ها ----- */
         .cyber-btn {
             position: relative; background: linear-gradient(135deg, var(--primary), var(--secondary));
-            overflow: hidden; z-index: 1; transition: all 0.3s ease;
-            touch-action: manipulation; /* رفع مشکل کلیک در موبایل */
+            overflow: hidden; z-index: 1; transition: all 0.3s ease; touch-action: manipulation;
         }
         .cyber-btn::before {
             content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
             background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent); transition: left 0.5s ease; z-index: -1;
         }
-        .cyber-btn:hover::before { left: 100%; }
-        .cyber-btn:hover { box-shadow: 0 0 25px rgba(139, 92, 246, 0.5); transform: scale(1.02); }
+        .cyber-btn:hover::before, .cyber-btn:active::before { left: 100%; }
+        .cyber-btn:hover, .cyber-btn:active { box-shadow: 0 0 20px rgba(139, 92, 246, 0.6); transform: scale(1.02); }
 
         .radar-loader {
-            width: 80px; height: 80px; border-radius: 50%; border: 2px solid rgba(14, 165, 233, 0.2);
+            width: 70px; height: 70px; border-radius: 50%; border: 2px solid rgba(14, 165, 233, 0.2);
             position: relative; overflow: hidden; box-shadow: 0 0 20px rgba(14, 165, 233, 0.3);
+            margin: 0 auto;
         }
         .radar-loader::before {
             content: ""; position: absolute; top: 50%; left: 50%; width: 50%; height: 50%;
             background: linear-gradient(45deg, transparent, rgba(14, 165, 233, 0.8));
-            transform-origin: 0 0; animation: radar 2s linear infinite;
+            transform-origin: 0 0; animation: radar 1.5s linear infinite;
         }
         @keyframes radar { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
         .output-card {
             background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05);
-            border-radius: 1rem; padding: 1.5rem; margin-bottom: 1rem; position: relative; overflow: hidden;
-            word-wrap: break-word; /* جلوگیری از بهم ریختگی متن طولانی در گوشی */
+            border-radius: 1rem; padding: 1.25rem; margin-bottom: 1rem; position: relative; overflow: hidden;
+            word-wrap: break-word; overflow-wrap: break-word;
         }
         .output-card::before { content: ""; position: absolute; top: 0; right: 0; width: 4px; height: 100%; }
         .output-khutbah1::before { background: #3b82f6; }
@@ -122,95 +119,91 @@
         <path d="M50 20 L50 10 M50 80 L50 90 M20 50 L10 50 M80 50 L90 50" stroke="#8b5cf6" stroke-width="2" opacity="0.5"/>
     </svg>
 
-    <div class="container mx-auto max-w-6xl p-4 md:p-8 min-h-screen flex flex-col items-center justify-center">
+    <!-- کانتینر اصلی کاملاً قفل شده در وسط -->
+    <div class="w-full max-w-6xl mx-auto px-4 md:px-8 py-8 min-h-screen flex flex-col items-center justify-center relative z-10 box-border">
         
-        <header class="text-center mb-10 relative z-10 w-full mt-8">
+        <header class="text-center mb-8 w-full">
             <div class="inline-block border border-sky-500/30 bg-sky-500/10 text-sky-400 px-4 py-1 rounded-full text-xs md:text-sm font-bold tracking-widest mb-4 shadow-[0_0_10px_rgba(14,165,233,0.2)]">
                 AI SERMON ANALYZER
             </div>
-            <!-- متن تغییر یافته -->
-            <h1 class="text-3xl md:text-5xl lg:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-purple-500 drop-shadow-lg mb-4">
+            <h1 class="text-3xl md:text-5xl lg:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-purple-500 drop-shadow-lg mb-3">
                 خلاصه سازی خطبه ها
             </h1>
-            <p class="text-gray-400 text-base md:text-xl font-light">
+            <p class="text-gray-400 text-sm md:text-xl font-light">
                 نسخه امن و بدون محدودیت IP (متصل به سرور واسطه)
             </p>
         </header>
 
-        <main id="mainCard" class="glass-panel w-full p-5 md:p-10 rounded-3xl transition-all duration-500 relative">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 mb-10">
-                <div class="group relative">
-                    <label class="block mb-3 font-bold text-sky-300 text-base md:text-lg flex items-center">
+        <main id="mainCard" class="glass-panel w-full p-5 md:p-10 rounded-3xl transition-all duration-500">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 mb-8">
+                <div class="group relative w-full">
+                    <label class="block mb-2 font-bold text-sky-300 text-base md:text-lg flex items-center">
                         <svg class="w-5 h-5 ml-2 text-sky-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
                         خطبه اول (محتوای مذهبی)
                     </label>
-                    <!-- ارتفاع باکس برای گوشی کوچکتر شده تا دکمه پایین نرود -->
-                    <textarea id="khutbah1" class="neon-input w-full p-4 md:p-5 rounded-2xl outline-none text-gray-200 leading-relaxed resize-none text-base h-40 md:h-60" placeholder="متن خطبه اول را اینجا وارد کنید..."></textarea>
+                    <textarea id="khutbah1" class="neon-input w-full p-4 rounded-xl outline-none text-gray-200 leading-relaxed resize-none text-base h-36 md:h-56" placeholder="متن خطبه اول را اینجا وارد کنید..."></textarea>
                 </div>
-                <div class="group relative">
-                    <label class="block mb-3 font-bold text-purple-300 text-base md:text-lg flex items-center">
+                <div class="group relative w-full">
+                    <label class="block mb-2 font-bold text-purple-300 text-base md:text-lg flex items-center">
                         <svg class="w-5 h-5 ml-2 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                        خطبه دوم (محتوای سیاسی/اجتماعی)
+                        خطبه دوم (سیاسی/اجتماعی)
                     </label>
-                    <textarea id="khutbah2" class="neon-input w-full p-4 md:p-5 rounded-2xl outline-none text-gray-200 leading-relaxed resize-none text-base h-40 md:h-60" placeholder="متن خطبه دوم را اینجا وارد کنید..."></textarea>
+                    <textarea id="khutbah2" class="neon-input w-full p-4 rounded-xl outline-none text-gray-200 leading-relaxed resize-none text-base h-36 md:h-56" placeholder="متن خطبه دوم را اینجا وارد کنید..."></textarea>
                 </div>
             </div>
 
-            <div class="text-center mb-6 relative z-10 flex justify-center">
-                <button id="generateBtn" class="cyber-btn flex items-center justify-center text-white font-black text-lg md:text-xl py-4 px-8 md:px-12 rounded-full cursor-pointer shadow-lg w-full md:w-auto">
-                    <svg class="w-6 h-6 md:w-7 md:h-7 ml-3 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+            <div class="w-full flex justify-center mb-4">
+                <button id="generateBtn" class="cyber-btn flex items-center justify-center text-white font-black text-lg py-3 md:py-4 px-8 md:px-12 rounded-full shadow-lg w-full md:w-auto">
+                    <svg class="w-6 h-6 ml-3 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                     آغاز پردازش هوش مصنوعی
                 </button>
             </div>
             
-            <div id="loading" class="hidden flex-col items-center justify-center my-10 transition-all duration-500 opacity-0">
+            <div id="loading" class="hidden flex-col items-center justify-center my-8 transition-all duration-500 opacity-0 w-full">
                 <div class="radar-loader"></div>
-                <p id="loadingText" class="mt-6 text-sky-400 font-bold text-base md:text-lg tracking-widest text-center">ارتباط با سرور واسطه Vercel...</p>
+                <p id="loadingText" class="mt-4 text-sky-400 font-bold text-sm md:text-base tracking-widest text-center w-full">ارتباط با سرور Vercel...</p>
             </div>
 
-            <div id="resultContainer" class="hidden mt-8 transform transition-all duration-700 opacity-0 translate-y-10">
-                <div class="flex flex-col md:flex-row justify-between items-center mb-6 pb-4 border-b border-gray-700/50 gap-4">
-                    <h2 class="text-2xl md:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-emerald-600 flex items-center">
-                        <svg class="w-7 h-7 md:w-8 md:h-8 text-green-500 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                        گزارش نهایی استخراج شد
+            <div id="resultContainer" class="hidden mt-6 transform transition-all duration-700 opacity-0 translate-y-10 w-full">
+                <div class="flex flex-col md:flex-row justify-between items-center mb-6 pb-4 border-b border-gray-700/50 gap-4 w-full">
+                    <h2 class="text-xl md:text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-emerald-600 flex items-center">
+                        <svg class="w-6 h-6 text-green-500 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        گزارش استخراج شد
                     </h2>
                     
-                    <button id="copyBtn" class="w-full md:w-auto group flex items-center justify-center bg-gray-800/80 hover:bg-sky-600 border border-gray-600 hover:border-sky-500 text-gray-300 hover:text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 shadow-lg">
-                        <svg id="copyIcon" class="w-5 h-5 ml-2 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <button id="copyBtn" class="w-full md:w-auto flex items-center justify-center bg-gray-800/80 hover:bg-sky-600 border border-gray-600 text-gray-300 hover:text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 shadow-lg">
+                        <svg id="copyIcon" class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
                         </svg>
                         <span id="copyText">کپی در کلیپ‌بورد</span>
                     </button>
                 </div>
                 
-                <div id="output" class="text-base md:text-lg leading-loose text-gray-300 font-medium"></div>
+                <div id="output" class="text-sm md:text-base leading-loose text-gray-300 font-medium w-full"></div>
             </div>
 
-             <div id="error" class="hidden mt-6 bg-red-900/30 border border-red-500/50 text-red-400 p-5 rounded-xl shadow-[0_0_15px_rgba(239,68,68,0.2)] backdrop-blur-sm" role="alert">
+             <div id="error" class="hidden mt-4 bg-red-900/30 border border-red-500/50 text-red-400 p-4 rounded-xl shadow-[0_0_15px_rgba(239,68,68,0.2)] w-full" role="alert">
                 <div class="flex items-center">
                     <svg class="w-6 h-6 mr-2 ml-2 text-red-500 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
-                    <strong class="font-bold text-lg">خطا در پردازش!</strong>
+                    <strong class="font-bold text-base md:text-lg">خطا!</strong>
                 </div>
-                <span class="block mt-2 font-medium text-red-200" id="errorMessage"></span>
+                <span class="block mt-2 text-sm text-red-200" id="errorMessage"></span>
             </div>
         </main>
     </div>
 
-    <!-- متغیر مخفی برای کپی متن خام -->
-    <textarea id="copyHelper" class="hidden absolute -left-full -top-full"></textarea>
-
     <script>
-        // 1. Particle Canvas Logic (بدون تغییر)
+        // 1. Particle Canvas Logic
         const canvas = document.getElementById('particle-canvas');
         const ctx = canvas.getContext('2d');
         let width, height, particles;
-        let mouse = { x: null, y: null, radius: 150 };
+        let mouse = { x: null, y: null, radius: 100 };
 
         function initCanvas() {
             width = canvas.width = window.innerWidth;
             height = canvas.height = window.innerHeight;
             particles = [];
-            let particleCount = (width * height) / 12000;
+            let particleCount = Math.min((width * height) / 15000, 50); // کاهش فشار روی گوشی
             for (let i = 0; i < particleCount; i++) {
                 particles.push({
                     x: Math.random() * width, y: Math.random() * height,
@@ -222,7 +215,7 @@
 
         function drawParticles() {
             ctx.clearRect(0, 0, width, height);
-            ctx.fillStyle = 'rgba(14, 165, 233, 0.5)';
+            ctx.fillStyle = 'rgba(14, 165, 233, 0.4)';
             particles.forEach(p => {
                 p.x += p.vx; p.y += p.vy;
                 if (p.x < 0 || p.x > width) p.vx *= -1;
@@ -231,15 +224,15 @@
                 if(mouse.x != null) {
                     let dx = mouse.x - p.x; let dy = mouse.y - p.y;
                     let distance = Math.sqrt(dx * dx + dy * dy);
-                    if (distance < mouse.radius) { p.x += dx * 0.01; p.y += dy * 0.01; }
+                    if (distance < mouse.radius) { p.x += dx * 0.02; p.y += dy * 0.02; }
                 }
                 ctx.beginPath(); ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2); ctx.fill();
 
                 particles.forEach(p2 => {
                     let dx = p.x - p2.x; let dy = p.y - p2.y;
                     let dist = Math.sqrt(dx * dx + dy * dy);
-                    if (dist < 100) {
-                        ctx.beginPath(); ctx.strokeStyle = `rgba(139, 92, 246, ${1 - dist/100})`;
+                    if (dist < 80) {
+                        ctx.beginPath(); ctx.strokeStyle = `rgba(139, 92, 246, ${1 - dist/80})`;
                         ctx.lineWidth = 0.5; ctx.moveTo(p.x, p.y); ctx.lineTo(p2.x, p2.y); ctx.stroke();
                     }
                 });
@@ -248,7 +241,7 @@
         }
         window.addEventListener('resize', initCanvas); initCanvas(); drawParticles();
 
-        // 2. Interactive AI Core & Parallax
+        // 2. Parallax (محاسبه امن برای گوشی)
         const aiCore = document.getElementById('ai-core');
         const mainCard = document.getElementById('mainCard');
         const aiPupil = document.getElementById('pupil');
@@ -256,11 +249,15 @@
         window.addEventListener('mousemove', (e) => {
             mouse.x = e.clientX; mouse.y = e.clientY;
             const rect = mainCard.getBoundingClientRect();
-            mainCard.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
-            mainCard.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
+            // محاسبه امن برای هاله نور تا صفحه را نکشد
+            const xPos = Math.max(0, Math.min(e.clientX - rect.left, rect.width));
+            const yPos = Math.max(0, Math.min(e.clientY - rect.top, rect.height));
+            
+            mainCard.style.setProperty('--mouse-x', `${xPos}px`);
+            mainCard.style.setProperty('--mouse-y', `${yPos}px`);
 
             const cx = window.innerWidth / 2; const cy = window.innerHeight / 2;
-            const moveX = (e.clientX - cx) * 0.05; const moveY = (e.clientY - cy) * 0.05;
+            const moveX = (e.clientX - cx) * 0.03; const moveY = (e.clientY - cy) * 0.03;
             aiCore.style.transform = `translate(calc(-50% + ${moveX}px), calc(-50% + ${moveY}px))`;
             
             const pupilX = 50 + (e.clientX - cx) * 0.01; const pupilY = 50 + (e.clientY - cy) * 0.01;
@@ -268,7 +265,10 @@
         });
         window.addEventListener('mouseout', () => { mouse.x = null; mouse.y = null; });
 
-        // 3. API Logic (VERCEL PROXY EDITION)
+        // متغیر کاملا مجازی برای ذخیره متن کپی (حذف باکس فیزیکی که صفحه را خراب می‌کرد)
+        let readyToCopyText = "";
+
+        // 3. API Logic
         const generateBtn = document.getElementById('generateBtn');
         const khutbah1Input = document.getElementById('khutbah1');
         const khutbah2Input = document.getElementById('khutbah2');
@@ -277,12 +277,11 @@
         const resultContainer = document.getElementById('resultContainer');
         const outputDiv = document.getElementById('output');
         const copyBtn = document.getElementById('copyBtn');
-        const copyHelper = document.getElementById('copyHelper');
         const errorDiv = document.getElementById('error');
         const errorMessageSpan = document.getElementById('errorMessage');
 
         const loadingMessages = [
-            "در حال خواندن متون...", "انتقال به سرور Vercel...", "تجزیه و تحلیل شبکه‌های معنایی...",
+            "در حال خواندن متون...", "انتقال به سرور...", "تجزیه و تحلیل کلمات...",
             "استخراج نکات کلیدی...", "آماده‌سازی خروجی..."
         ];
 
@@ -291,7 +290,7 @@
         copyBtn.addEventListener('click', copyOutputToClipboard);
 
         async function handleGeneration() {
-            // مخفی کردن کیبورد گوشی در هنگام کلیک برای جلوگیری از گیر کردن صفحه
+            // مخفی کردن کیبورد در گوشی
             khutbah1Input.blur();
             khutbah2Input.blur();
 
@@ -304,12 +303,12 @@
             const khutbah2Text = khutbah2Input.value.trim();
 
             if (!khutbah1Text || !khutbah2Text) {
-                showError("خطا: اطلاعات ورودی ناقص است. لطفاً هر دو فیلد را پر کنید."); return;
+                showError("اطلاعات ورودی ناقص است. لطفاً هر دو فیلد را پر کنید."); return;
             }
 
             generateBtn.disabled = true;
-            generateBtn.innerHTML = `<span class="modern-loader"></span> در حال پردازش...`;
-            generateBtn.classList.add('opacity-50', 'cursor-not-allowed', 'scale-95');
+            generateBtn.innerHTML = `در حال پردازش...`;
+            generateBtn.classList.add('opacity-50', 'scale-95');
             
             loadingDiv.classList.remove('hidden');
             setTimeout(() => loadingDiv.classList.remove('opacity-0'), 50);
@@ -347,7 +346,6 @@
             try {
                 const payload = { contents: [{ role: "user", parts: [{ text: prompt }] }], generationConfig: { responseMimeType: "application/json", responseSchema: schema } };
                 
-                // --------- مهم: اتصال به سرور واسط Vercel ---------
                 const endpoint = '/api/proxy'; 
                 const response = await fetch(endpoint, { 
                     method: 'POST', 
@@ -367,66 +365,64 @@
                     const data = JSON.parse(jsonText);
                     buildAndRevealOutput(data);
                 } else {
-                    throw new Error("پاسخ دریافتی از هوش مصنوعی ساختار معتبری ندارد.");
+                    throw new Error("پاسخ دریافتی نامعتبر است.");
                 }
 
             } catch (err) {
-                showError(`نقص فنی: ${err.message} (مطمئن شوید پروژه روی Vercel دیپلوی شده است)`);
+                showError(`نقص فنی: ${err.message}`);
             } finally {
                 clearInterval(loadingInterval);
                 loadingDiv.classList.add('opacity-0');
                 setTimeout(() => loadingDiv.classList.add('hidden'), 500);
                 
                 generateBtn.disabled = false;
-                generateBtn.innerHTML = `<svg class="w-6 h-6 md:w-7 md:h-7 ml-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg> آغاز پردازش مجدد`;
-                generateBtn.classList.remove('opacity-50', 'cursor-not-allowed', 'scale-95');
+                generateBtn.innerHTML = `<svg class="w-6 h-6 ml-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg> پردازش مجدد`;
+                generateBtn.classList.remove('opacity-50', 'scale-95');
             }
         }
 
-        // 4. Output Formatting & Typewriter Effect
         function buildAndRevealOutput(data) {
             const intro = "به گزارش معاونت ارتباطات و رسانه دفتر امام جمعه دهستان میانکاله (زاغمرز)، حجت الاسلام والمسلمین حاج حسین انزائی در خطبه‌های این هفته از نماز جمعه، ضمن سفارش به تقوا اظهار کرد:";
             
-            // Raw Text for Copy
+            // ذخیره متن به صورت مجازی (بدون باگ در موبایل)
             let rawText = `بِسْمِ اللهِ الرَّحْمنِ الرَّحِیم\n\n«${data.impactfulTitle}»\n\n${intro}\n\n`;
             rawText += `🔸 خطبه اول: ${data.khutbah1.title}\n`;
             data.khutbah1.summary.forEach((i, idx) => rawText += `${idx + 1}. ${i.heading}\n   ${i.explanation}\n\n`);
             rawText += `---\n🔹 خطبه دوم: ${data.khutbah2.title}\n`;
             data.khutbah2.summary.forEach((i, idx) => rawText += `${idx + 1}. ${i.heading}\n   ${i.explanation}\n\n`);
             rawText += `---\n📌 ${data.overallSummary.title}\n${data.overallSummary.text}`;
-            copyHelper.value = rawText.trim();
+            readyToCopyText = rawText.trim();
 
-            // Rich HTML
             let htmlContent = `
-                <div class="text-center mb-8">
-                    <span class="text-gray-400 text-sm tracking-widest">بِسْمِ اللهِ الرَّحْمنِ الرَّحِیم</span>
-                    <h3 class="text-xl md:text-3xl font-black text-sky-300 mt-4 mb-4 leading-normal px-2 md:px-4">«${data.impactfulTitle}»</h3>
-                    <p class="text-gray-300 text-sm md:text-lg max-w-3xl mx-auto border-b border-gray-700/50 pb-6">${intro}</p>
+                <div class="text-center mb-6">
+                    <span class="text-gray-400 text-xs md:text-sm tracking-widest">بِسْمِ اللهِ الرَّحْمنِ الرَّحِیم</span>
+                    <h3 class="text-lg md:text-2xl font-black text-sky-300 mt-3 mb-3 leading-normal">«${data.impactfulTitle}»</h3>
+                    <p class="text-gray-300 text-sm md:text-base max-w-3xl mx-auto border-b border-gray-700/50 pb-4">${intro}</p>
                 </div>
                 <div class="output-card output-khutbah1">
-                    <h4 class="text-lg md:text-xl font-bold text-blue-400 mb-4 flex items-center">
-                        <span class="bg-blue-500/20 p-2 rounded-lg ml-3"><svg class="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z"></path></svg></span>
+                    <h4 class="text-base md:text-lg font-bold text-blue-400 mb-3 flex items-center">
+                        <span class="bg-blue-500/20 p-1.5 md:p-2 rounded-lg ml-2"><svg class="w-4 h-4 md:w-5 md:h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z"></path></svg></span>
                         خطبه اول: ${data.khutbah1.title}
                     </h4>
-                    <div class="space-y-4 pr-2">
-                        ${data.khutbah1.summary.map(i => `<div class="border-r-2 border-blue-500/30 pr-4"><strong class="text-blue-300 block mb-1 text-base md:text-lg">${i.heading}</strong><span class="text-gray-400 text-sm md:text-base">${i.explanation}</span></div>`).join('')}
+                    <div class="space-y-3 pr-2">
+                        ${data.khutbah1.summary.map(i => `<div class="border-r-2 border-blue-500/30 pr-3"><strong class="text-blue-300 block mb-1 text-sm md:text-base">${i.heading}</strong><span class="text-gray-400 text-xs md:text-sm">${i.explanation}</span></div>`).join('')}
                     </div>
                 </div>
                 <div class="output-card output-khutbah2">
-                    <h4 class="text-lg md:text-xl font-bold text-emerald-400 mb-4 flex items-center">
-                        <span class="bg-emerald-500/20 p-2 rounded-lg ml-3"><svg class="w-5 h-5 text-emerald-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd"></path></svg></span>
+                    <h4 class="text-base md:text-lg font-bold text-emerald-400 mb-3 flex items-center">
+                        <span class="bg-emerald-500/20 p-1.5 md:p-2 rounded-lg ml-2"><svg class="w-4 h-4 md:w-5 md:h-5 text-emerald-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd"></path></svg></span>
                         خطبه دوم: ${data.khutbah2.title}
                     </h4>
-                    <div class="space-y-4 pr-2">
-                        ${data.khutbah2.summary.map(i => `<div class="border-r-2 border-emerald-500/30 pr-4"><strong class="text-emerald-300 block mb-1 text-base md:text-lg">${i.heading}</strong><span class="text-gray-400 text-sm md:text-base">${i.explanation}</span></div>`).join('')}
+                    <div class="space-y-3 pr-2">
+                        ${data.khutbah2.summary.map(i => `<div class="border-r-2 border-emerald-500/30 pr-3"><strong class="text-emerald-300 block mb-1 text-sm md:text-base">${i.heading}</strong><span class="text-gray-400 text-xs md:text-sm">${i.explanation}</span></div>`).join('')}
                     </div>
                 </div>
                 <div class="output-card output-overall">
-                    <h4 class="text-lg md:text-xl font-bold text-amber-400 mb-4 flex items-center">
-                        <span class="bg-amber-500/20 p-2 rounded-lg ml-3"><svg class="w-5 h-5 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg></span>
+                    <h4 class="text-base md:text-lg font-bold text-amber-400 mb-3 flex items-center">
+                        <span class="bg-amber-500/20 p-1.5 md:p-2 rounded-lg ml-2"><svg class="w-4 h-4 md:w-5 md:h-5 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg></span>
                         ${data.overallSummary.title}
                     </h4>
-                    <p class="text-gray-300 pr-2 leading-relaxed text-sm md:text-base">${data.overallSummary.text}</p>
+                    <p class="text-gray-300 pr-2 leading-relaxed text-xs md:text-sm">${data.overallSummary.text}</p>
                 </div>
             `;
 
@@ -442,7 +438,7 @@
                     else { clearInterval(fadeEffect); outputDiv.classList.remove('cursor-blink'); }
                 }, 50);
                 
-                // اسکرول نرم به پایین در گوشی
+                // اسکرول نرم در گوشی
                 const y = resultContainer.getBoundingClientRect().top + window.scrollY - 20;
                 window.scrollTo({top: y, behavior: 'smooth'});
             }, 100);
@@ -450,15 +446,15 @@
 
         function showError(message) { errorMessageSpan.textContent = message; errorDiv.classList.remove('hidden'); }
         
-        // سیستم کپی جدید و مدرن که در گوشی باگ ایجاد نمی‌کند
         async function copyOutputToClipboard() {
+            if(!readyToCopyText) return;
             const btn = document.getElementById('copyBtn'); 
             const icon = document.getElementById('copyIcon'); 
             const text = document.getElementById('copyText');
-            const textToCopy = copyHelper.value;
 
             try {
-                await navigator.clipboard.writeText(textToCopy);
+                // کپی امن و مدرن بدون لرزش صفحه
+                await navigator.clipboard.writeText(readyToCopyText);
                 
                 btn.classList.add('bg-green-600', 'border-green-500', 'text-white'); 
                 btn.classList.remove('bg-gray-800/80', 'text-gray-300');
@@ -472,7 +468,7 @@
                     icon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />`;
                 }, 3000);
             } catch (err) { 
-                alert('مشکلی در کپی کردن پیش آمد یا مرورگر شما پشتیبانی نمی‌کند.'); 
+                alert('مرورگر شما از کپی مستقیم پشتیبانی نمی‌کند.'); 
             }
         }
     </script>
