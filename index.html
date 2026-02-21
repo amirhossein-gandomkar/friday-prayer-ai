@@ -30,7 +30,6 @@
         /* ----- هسته هوش مصنوعی ----- */
         #ai-core {
             position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            /* اصلاح سایز برای گوشی */
             width: 90vw; max-width: 400px; height: 90vw; max-height: 400px; 
             z-index: -1; pointer-events: none; opacity: 0.15;
             transition: transform 0.1s ease-out; filter: drop-shadow(0 0 30px var(--primary));
@@ -47,7 +46,6 @@
         .glass-panel::before {
             content: ""; position: absolute; top: var(--mouse-y, 0); left: var(--mouse-x, 0);
             transform: translate(-50%, -50%); 
-            /* اصلاح هاله نوری برای جلوگیری از بیرون زدگی در موبایل */
             width: 100vw; height: 100vw; max-width: 500px; max-height: 500px;
             background: radial-gradient(circle, rgba(14, 165, 233, 0.1) 0%, transparent 70%);
             pointer-events: none; z-index: 0; transition: opacity 0.3s;
@@ -104,6 +102,21 @@
 
         .cursor-blink::after { content: '|'; animation: blink 1s step-end infinite; color: var(--primary); }
         @keyframes blink { 50% { opacity: 0; } }
+
+        /* =========================================
+           بهینه سازی برای موبایل: خاموش کردن بک‌گراند، چشم هوش مصنوعی و هاله موس
+           ========================================= */
+        @media (max-width: 768px) {
+            #particle-canvas {
+                display: none !important; /* مخفی کردن ذرات در موبایل */
+            }
+            #ai-core {
+                display: none !important; /* مخفی کردن چشم در موبایل */
+            }
+            .glass-panel::before {
+                display: none !important; /* حذف هاله موس که روی دکمه ها را میپوشاند */
+            }
+        }
     </style>
 </head>
 <body class="antialiased text-gray-200">
@@ -128,7 +141,6 @@
             <div class="inline-block border border-sky-500/30 bg-sky-500/10 text-sky-400 px-4 py-1 rounded-full text-xs md:text-sm font-bold tracking-widest mb-4 shadow-[0_0_10px_rgba(14,165,233,0.2)]">
                 AI SERMON ANALYZER
             </div>
-            <!-- متن تغییر یافته -->
             <h1 class="text-3xl md:text-5xl lg:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-purple-500 drop-shadow-lg mb-4">
                 خلاصه سازی خطبه ها
             </h1>
@@ -144,7 +156,6 @@
                         <svg class="w-5 h-5 ml-2 text-sky-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
                         خطبه اول (محتوای مذهبی)
                     </label>
-                    <!-- ارتفاع باکس برای گوشی کوچکتر شده تا دکمه پایین نرود -->
                     <textarea id="khutbah1" class="neon-input w-full p-4 md:p-5 rounded-2xl outline-none text-gray-200 leading-relaxed resize-none text-base h-40 md:h-60" placeholder="متن خطبه اول را اینجا وارد کنید..."></textarea>
                 </div>
                 <div class="group relative">
@@ -196,79 +207,85 @@
         </main>
     </div>
 
-    <!-- متغیر مخفی برای کپی متن خام -->
     <textarea id="copyHelper" class="hidden absolute -left-full -top-full"></textarea>
 
     <script>
-        // 1. Particle Canvas Logic (بدون تغییر)
-        const canvas = document.getElementById('particle-canvas');
-        const ctx = canvas.getContext('2d');
-        let width, height, particles;
-        let mouse = { x: null, y: null, radius: 150 };
+        // تشخیص موبایل با استفاده از جاوااسکریپت برای جلوگیری از اجرای اسکریپت های سنگین
+        const isMobileDevice = window.innerWidth <= 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
-        function initCanvas() {
-            width = canvas.width = window.innerWidth;
-            height = canvas.height = window.innerHeight;
-            particles = [];
-            let particleCount = (width * height) / 12000;
-            for (let i = 0; i < particleCount; i++) {
-                particles.push({
-                    x: Math.random() * width, y: Math.random() * height,
-                    vx: (Math.random() - 0.5) * 0.5, vy: (Math.random() - 0.5) * 0.5,
-                    radius: Math.random() * 2 + 1
-                });
-            }
-        }
+        // 1. Particle Canvas Logic (فقط در ویندوز/دسکتاپ اجرا می‌شود)
+        if (!isMobileDevice) {
+            const canvas = document.getElementById('particle-canvas');
+            const ctx = canvas.getContext('2d');
+            let width, height, particles;
+            let mouse = { x: null, y: null, radius: 150 };
 
-        function drawParticles() {
-            ctx.clearRect(0, 0, width, height);
-            ctx.fillStyle = 'rgba(14, 165, 233, 0.5)';
-            particles.forEach(p => {
-                p.x += p.vx; p.y += p.vy;
-                if (p.x < 0 || p.x > width) p.vx *= -1;
-                if (p.y < 0 || p.y > height) p.vy *= -1;
-
-                if(mouse.x != null) {
-                    let dx = mouse.x - p.x; let dy = mouse.y - p.y;
-                    let distance = Math.sqrt(dx * dx + dy * dy);
-                    if (distance < mouse.radius) { p.x += dx * 0.01; p.y += dy * 0.01; }
+            function initCanvas() {
+                width = canvas.width = window.innerWidth;
+                height = canvas.height = window.innerHeight;
+                particles = [];
+                let particleCount = (width * height) / 12000;
+                for (let i = 0; i < particleCount; i++) {
+                    particles.push({
+                        x: Math.random() * width, y: Math.random() * height,
+                        vx: (Math.random() - 0.5) * 0.5, vy: (Math.random() - 0.5) * 0.5,
+                        radius: Math.random() * 2 + 1
+                    });
                 }
-                ctx.beginPath(); ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2); ctx.fill();
+            }
 
-                particles.forEach(p2 => {
-                    let dx = p.x - p2.x; let dy = p.y - p2.y;
-                    let dist = Math.sqrt(dx * dx + dy * dy);
-                    if (dist < 100) {
-                        ctx.beginPath(); ctx.strokeStyle = `rgba(139, 92, 246, ${1 - dist/100})`;
-                        ctx.lineWidth = 0.5; ctx.moveTo(p.x, p.y); ctx.lineTo(p2.x, p2.y); ctx.stroke();
+            function drawParticles() {
+                ctx.clearRect(0, 0, width, height);
+                ctx.fillStyle = 'rgba(14, 165, 233, 0.5)';
+                particles.forEach(p => {
+                    p.x += p.vx; p.y += p.vy;
+                    if (p.x < 0 || p.x > width) p.vx *= -1;
+                    if (p.y < 0 || p.y > height) p.vy *= -1;
+
+                    if(mouse.x != null) {
+                        let dx = mouse.x - p.x; let dy = mouse.y - p.y;
+                        let distance = Math.sqrt(dx * dx + dy * dy);
+                        if (distance < mouse.radius) { p.x += dx * 0.01; p.y += dy * 0.01; }
                     }
+                    ctx.beginPath(); ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2); ctx.fill();
+
+                    particles.forEach(p2 => {
+                        let dx = p.x - p2.x; let dy = p.y - p2.y;
+                        let dist = Math.sqrt(dx * dx + dy * dy);
+                        if (dist < 100) {
+                            ctx.beginPath(); ctx.strokeStyle = `rgba(139, 92, 246, ${1 - dist/100})`;
+                            ctx.lineWidth = 0.5; ctx.moveTo(p.x, p.y); ctx.lineTo(p2.x, p2.y); ctx.stroke();
+                        }
+                    });
                 });
+                requestAnimationFrame(drawParticles);
+            }
+            window.addEventListener('resize', initCanvas); 
+            initCanvas(); 
+            drawParticles();
+
+            // 2. Interactive AI Core & Parallax (فقط در ویندوز/دسکتاپ اجرا می‌شود)
+            const aiCore = document.getElementById('ai-core');
+            const mainCard = document.getElementById('mainCard');
+            const aiPupil = document.getElementById('pupil');
+
+            window.addEventListener('mousemove', (e) => {
+                mouse.x = e.clientX; mouse.y = e.clientY;
+                const rect = mainCard.getBoundingClientRect();
+                mainCard.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
+                mainCard.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
+
+                const cx = window.innerWidth / 2; const cy = window.innerHeight / 2;
+                const moveX = (e.clientX - cx) * 0.05; const moveY = (e.clientY - cy) * 0.05;
+                aiCore.style.transform = `translate(calc(-50% + ${moveX}px), calc(-50% + ${moveY}px))`;
+                
+                const pupilX = 50 + (e.clientX - cx) * 0.01; const pupilY = 50 + (e.clientY - cy) * 0.01;
+                aiPupil.setAttribute('cx', pupilX); aiPupil.setAttribute('cy', pupilY);
             });
-            requestAnimationFrame(drawParticles);
+            window.addEventListener('mouseout', () => { mouse.x = null; mouse.y = null; });
         }
-        window.addEventListener('resize', initCanvas); initCanvas(); drawParticles();
 
-        // 2. Interactive AI Core & Parallax
-        const aiCore = document.getElementById('ai-core');
-        const mainCard = document.getElementById('mainCard');
-        const aiPupil = document.getElementById('pupil');
-
-        window.addEventListener('mousemove', (e) => {
-            mouse.x = e.clientX; mouse.y = e.clientY;
-            const rect = mainCard.getBoundingClientRect();
-            mainCard.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
-            mainCard.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
-
-            const cx = window.innerWidth / 2; const cy = window.innerHeight / 2;
-            const moveX = (e.clientX - cx) * 0.05; const moveY = (e.clientY - cy) * 0.05;
-            aiCore.style.transform = `translate(calc(-50% + ${moveX}px), calc(-50% + ${moveY}px))`;
-            
-            const pupilX = 50 + (e.clientX - cx) * 0.01; const pupilY = 50 + (e.clientY - cy) * 0.01;
-            aiPupil.setAttribute('cx', pupilX); aiPupil.setAttribute('cy', pupilY);
-        });
-        window.addEventListener('mouseout', () => { mouse.x = null; mouse.y = null; });
-
-        // 3. API Logic (VERCEL PROXY EDITION)
+        // 3. API Logic (VERCEL PROXY EDITION) - این بخش برای هر دو (موبایل و دسکتاپ) یکسان کار میکند
         const generateBtn = document.getElementById('generateBtn');
         const khutbah1Input = document.getElementById('khutbah1');
         const khutbah2Input = document.getElementById('khutbah2');
