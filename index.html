@@ -2,7 +2,7 @@
 <html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>دستیار هوشمند خطبه‌های نماز جمعه</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;700;900&display=swap" rel="stylesheet">
@@ -13,32 +13,25 @@
             --dark-glass: rgba(15, 23, 42, 0.7);
         }
 
-        /* حل مشکل اسکرول افقی در ویندوز و موبایل */
-        html, body {
+        body {
             font-family: 'Vazirmatn', sans-serif;
             margin: 0;
-            padding: 0;
             overflow-x: hidden;
-            width: 100%;
             background-color: #020617;
             color: #e2e8f0;
-            position: relative;
         }
 
         /* ----- بوم شبکه عصبی در پس زمینه ----- */
         #particle-canvas {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; pointer-events: none;
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -2; pointer-events: none;
         }
 
         /* ----- هسته هوش مصنوعی ----- */
         #ai-core {
             position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            width: 300px; height: 300px; z-index: -1; pointer-events: none; opacity: 0.15;
-            transition: transform 0.2s ease-out; filter: drop-shadow(0 0 30px var(--primary));
+            width: 400px; height: 400px; z-index: -1; pointer-events: none; opacity: 0.15;
+            transition: transform 0.1s ease-out; filter: drop-shadow(0 0 30px var(--primary));
             animation: float 6s ease-in-out infinite;
-        }
-        @media (min-width: 768px) {
-            #ai-core { width: 400px; height: 400px; }
         }
         @keyframes float { 0% { top: 50%; } 50% { top: 48%; } 100% { top: 50%; } }
 
@@ -47,12 +40,11 @@
             background: var(--dark-glass); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
             border: 1px solid rgba(255, 255, 255, 0.05);
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7), inset 0 0 0 1px rgba(255, 255, 255, 0.05);
-            overflow: hidden; /* جلوگیری از بیرون زدن نورافکن در موبایل */
         }
         .glass-panel::before {
-            content: ""; position: absolute; top: var(--mouse-y, -1000px); left: var(--mouse-x, -1000px);
-            transform: translate(-50%, -50%); width: 400px; height: 400px;
-            background: radial-gradient(circle, rgba(14, 165, 233, 0.15) 0%, transparent 70%);
+            content: ""; position: absolute; top: var(--mouse-y, 0); left: var(--mouse-x, 0);
+            transform: translate(-50%, -50%); width: 500px; height: 500px;
+            background: radial-gradient(circle, rgba(14, 165, 233, 0.1) 0%, transparent 70%);
             pointer-events: none; z-index: 0; transition: opacity 0.3s;
         }
         .glass-panel > * { position: relative; z-index: 1; }
@@ -74,34 +66,29 @@
         /* ----- دکمه ها و انیمیشن ها ----- */
         .cyber-btn {
             position: relative; background: linear-gradient(135deg, var(--primary), var(--secondary));
-            overflow: hidden; z-index: 1; transition: all 0.3s ease; touch-action: manipulation;
+            overflow: hidden; z-index: 1; transition: all 0.3s ease;
         }
         .cyber-btn::before {
             content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
             background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent); transition: left 0.5s ease; z-index: -1;
         }
         .cyber-btn:hover::before { left: 100%; }
-        .cyber-btn:active { transform: scale(0.95); } /* افکت کلیک در موبایل */
-        @media (min-width: 768px) {
-            .cyber-btn:hover { box-shadow: 0 0 25px rgba(139, 92, 246, 0.5); transform: scale(1.02); }
-        }
+        .cyber-btn:hover { box-shadow: 0 0 25px rgba(139, 92, 246, 0.5); transform: scale(1.02); }
 
         .radar-loader {
-            width: 60px; height: 60px; border-radius: 50%; border: 2px solid rgba(14, 165, 233, 0.2);
+            width: 80px; height: 80px; border-radius: 50%; border: 2px solid rgba(14, 165, 233, 0.2);
             position: relative; overflow: hidden; box-shadow: 0 0 20px rgba(14, 165, 233, 0.3);
-            margin: 0 auto;
         }
-        @media (min-width: 768px) { .radar-loader { width: 80px; height: 80px; } }
         .radar-loader::before {
             content: ""; position: absolute; top: 50%; left: 50%; width: 50%; height: 50%;
             background: linear-gradient(45deg, transparent, rgba(14, 165, 233, 0.8));
-            transform-origin: 0 0; animation: radar 1.5s linear infinite;
+            transform-origin: 0 0; animation: radar 2s linear infinite;
         }
         @keyframes radar { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
         .output-card {
             background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05);
-            border-radius: 1rem; padding: 1.25rem; margin-bottom: 1rem; position: relative; overflow: hidden;
+            border-radius: 1rem; padding: 1.5rem; margin-bottom: 1rem; position: relative; overflow: hidden;
         }
         .output-card::before { content: ""; position: absolute; top: 0; right: 0; width: 4px; height: 100%; }
         .output-khutbah1::before { background: #3b82f6; }
@@ -130,59 +117,56 @@
 
     <div class="container mx-auto max-w-6xl p-4 md:p-8 min-h-screen flex flex-col items-center justify-center">
         
-        <header class="text-center mb-8 md:mb-12 relative z-10 w-full mt-4 md:mt-8">
-            <div class="inline-block border border-sky-500/30 bg-sky-500/10 text-sky-400 px-4 py-1 rounded-full text-xs md:text-sm font-bold tracking-widest mb-4 shadow-[0_0_10px_rgba(14,165,233,0.2)]">
+        <header class="text-center mb-12 relative z-10 w-full mt-8">
+            <div class="inline-block border border-sky-500/30 bg-sky-500/10 text-sky-400 px-4 py-1 rounded-full text-sm font-bold tracking-widest mb-4 shadow-[0_0_10px_rgba(14,165,233,0.2)]">
                 AI SERMON ANALYZER - VERCEL EDITION
             </div>
-            <!-- تغییر متن هدینگ به درخواست کاربر -->
-            <h1 class="text-3xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-purple-500 drop-shadow-lg mb-4">
-                خلاصه سازی خطبه ها
+            <h1 class="text-4xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-purple-500 drop-shadow-lg mb-4">
+                مغز متفکر خلاصه‌سازی خطبه‌ها
             </h1>
-            <p class="text-gray-400 text-sm md:text-xl font-light">
+            <p class="text-gray-400 text-lg md:text-xl font-light">
                 نسخه امن و بدون محدودیت IP (متصل به سرور واسطه)
             </p>
         </header>
 
-        <main id="mainCard" class="glass-panel w-full p-5 md:p-10 rounded-2xl md:rounded-3xl transition-all duration-500 relative">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 mb-8">
+        <main id="mainCard" class="glass-panel w-full p-6 md:p-10 rounded-3xl transition-all duration-500 relative">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
                 <div class="group relative">
-                    <label class="block mb-2 md:mb-3 font-bold text-sky-300 text-base md:text-lg flex items-center">
+                    <label class="block mb-3 font-bold text-sky-300 text-lg flex items-center">
                         <svg class="w-5 h-5 ml-2 text-sky-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
                         خطبه اول (محتوای مذهبی)
                     </label>
-                    <!-- تغییر متن پلیس‌هولدر و ریسپانسیو کردن ارتفاع -->
-                    <textarea id="khutbah1" class="neon-input w-full p-4 rounded-xl md:rounded-2xl outline-none text-gray-200 leading-relaxed resize-none text-sm md:text-base h-36 md:h-64" placeholder="متن خطبه اول را اینجا وارد کنید..."></textarea>
+                    <textarea id="khutbah1" rows="9" class="neon-input w-full p-5 rounded-2xl outline-none text-gray-200 leading-relaxed resize-none text-base" placeholder="متن خطبه اول را اینجا وارد کنید..."></textarea>
                 </div>
                 <div class="group relative">
-                    <label class="block mb-2 md:mb-3 font-bold text-purple-300 text-base md:text-lg flex items-center">
+                    <label class="block mb-3 font-bold text-purple-300 text-lg flex items-center">
                         <svg class="w-5 h-5 ml-2 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                         خطبه دوم (محتوای سیاسی/اجتماعی)
                     </label>
-                    <!-- تغییر متن پلیس‌هولدر و ریسپانسیو کردن ارتفاع -->
-                    <textarea id="khutbah2" class="neon-input w-full p-4 rounded-xl md:rounded-2xl outline-none text-gray-200 leading-relaxed resize-none text-sm md:text-base h-36 md:h-64" placeholder="متن خطبه دوم را اینجا وارد کنید..."></textarea>
+                    <textarea id="khutbah2" rows="9" class="neon-input w-full p-5 rounded-2xl outline-none text-gray-200 leading-relaxed resize-none text-base" placeholder="متن خطبه دوم را اینجا وارد کنید..."></textarea>
                 </div>
             </div>
 
-            <div class="text-center mb-4 relative z-10 flex justify-center">
-                <button id="generateBtn" class="cyber-btn flex items-center justify-center text-white font-black text-lg md:text-xl py-4 px-8 md:px-12 rounded-2xl md:rounded-full cursor-pointer shadow-lg w-full md:w-auto outline-none">
-                    <svg class="w-6 h-6 md:w-7 md:h-7 ml-3 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+            <div class="text-center mb-6 relative z-10 flex justify-center">
+                <button id="generateBtn" class="cyber-btn flex items-center justify-center text-white font-black text-xl py-4 px-12 rounded-full cursor-pointer shadow-lg w-full md:w-auto">
+                    <svg class="w-7 h-7 ml-3 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                     آغاز پردازش هوش مصنوعی
                 </button>
             </div>
             
-            <div id="loading" class="hidden flex-col items-center justify-center my-8 md:my-12 transition-all duration-500 opacity-0">
+            <div id="loading" class="hidden flex-col items-center justify-center my-12 transition-all duration-500 opacity-0">
                 <div class="radar-loader"></div>
-                <p id="loadingText" class="mt-4 md:mt-6 text-sky-400 font-bold text-sm md:text-lg tracking-widest text-center">ارتباط با سرور واسطه Vercel...</p>
+                <p id="loadingText" class="mt-6 text-sky-400 font-bold text-lg tracking-widest">ارتباط با سرور واسطه Vercel...</p>
             </div>
 
             <div id="resultContainer" class="hidden mt-8 transform transition-all duration-700 opacity-0 translate-y-10">
                 <div class="flex flex-col md:flex-row justify-between items-center mb-6 pb-4 border-b border-gray-700/50 gap-4">
-                    <h2 class="text-2xl md:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-emerald-600 flex items-center">
-                        <svg class="w-6 h-6 md:w-8 md:h-8 text-green-500 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <h2 class="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-emerald-600 flex items-center">
+                        <svg class="w-8 h-8 text-green-500 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                         گزارش نهایی استخراج شد
                     </h2>
                     
-                    <button id="copyBtn" class="group w-full md:w-auto justify-center flex items-center bg-gray-800/80 hover:bg-sky-600 border border-gray-600 hover:border-sky-500 text-gray-300 hover:text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 shadow-lg">
+                    <button id="copyBtn" class="group flex items-center bg-gray-800/80 hover:bg-sky-600 border border-gray-600 hover:border-sky-500 text-gray-300 hover:text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 shadow-lg">
                         <svg id="copyIcon" class="w-5 h-5 ml-2 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
                         </svg>
@@ -190,25 +174,22 @@
                     </button>
                 </div>
                 
-                <div id="output" class="text-base md:text-lg leading-loose text-gray-300 font-medium"></div>
+                <div id="output" class="text-lg leading-loose text-gray-300 font-medium"></div>
                 <textarea id="copyHelper" class="hidden"></textarea>
             </div>
 
-             <div id="error" class="hidden mt-6 bg-red-900/30 border border-red-500/50 text-red-400 p-4 md:p-5 rounded-xl shadow-[0_0_15px_rgba(239,68,68,0.2)] backdrop-blur-sm" role="alert">
+             <div id="error" class="hidden mt-6 bg-red-900/30 border border-red-500/50 text-red-400 p-5 rounded-xl shadow-[0_0_15px_rgba(239,68,68,0.2)] backdrop-blur-sm" role="alert">
                 <div class="flex items-center">
                     <svg class="w-6 h-6 mr-2 ml-2 text-red-500 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
-                    <strong class="font-bold text-base md:text-lg">خطا در پردازش!</strong>
+                    <strong class="font-bold text-lg">خطا در پردازش!</strong>
                 </div>
-                <span class="block mt-2 text-sm md:text-base font-medium text-red-200" id="errorMessage"></span>
+                <span class="block mt-2 font-medium text-red-200" id="errorMessage"></span>
             </div>
         </main>
     </div>
 
     <script>
-        // تشخیص موبایل برای بهینه سازی
-        const isMobile = window.innerWidth < 768;
-
-        // 1. Particle Canvas Logic (Optimized for Mobile)
+        // 1. Particle Canvas Logic
         const canvas = document.getElementById('particle-canvas');
         const ctx = canvas.getContext('2d');
         let width, height, particles;
@@ -218,12 +199,11 @@
             width = canvas.width = window.innerWidth;
             height = canvas.height = window.innerHeight;
             particles = [];
-            // در گوشی ذرات کمتری تولید شود تا گوشی هنگ نکند
-            let particleCount = isMobile ? 30 : Math.min((width * height) / 15000, 100); 
+            let particleCount = (width * height) / 12000;
             for (let i = 0; i < particleCount; i++) {
                 particles.push({
                     x: Math.random() * width, y: Math.random() * height,
-                    vx: (Math.random() - 0.5) * 0.4, vy: (Math.random() - 0.5) * 0.4,
+                    vx: (Math.random() - 0.5) * 0.5, vy: (Math.random() - 0.5) * 0.5,
                     radius: Math.random() * 2 + 1
                 });
             }
@@ -237,7 +217,7 @@
                 if (p.x < 0 || p.x > width) p.vx *= -1;
                 if (p.y < 0 || p.y > height) p.vy *= -1;
 
-                if(!isMobile && mouse.x != null) {
+                if(mouse.x != null) {
                     let dx = mouse.x - p.x; let dy = mouse.y - p.y;
                     let distance = Math.sqrt(dx * dx + dy * dy);
                     if (distance < mouse.radius) { p.x += dx * 0.01; p.y += dy * 0.01; }
@@ -247,8 +227,8 @@
                 particles.forEach(p2 => {
                     let dx = p.x - p2.x; let dy = p.y - p2.y;
                     let dist = Math.sqrt(dx * dx + dy * dy);
-                    if (dist < (isMobile ? 80 : 120)) {
-                        ctx.beginPath(); ctx.strokeStyle = `rgba(139, 92, 246, ${1 - dist/(isMobile?80:120)})`;
+                    if (dist < 100) {
+                        ctx.beginPath(); ctx.strokeStyle = `rgba(139, 92, 246, ${1 - dist/100})`;
                         ctx.lineWidth = 0.5; ctx.moveTo(p.x, p.y); ctx.lineTo(p2.x, p2.y); ctx.stroke();
                     }
                 });
@@ -257,30 +237,25 @@
         }
         window.addEventListener('resize', initCanvas); initCanvas(); drawParticles();
 
-        // 2. Interactive AI Core & Parallax (Controlled so it doesn't cause overflow)
+        // 2. Interactive AI Core & Parallax
         const aiCore = document.getElementById('ai-core');
         const mainCard = document.getElementById('mainCard');
         const aiPupil = document.getElementById('pupil');
 
-        if (!isMobile) {
-            window.addEventListener('mousemove', (e) => {
-                mouse.x = e.clientX; mouse.y = e.clientY;
-                const rect = mainCard.getBoundingClientRect();
-                mainCard.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
-                mainCard.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
+        window.addEventListener('mousemove', (e) => {
+            mouse.x = e.clientX; mouse.y = e.clientY;
+            const rect = mainCard.getBoundingClientRect();
+            mainCard.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
+            mainCard.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
 
-                // محدود کردن حرکت چشم برای جلوگیری از ایجاد اسکرول
-                const cx = window.innerWidth / 2; const cy = window.innerHeight / 2;
-                const moveX = Math.max(-30, Math.min(30, (e.clientX - cx) * 0.05)); 
-                const moveY = Math.max(-30, Math.min(30, (e.clientY - cy) * 0.05));
-                aiCore.style.transform = `translate(calc(-50% + ${moveX}px), calc(-50% + ${moveY}px))`;
-                
-                const pupilX = 50 + Math.max(-5, Math.min(5, (e.clientX - cx) * 0.01)); 
-                const pupilY = 50 + Math.max(-5, Math.min(5, (e.clientY - cy) * 0.01));
-                aiPupil.setAttribute('cx', pupilX); aiPupil.setAttribute('cy', pupilY);
-            });
-            window.addEventListener('mouseout', () => { mouse.x = null; mouse.y = null; });
-        }
+            const cx = window.innerWidth / 2; const cy = window.innerHeight / 2;
+            const moveX = (e.clientX - cx) * 0.05; const moveY = (e.clientY - cy) * 0.05;
+            aiCore.style.transform = `translate(calc(-50% + ${moveX}px), calc(-50% + ${moveY}px))`;
+            
+            const pupilX = 50 + (e.clientX - cx) * 0.01; const pupilY = 50 + (e.clientY - cy) * 0.01;
+            aiPupil.setAttribute('cx', pupilX); aiPupil.setAttribute('cy', pupilY);
+        });
+        window.addEventListener('mouseout', () => { mouse.x = null; mouse.y = null; });
 
         // 3. API Logic (VERCEL PROXY EDITION)
         const generateBtn = document.getElementById('generateBtn');
@@ -301,13 +276,7 @@
         ];
 
         let loadingInterval;
-        
-        // اطمینان از کارکرد دکمه در موبایل
-        generateBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            handleGeneration();
-        });
-        
+        generateBtn.addEventListener('click', handleGeneration);
         copyBtn.addEventListener('click', copyOutputToClipboard);
 
         async function handleGeneration() {
@@ -320,23 +289,16 @@
             const khutbah2Text = khutbah2Input.value.trim();
 
             if (!khutbah1Text || !khutbah2Text) {
-                showError("خطا: اطلاعات ورودی ناقص است. لطفاً هر دو فیلد را پر کنید."); 
-                // اسکرول به خطا در موبایل
-                errorDiv.scrollIntoView({behavior: "smooth", block: "center"});
-                return;
+                showError("خطا: اطلاعات ورودی ناقص است. لطفاً هر دو فیلد را پر کنید."); return;
             }
 
             generateBtn.disabled = true;
-            generateBtn.innerHTML = `<span class="modern-loader" style="width:24px;height:24px;border-width:3px;margin:0 10px;"></span> در حال پردازش...`;
-            generateBtn.classList.add('opacity-50', 'cursor-not-allowed');
+            generateBtn.innerHTML = `<span class="modern-loader"></span> در حال پردازش...`;
+            generateBtn.classList.add('opacity-50', 'cursor-not-allowed', 'scale-95');
             
             loadingDiv.classList.remove('hidden');
-            loadingDiv.classList.add('flex');
             setTimeout(() => loadingDiv.classList.remove('opacity-0'), 50);
             
-            // اسکرول به لودینگ در موبایل
-            if(isMobile) loadingDiv.scrollIntoView({behavior: "smooth", block: "center"});
-
             let msgIndex = 0; loadingText.innerText = loadingMessages[0];
             loadingInterval = setInterval(() => {
                 msgIndex = (msgIndex + 1) % loadingMessages.length;
@@ -370,7 +332,7 @@
             try {
                 const payload = { contents: [{ role: "user", parts: [{ text: prompt }] }], generationConfig: { responseMimeType: "application/json", responseSchema: schema } };
                 
-                // اتصال به سرور واسط Vercel
+                // --------- مهم: اتصال به سرور واسط Vercel ---------
                 const endpoint = '/api/proxy'; 
                 const response = await fetch(endpoint, { 
                     method: 'POST', 
@@ -395,18 +357,14 @@
 
             } catch (err) {
                 showError(`نقص فنی: ${err.message} (مطمئن شوید پروژه روی Vercel دیپلوی شده است)`);
-                if(isMobile) errorDiv.scrollIntoView({behavior: "smooth", block: "center"});
             } finally {
                 clearInterval(loadingInterval);
                 loadingDiv.classList.add('opacity-0');
-                setTimeout(() => {
-                    loadingDiv.classList.add('hidden');
-                    loadingDiv.classList.remove('flex');
-                }, 500);
+                setTimeout(() => loadingDiv.classList.add('hidden'), 500);
                 
                 generateBtn.disabled = false;
-                generateBtn.innerHTML = `<svg class="w-6 h-6 md:w-7 md:h-7 ml-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg> آغاز پردازش مجدد`;
-                generateBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                generateBtn.innerHTML = `<svg class="w-7 h-7 ml-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg> آغاز پردازش مجدد`;
+                generateBtn.classList.remove('opacity-50', 'cursor-not-allowed', 'scale-95');
             }
         }
 
@@ -425,35 +383,35 @@
 
             // Rich HTML
             let htmlContent = `
-                <div class="text-center mb-6 md:mb-8">
-                    <span class="text-gray-400 text-xs md:text-sm tracking-widest">بِسْمِ اللهِ الرَّحْمنِ الرَّحِیم</span>
-                    <h3 class="text-xl md:text-3xl font-black text-sky-300 mt-3 md:mt-4 mb-3 md:mb-4 leading-normal px-2">«${data.impactfulTitle}»</h3>
-                    <p class="text-gray-300 text-sm md:text-lg max-w-3xl mx-auto border-b border-gray-700/50 pb-4 md:pb-6">${intro}</p>
+                <div class="text-center mb-8">
+                    <span class="text-gray-400 text-sm tracking-widest">بِسْمِ اللهِ الرَّحْمنِ الرَّحِیم</span>
+                    <h3 class="text-2xl md:text-3xl font-black text-sky-300 mt-4 mb-4 leading-normal px-4">«${data.impactfulTitle}»</h3>
+                    <p class="text-gray-300 text-base md:text-lg max-w-3xl mx-auto border-b border-gray-700/50 pb-6">${intro}</p>
                 </div>
                 <div class="output-card output-khutbah1">
-                    <h4 class="text-lg md:text-xl font-bold text-blue-400 mb-4 flex items-center">
-                        <span class="bg-blue-500/20 p-1.5 md:p-2 rounded-lg ml-2 md:ml-3"><svg class="w-4 h-4 md:w-5 md:h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z"></path></svg></span>
+                    <h4 class="text-xl font-bold text-blue-400 mb-4 flex items-center">
+                        <span class="bg-blue-500/20 p-2 rounded-lg ml-3"><svg class="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z"></path></svg></span>
                         خطبه اول: ${data.khutbah1.title}
                     </h4>
-                    <div class="space-y-4 pr-1 md:pr-2">
-                        ${data.khutbah1.summary.map(i => `<div class="border-r-2 border-blue-500/30 pr-3 md:pr-4"><strong class="text-blue-300 block mb-1 text-base md:text-lg">${i.heading}</strong><span class="text-gray-400 text-sm md:text-base">${i.explanation}</span></div>`).join('')}
+                    <div class="space-y-4 pr-2">
+                        ${data.khutbah1.summary.map(i => `<div class="border-r-2 border-blue-500/30 pr-4"><strong class="text-blue-300 block mb-1 text-lg">${i.heading}</strong><span class="text-gray-400 text-base">${i.explanation}</span></div>`).join('')}
                     </div>
                 </div>
                 <div class="output-card output-khutbah2">
-                    <h4 class="text-lg md:text-xl font-bold text-emerald-400 mb-4 flex items-center">
-                        <span class="bg-emerald-500/20 p-1.5 md:p-2 rounded-lg ml-2 md:ml-3"><svg class="w-4 h-4 md:w-5 md:h-5 text-emerald-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd"></path></svg></span>
+                    <h4 class="text-xl font-bold text-emerald-400 mb-4 flex items-center">
+                        <span class="bg-emerald-500/20 p-2 rounded-lg ml-3"><svg class="w-5 h-5 text-emerald-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd"></path></svg></span>
                         خطبه دوم: ${data.khutbah2.title}
                     </h4>
-                    <div class="space-y-4 pr-1 md:pr-2">
-                        ${data.khutbah2.summary.map(i => `<div class="border-r-2 border-emerald-500/30 pr-3 md:pr-4"><strong class="text-emerald-300 block mb-1 text-base md:text-lg">${i.heading}</strong><span class="text-gray-400 text-sm md:text-base">${i.explanation}</span></div>`).join('')}
+                    <div class="space-y-4 pr-2">
+                        ${data.khutbah2.summary.map(i => `<div class="border-r-2 border-emerald-500/30 pr-4"><strong class="text-emerald-300 block mb-1 text-lg">${i.heading}</strong><span class="text-gray-400 text-base">${i.explanation}</span></div>`).join('')}
                     </div>
                 </div>
                 <div class="output-card output-overall">
-                    <h4 class="text-lg md:text-xl font-bold text-amber-400 mb-4 flex items-center">
-                        <span class="bg-amber-500/20 p-1.5 md:p-2 rounded-lg ml-2 md:ml-3"><svg class="w-4 h-4 md:w-5 md:h-5 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg></span>
+                    <h4 class="text-xl font-bold text-amber-400 mb-4 flex items-center">
+                        <span class="bg-amber-500/20 p-2 rounded-lg ml-3"><svg class="w-5 h-5 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg></span>
                         ${data.overallSummary.title}
                     </h4>
-                    <p class="text-gray-300 pr-1 md:pr-2 leading-relaxed text-sm md:text-base">${data.overallSummary.text}</p>
+                    <p class="text-gray-300 pr-2 leading-relaxed text-base">${data.overallSummary.text}</p>
                 </div>
             `;
 
@@ -468,9 +426,7 @@
                     if (outputDiv.style.opacity < 1) outputDiv.style.opacity = parseFloat(outputDiv.style.opacity) + 0.1;
                     else { clearInterval(fadeEffect); outputDiv.classList.remove('cursor-blink'); }
                 }, 50);
-                
-                // اسکرول نرم به سمت خروجی در ویندوز و موبایل
-                setTimeout(() => resultContainer.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+                resultContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }, 100);
         }
 
