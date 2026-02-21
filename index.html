@@ -168,9 +168,10 @@
             </div>
 
             <div class="text-center mb-6 relative z-10 flex justify-center">
+                <!-- دکمه پردازش -->
                 <button id="generateBtn" class="cyber-btn flex items-center justify-center text-white font-black text-lg md:text-xl py-4 px-8 md:px-12 rounded-full cursor-pointer shadow-lg w-full md:w-auto">
                     <svg class="w-6 h-6 md:w-7 md:h-7 ml-3 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                    آغاز پردازش هوش مصنوعی
+                    <span>آغاز پردازش هوش مصنوعی</span>
                 </button>
             </div>
             
@@ -285,7 +286,7 @@
             window.addEventListener('mouseout', () => { mouse.x = null; mouse.y = null; });
         }
 
-        // 3. API Logic (VERCEL PROXY EDITION) - این بخش برای هر دو (موبایل و دسکتاپ) یکسان کار میکند
+        // 3. API Logic (VERCEL PROXY EDITION)
         const generateBtn = document.getElementById('generateBtn');
         const khutbah1Input = document.getElementById('khutbah1');
         const khutbah2Input = document.getElementById('khutbah2');
@@ -325,7 +326,14 @@
             }
 
             generateBtn.disabled = true;
-            generateBtn.innerHTML = `<span class="modern-loader"></span> در حال پردازش...`;
+            // اصلاح تراز شدن آیکون چرخان (Loading) و متن درون دکمه
+            generateBtn.innerHTML = `
+                <svg class="w-6 h-6 md:w-7 md:h-7 ml-3 animate-spin text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <span>در حال پردازش...</span>
+            `;
             generateBtn.classList.add('opacity-50', 'cursor-not-allowed', 'scale-95');
             
             loadingDiv.classList.remove('hidden');
@@ -395,7 +403,8 @@
                 setTimeout(() => loadingDiv.classList.add('hidden'), 500);
                 
                 generateBtn.disabled = false;
-                generateBtn.innerHTML = `<svg class="w-6 h-6 md:w-7 md:h-7 ml-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg> آغاز پردازش مجدد`;
+                // بازگرداندن دکمه به حالت اولیه به شکل استاندارد
+                generateBtn.innerHTML = `<svg class="w-6 h-6 md:w-7 md:h-7 ml-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg> <span>آغاز پردازش مجدد</span>`;
                 generateBtn.classList.remove('opacity-50', 'cursor-not-allowed', 'scale-95');
             }
         }
