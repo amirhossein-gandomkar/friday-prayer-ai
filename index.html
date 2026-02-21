@@ -6,7 +6,7 @@
     <title>دستیار هوشمند خطبه‌های نماز جمعه</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;700;900&display=swap" rel="stylesheet">
-    <!-- اضافه کردن کتابخانه تولید PDF -->
+    <!-- کتابخانه تولید PDF -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     
     <style>
@@ -16,30 +16,30 @@
             --dark-glass: rgba(15, 23, 42, 0.75);
         }
 
-        /* قفل کامل اسکرول افقی در ویندوز */
-        html, body {
+        /* قفل اسکرول افقی بدون مخفی کردن بک‌گراند */
+        body {
             font-family: 'Vazirmatn', sans-serif;
             margin: 0;
             padding: 0;
-            overflow-x: hidden !important;
-            width: 100%;
+            overflow-x: hidden;
             background-color: #020617;
             color: #e2e8f0;
+            min-height: 100vh;
         }
 
         /* ----- بوم شبکه عصبی در پس زمینه ----- */
         #particle-canvas {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -2; pointer-events: none;
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 0; pointer-events: none;
         }
 
         /* ----- هسته هوش مصنوعی (چشم) ----- */
         #ai-core {
             position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            width: 300px; height: 300px; z-index: -1; pointer-events: none; opacity: 0.2;
+            width: 300px; height: 300px; z-index: 10; pointer-events: none; opacity: 0.2;
             transition: transform 0.2s ease-out; filter: drop-shadow(0 0 30px var(--primary));
             animation: float 6s ease-in-out infinite;
         }
-        @media (min-width: 768px) { #ai-core { width: 450px; height: 450px; } }
+        @media (min-width: 768px) { #ai-core { width: 500px; height: 500px; opacity: 0.15;} }
         @keyframes float { 0% { top: 50%; } 50% { top: 48%; } 100% { top: 50%; } }
 
         /* ----- شیشه تاریک (پنل اصلی) ----- */
@@ -49,7 +49,6 @@
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7), inset 0 0 0 1px rgba(255, 255, 255, 0.05);
             overflow: hidden;
             position: relative;
-            z-index: 10;
         }
         
         .glass-panel::before {
@@ -69,12 +68,12 @@
             box-shadow: 0 0 20px rgba(14, 165, 233, 0.2), inset 0 0 10px rgba(14, 165, 233, 0.1); transform: translateY(-2px);
         }
         
-        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #020617; }
         ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: var(--primary); box-shadow: 0 0 10px var(--primary); }
 
-        /* ----- دکمه ها و انیمیشن ها ----- */
+        /* ----- دکمه ها ----- */
         .cyber-btn {
             position: relative; background: linear-gradient(135deg, var(--primary), var(--secondary));
             overflow: hidden; z-index: 1; transition: all 0.3s ease; touch-action: manipulation;
@@ -111,10 +110,11 @@
         @keyframes blink { 50% { opacity: 0; } }
     </style>
 </head>
-<body class="antialiased text-gray-200 relative">
+<body class="antialiased">
 
-    <!-- شبکه عصبی و چشم هوش مصنوعی در لایه زیرین -->
+    <!-- بک گراند متحرک و چشم رباتیک -->
     <canvas id="particle-canvas"></canvas>
+    
     <svg id="ai-core" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
         <circle cx="50" cy="50" r="45" fill="none" stroke="#0ea5e9" stroke-width="0.5" stroke-dasharray="2 4" />
         <circle cx="50" cy="50" r="35" fill="none" stroke="#8b5cf6" stroke-width="1" stroke-dasharray="10 5">
@@ -127,14 +127,14 @@
         <path d="M50 20 L50 10 M50 80 L50 90 M20 50 L10 50 M80 50 L90 50" stroke="#8b5cf6" stroke-width="2" opacity="0.5"/>
     </svg>
 
-    <!-- محتوای اصلی سایت -->
+    <!-- کانتینر اصلی -->
     <div class="container mx-auto max-w-6xl p-4 md:p-8 min-h-screen flex flex-col items-center justify-center relative z-20">
         
         <header class="text-center mb-8 md:mb-12 w-full mt-4 md:mt-8">
             <div class="inline-block border border-sky-500/30 bg-sky-500/10 text-sky-400 px-4 py-1 rounded-full text-xs md:text-sm font-bold tracking-widest mb-4 shadow-[0_0_10px_rgba(14,165,233,0.2)]">
                 AI SERMON ANALYZER - VERCEL EDITION
             </div>
-            <h1 class="text-3xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-purple-500 drop-shadow-lg mb-4">
+            <h1 class="text-4xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-purple-500 drop-shadow-lg mb-4">
                 خلاصه سازی خطبه ها
             </h1>
             <p class="text-gray-400 text-sm md:text-xl font-light">
@@ -149,14 +149,14 @@
                         <svg class="w-5 h-5 ml-2 text-sky-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
                         خطبه اول (محتوای مذهبی)
                     </label>
-                    <textarea id="khutbah1" class="neon-input w-full p-4 rounded-xl md:rounded-2xl outline-none text-gray-200 leading-relaxed resize-none text-sm md:text-base h-36 md:h-64" placeholder="متن خطبه اول را اینجا وارد کنید..."></textarea>
+                    <textarea id="khutbah1" class="neon-input w-full p-4 rounded-xl md:rounded-2xl outline-none text-gray-200 leading-relaxed resize-none text-sm md:text-base h-40 md:h-64" placeholder="متن کامل خطبه اول را اینجا وارد کنید..."></textarea>
                 </div>
                 <div class="group relative">
                     <label class="block mb-2 md:mb-3 font-bold text-purple-300 text-base md:text-lg flex items-center">
                         <svg class="w-5 h-5 ml-2 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                         خطبه دوم (محتوای سیاسی/اجتماعی)
                     </label>
-                    <textarea id="khutbah2" class="neon-input w-full p-4 rounded-xl md:rounded-2xl outline-none text-gray-200 leading-relaxed resize-none text-sm md:text-base h-36 md:h-64" placeholder="متن خطبه دوم را اینجا وارد کنید..."></textarea>
+                    <textarea id="khutbah2" class="neon-input w-full p-4 rounded-xl md:rounded-2xl outline-none text-gray-200 leading-relaxed resize-none text-sm md:text-base h-40 md:h-64" placeholder="متن کامل خطبه دوم را اینجا وارد کنید..."></textarea>
                 </div>
             </div>
 
@@ -179,10 +179,9 @@
                         گزارش نهایی استخراج شد
                     </h2>
                     
-                    <!-- گروه دکمه ها شامل کپی، ورد و PDF -->
                     <div class="flex flex-col sm:flex-row flex-wrap gap-3 w-full lg:w-auto justify-center">
                         
-                        <!-- دکمه PDF (قرمز) -->
+                        <!-- دکمه PDF -->
                         <button id="pdfBtn" class="group justify-center flex items-center bg-red-600 hover:bg-red-500 text-white font-bold py-3 px-5 rounded-xl transition-all duration-300 shadow-lg flex-1 sm:flex-none">
                             <svg class="w-5 h-5 ml-2 transition-transform group-hover:-translate-y-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
@@ -190,7 +189,7 @@
                             <span id="pdfText">خروجی PDF</span>
                         </button>
 
-                        <!-- دکمه WORD (آبی) -->
+                        <!-- دکمه WORD -->
                         <button id="wordBtn" class="group justify-center flex items-center bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-5 rounded-xl transition-all duration-300 shadow-lg flex-1 sm:flex-none">
                             <svg class="w-5 h-5 ml-2 transition-transform group-hover:-translate-y-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
@@ -198,7 +197,7 @@
                             <span id="wordText">خروجی Word</span>
                         </button>
 
-                        <!-- دکمه COPY (خاکستری) -->
+                        <!-- دکمه کپی -->
                         <button id="copyBtn" class="group justify-center flex items-center bg-gray-800 border border-gray-600 hover:border-sky-500 hover:bg-sky-600 text-gray-300 hover:text-white font-bold py-3 px-5 rounded-xl transition-all duration-300 shadow-lg flex-1 sm:flex-none w-full sm:w-auto mt-2 sm:mt-0">
                             <svg id="copyIcon" class="w-5 h-5 ml-2 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
@@ -233,7 +232,7 @@
 
         let currentAiData = null;
 
-        // 1. Particle Canvas
+        // 1. Particle Canvas (بدون ایجاد باگ اسکرول)
         const canvas = document.getElementById('particle-canvas');
         const ctx = canvas.getContext('2d');
         let width, height, particles;
@@ -243,7 +242,7 @@
             width = canvas.width = window.innerWidth;
             height = canvas.height = window.innerHeight;
             particles = [];
-            let particleCount = isMobile ? 30 : Math.min((width * height) / 15000, 100); 
+            let particleCount = isMobile ? 30 : Math.min((width * height) / 12000, 100); 
             for (let i = 0; i < particleCount; i++) {
                 particles.push({
                     x: Math.random() * width, y: Math.random() * height,
@@ -281,7 +280,7 @@
         }
         window.addEventListener('resize', initCanvas); initCanvas(); drawParticles();
 
-        // 2. Parallax Eye
+        // 2. Parallax Eye (کنترل شده برای جلوگیری از رفتن به بیرون صفحه)
         const aiCore = document.getElementById('ai-core');
         const mainCard = document.getElementById('mainCard');
         const aiPupil = document.getElementById('pupil');
@@ -294,8 +293,8 @@
                 mainCard.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
 
                 const cx = window.innerWidth / 2; const cy = window.innerHeight / 2;
-                const moveX = Math.max(-30, Math.min(30, (e.clientX - cx) * 0.05)); 
-                const moveY = Math.max(-30, Math.min(30, (e.clientY - cy) * 0.05));
+                const moveX = Math.max(-20, Math.min(20, (e.clientX - cx) * 0.03)); 
+                const moveY = Math.max(-20, Math.min(20, (e.clientY - cy) * 0.03));
                 aiCore.style.transform = `translate(calc(-50% + ${moveX}px), calc(-50% + ${moveY}px))`;
                 
                 const pupilX = 50 + Math.max(-5, Math.min(5, (e.clientX - cx) * 0.01)); 
@@ -326,7 +325,7 @@
         generateBtn.addEventListener('click', function(e) { e.preventDefault(); handleGeneration(); });
         copyBtn.addEventListener('click', copyOutputToClipboard);
         wordBtn.addEventListener('click', exportToWord);
-        pdfBtn.addEventListener('click', exportToPdf); // دکمه PDF
+        pdfBtn.addEventListener('click', exportToPdf); 
 
         async function handleGeneration() {
             resultContainer.classList.remove('opacity-100', 'translate-y-0');
@@ -464,94 +463,20 @@
             }, 100);
         }
 
-        // تابع ساخت ساختار مشترک برای ورد و PDF
-        function generateDocumentHTML(data) {
+        // --- بخش تولید قالب اختصاصی برای خروجی‌های ورد و PDF ---
+        // این قالب برای جلوگیری از مشکل بریده شدن متن در PDF طراحی شده است
+        function generateOfficialDocument(data, forPdf = false) {
             const intro = "به گزارش معاونت ارتباطات و رسانه دفتر امام جمعه دهستان میانکاله (زاغمرز)، حجت الاسلام والمسلمین حاج حسین انزائی در خطبه‌های این هفته از نماز جمعه، ضمن سفارش به تقوا اظهار کرد:";
+            
+            // برای PDF عرض را فیکس میکنیم تا html2canvas گیج نشود و متن بیرون نزند
+            const containerStyle = forPdf 
+                ? "width: 750px; padding: 40px; background: white; color: black; direction: rtl; text-align: right; font-family: Tahoma, Arial, sans-serif; font-size: 14pt; line-height: 2;"
+                : "font-family: 'B Nazanin', Tahoma, Arial; font-size: 14pt; direction: rtl; text-align: right; line-height: 1.8; color: #000;";
+
             let html = `
-                <div style="font-family: 'B Nazanin', 'Vazirmatn', Tahoma, Arial, sans-serif; font-size: 14pt; direction: rtl; text-align: right; line-height: 1.8; color: #000; padding: 20px;">
-                    <div style="text-align: center; margin-bottom: 10px; font-size: 14pt;">بِسْمِ اللهِ الرَّحْمنِ الرَّحِیم</div>
-                    <div style="text-align: center; font-size: 16pt; font-weight: bold; margin-bottom: 20px;">«${data.impactfulTitle}»</div>
-                    <div style="margin-bottom: 20px;">${intro}</div>
+                <div style="${containerStyle}" id="export-content">
+                    <div style="text-align: center; margin-bottom: 15px; font-size: 14pt; font-weight: bold;">بِسْمِ اللهِ الرَّحْمنِ الرَّحِیم</div>
+                    <div style="text-align: center; font-size: 16pt; font-weight: bold; margin-bottom: 25px;">«${data.impactfulTitle}»</div>
+                    <div style="margin-bottom: 25px; text-align: justify;">${intro}</div>
                     
-                    <div style="font-weight: bold; font-size: 14pt; margin-top: 20px; margin-bottom: 10px;">خطبه اول: ${data.khutbah1.title}</div>
-            `;
-            data.khutbah1.summary.forEach((item, index) => {
-                html += `<div style="margin-bottom: 10px;"><span style="font-weight: bold;">${toPersianDigits(index + 1)}. ${item.heading}: </span>${item.explanation}</div>`;
-            });
-
-            html += `<div style="font-weight: bold; font-size: 14pt; margin-top: 20px; margin-bottom: 10px;">خطبه دوم: ${data.khutbah2.title}</div>`;
-            data.khutbah2.summary.forEach((item, index) => {
-                html += `<div style="margin-bottom: 10px;"><span style="font-weight: bold;">${toPersianDigits(index + 1)}. ${item.heading}: </span>${item.explanation}</div>`;
-            });
-
-            html += `
-                    <div style="font-weight: bold; font-size: 14pt; margin-top: 20px; margin-bottom: 10px;">${data.overallSummary.title}</div>
-                    <div>${data.overallSummary.text}</div>
-                </div>
-            `;
-            return html;
-        }
-
-        // خروجی WORD
-        function exportToWord() {
-            if (!currentAiData) return;
-            const wordHtml = `
-            <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
-            <head><meta charset="utf-8"></head>
-            <body>${generateDocumentHTML(currentAiData)}</body></html>`;
-
-            const blob = new Blob(['\ufeff', wordHtml], { type: 'application/msword' });
-            const url = URL.createObjectURL(blob);
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = `خلاصه_خطبه_${new Date().toLocaleDateString('fa-IR').replace(/\//g, '-')}.doc`;
-            document.body.appendChild(link); link.click(); document.body.removeChild(link);
-            URL.revokeObjectURL(url);
-            
-            const btn = document.getElementById('wordBtn'); const text = document.getElementById('wordText');
-            const originalText = text.innerText; text.innerText = 'دانلود شد!'; btn.classList.replace('bg-blue-600', 'bg-green-600');
-            setTimeout(() => { text.innerText = originalText; btn.classList.replace('bg-green-600', 'bg-blue-600'); }, 3000);
-        }
-
-        // خروجی PDF با استفاده از html2pdf
-        function exportToPdf() {
-            if (!currentAiData) return;
-            
-            // ساخت یک دیو مخفی برای رندر کردن قالب در PDF
-            const pdfContainer = document.createElement('div');
-            pdfContainer.innerHTML = generateDocumentHTML(currentAiData);
-            document.body.appendChild(pdfContainer);
-
-            const opt = {
-                margin:       15,
-                filename:     `خلاصه_خطبه_${new Date().toLocaleDateString('fa-IR').replace(/\//g, '-')}.pdf`,
-                image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2, useCORS: true },
-                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
-            };
-
-            const btn = document.getElementById('pdfBtn'); const text = document.getElementById('pdfText');
-            const originalText = text.innerText; text.innerText = 'در حال ساخت...'; 
-            
-            html2pdf().set(opt).from(pdfContainer).save().then(() => {
-                document.body.removeChild(pdfContainer); // پاک کردن دیو مخفی
-                text.innerText = 'دانلود شد!';
-                btn.classList.replace('bg-red-600', 'bg-green-600');
-                setTimeout(() => { text.innerText = originalText; btn.classList.replace('bg-green-600', 'bg-red-600'); }, 3000);
-            });
-        }
-
-        function showError(message) { errorMessageSpan.textContent = message; errorDiv.classList.remove('hidden'); }
-        
-        function copyOutputToClipboard() {
-            copyHelper.classList.remove('hidden'); copyHelper.select();
-            try {
-                document.execCommand('copy');
-                const btn = document.getElementById('copyBtn'); const text = document.getElementById('copyText');
-                btn.classList.add('bg-green-600', 'text-white'); btn.classList.remove('bg-gray-800'); text.innerText = 'کپی شد!';
-                setTimeout(() => { btn.classList.remove('bg-green-600', 'text-white'); btn.classList.add('bg-gray-800'); text.innerText = 'کپی متن'; }, 3000);
-            } catch (err) { alert('مرورگر پشتیبانی نمی‌کند.'); } finally { copyHelper.classList.add('hidden'); }
-        }
-    </script>
-</body>
-</html>
+                    <div style="font-weight: bold; font-size: 14pt; margin-top: 20px; margin
