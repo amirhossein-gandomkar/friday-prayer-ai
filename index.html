@@ -102,6 +102,12 @@
         .cursor-blink::after { content: '|'; animation: blink 1s step-end infinite; color: var(--primary); }
         @keyframes blink { 50% { opacity: 0; } }
 
+        /* استایل سفارشی گزینه‌های منوی کشویی به منظور همخوانی کامل با تم نئونی و شیشه‌ای سایت */
+        #summaryLength option {
+            background-color: #0f172a !important;
+            color: #38bdf8 !important;
+        }
+
         @media (max-width: 768px) {
             #particle-canvas { display: none !important; }
             #ai-core { display: none !important; }
@@ -126,7 +132,7 @@
             </button>
             <div class="text-center mb-6">
                 <h2 class="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-purple-500">معرفی سامانه جمعه یار</h2>
-                <p class="text-gray-400 mt-2">دستیار هوشمند استخراج و خلاصه‌سازی خطبه‌های نماز جمعه</p>
+                <p class="text-gray-400 mt-2">دستیار هوشمند استخراج و خلاصه سازی خطبه‌های نماز جمعه</p>
             </div>
             <div class="space-y-4 text-sm md:text-base text-gray-300 leading-relaxed">
                 <p>
@@ -136,9 +142,9 @@
                     <h4 class="font-bold text-sky-400 mb-2">💡 ویژگی‌ها و قابلیت‌های کلیدی:</h4>
                     <ul class="list-disc list-inside space-y-2 pr-4 text-right">
                         <li><strong>خلاصه‌سازی سفارشی:</strong> امکان تعیین اندازه خلاصه‌ها (کوتاه، متوسط یا بلند) به صورت اختصاصی از منوی کشویی قبل از شروع پردازش.</li>
-                        <li><strong>تولید دلخواه خطبه‌نگاشت:</strong> استخراج دقیق‌ترین و تاثیرگذارترین بخش‌های خطبه‌های مذهبی و سیاسی و نشاندن بر روی پوسترها تنها با مشخص کردن تاریخ شمسی دلخواه.</li>
+                        <li><strong>تولید دلخواه خطبه‌نگاشت:</strong> استخراج دقیق‌ترین و کوبنده‌ترین فرازهای عینی خطبه‌های مذهبی و سیاسی و درج خودکار آن‌ها بر روی پوسترها تنها با مشخص کردن تاریخ نماز جمعه.</li>
                         <li><strong>خروجی‌های چندگانه:</strong> کپی ساده متن، دریافت فایل تمیز Word یا فایل PDF بدون خطا و به‌هم‌ریختگی ظاهری.</li>
-                        <li><strong>بدون نیاز به فیلترشکن:</strong> متصل به پروکسی ابری Vercel جهت ارتباط مستقیم و پرسرعت.</li>
+                        <li><strong>بدون نیاز به فیلترشکن:</strong> متصل به زیرساخت ابری اختصاصی و پایدار جهت ارتباط سریع و بدون محدودیت IP.</li>
                     </ul>
                 </div>
             </div>
@@ -170,7 +176,7 @@
                 جمعه یار
             </h1>
             <p class="text-gray-400 text-base md:text-xl font-light">
-                نسخه امن و بدون محدودیت IP (متصل به سرور واسطه Vercel)
+                نسخه امن و بدون محدودیت IP (متصل به سرورهای ابری اختصاصی و ایمن)
             </p>
         </header>
 
@@ -193,14 +199,20 @@
                 </div>
             </div>
 
-            <!-- پنل شروع فرآیند پردازش و منوی کشویی انتخاب حجم خلاصه -->
+            <!-- پنل شروع فرآیند پردازش و منوی کشویی مدرن انتخاب حجم خلاصه -->
             <div class="flex flex-col md:flex-row items-center justify-center gap-4 mb-6 relative z-10 w-full max-w-2xl mx-auto">
-                <div class="w-full md:w-1/3">
-                    <select id="summaryLength" class="neon-input w-full p-4 rounded-full text-base font-bold outline-none cursor-pointer bg-slate-900 border border-sky-500/30 text-sky-300 transition-all duration-300">
+                <div class="relative w-full md:w-1/3">
+                    <select id="summaryLength" class="neon-input w-full p-4 pr-10 pl-4 rounded-full text-base font-bold outline-none cursor-pointer bg-slate-900 border border-sky-500/30 text-sky-400 hover:border-sky-400 transition-all duration-300 focus:border-sky-400 focus:shadow-[0_0_15px_rgba(14,165,233,0.3)] appearance-none text-center">
                         <option value="short">خلاصه کوتاه</option>
                         <option value="medium" selected>خلاصه متوسط (پیش‌فرض)</option>
                         <option value="long">خلاصه بلند</option>
                     </select>
+                    <!-- فلش راهنمای اختصاصی نئونی منو -->
+                    <div class="absolute inset-y-0 left-4 flex items-center pointer-events-none text-sky-400">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </div>
                 </div>
                 
                 <button id="generateBtn" class="cyber-btn flex items-center justify-center text-white font-black text-lg md:text-xl py-4 px-8 md:px-12 rounded-full cursor-pointer shadow-lg w-full md:w-2/3">
@@ -211,7 +223,7 @@
             
             <div id="loading" class="hidden flex flex-col items-center justify-center my-10 transition-all duration-500 opacity-0 w-full">
                 <div class="radar-loader"></div>
-                <p id="loadingText" class="mt-6 text-sky-400 font-bold text-base md:text-lg tracking-widest text-center">ارتباط با سرور واسطه Vercel...</p>
+                <p id="loadingText" class="mt-6 text-sky-400 font-bold text-base md:text-lg tracking-widest text-center">ارتباط با سرور ابری اختصاصی...</p>
             </div>
 
             <div id="resultContainer" class="hidden mt-8 transform transition-all duration-700 opacity-0 translate-y-10">
@@ -309,7 +321,7 @@
                                         <div class="radar-loader"></div>
                                     </div>
                                 </div>
-                                <!-- دکمه دانلود ابتدا کاملاً مخفی است و کادر تصویر هم تا قبل از اتمام رندر دیده نمی‌شود -->
+                                <!-- دکمه دانلود ابتدا کاملاً مخفی است -->
                                 <button id="downloadReligiousBtn" class="cyber-btn w-full max-w-sm py-2 px-4 rounded-xl text-white font-bold flex items-center justify-center gap-2 hidden">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
                                     دانلود تصویر مذهبی
@@ -493,7 +505,7 @@
         }
 
         const loadingMessages = [
-            "در حال خواندن متون...", "انتقال به سرور واسط...", "تجزیه و تحلیل شبکه‌های معنایی...",
+            "در حال خواندن متون...", "انتقال به سرور ابری...", "تجزیه و تحلیل شبکه‌های معنایی...",
             "استخراج نکات کلیدی...", "آماده‌سازی خروجی..."
         ];
 
@@ -522,7 +534,7 @@
             document.getElementById('downloadReligiousBtn').classList.add('hidden');
             document.getElementById('downloadPoliticalBtn').classList.add('hidden');
 
-            // نمایش دائمی لودرهای چرخشی
+            // نمایش لودرهای چرخشی
             document.getElementById('loaderReligious').classList.remove('hidden');
             document.getElementById('loaderPolitical').classList.remove('hidden');
 
@@ -532,11 +544,11 @@
             const y = document.getElementById('selYear').value;
             const fullDateString = `نماز جمعه ${d} ${m} ${y} دهستان میانکاله (زاغمرز)`;
 
-            // فرآیند رسم زنده تصویر قالب خطبه‌نگاشت با استفاده از Blob باینری
+            // فرآیند رسم زنده تصویر قالب خطبه‌نگاشت با استفاده از Blob باینری بدون خطا و سیاهی تصویر
             renderKhutbahNegasht(currentReportData.religiousQuote, 'canvasReligious', 'imgReligiousPreview', 'loaderReligious', 'downloadReligiousBtn', fullDateString);
             renderKhutbahNegasht(currentReportData.politicalQuote, 'canvasPolitical', 'imgPoliticalPreview', 'loaderPolitical', 'downloadPoliticalBtn', fullDateString);
 
-            // اعمال لایو کلیک هندلرهای دکمه دانلود
+            // اعمال کلیک هندلرهای دکمه دانلود
             document.getElementById('downloadReligiousBtn').onclick = () => downloadImage('canvasReligious', 'khutbah_religious.png');
             document.getElementById('downloadPoliticalBtn').onclick = () => downloadImage('canvasPolitical', 'khutbah_political.png');
 
@@ -602,8 +614,8 @@
                 6. khutbah2.summary: خلاصه خطبه دوم (سیاسی/اجتماعی) بر اساس ساختار طولی بالا.
                 7. overallSummary.title: تیتر خلاصه نهایی.
                 8. overallSummary.text: خلاصه کلی (حدود ۴ الی ۶ خط).
-                9. religiousQuote: یک فراز مستقل، بسیار زیبا، شیوا، معنوی و طولانی (حدود ۲ الی ۳ جمله کامل و تاثیرگذار، طولانی‌تر از دفعات قبل) از خطبه اول برای درج در خطبه‌نگاشت مذهبی.
-                10. politicalQuote: یک فراز مستقل، بسیار قوی، سیاسی/اجتماعی، کوبنده و طولانی (حدود ۲ الی ۳ جمله کامل و حماسی، طولانی‌تر از دفعات قبل) از خطبه دوم برای درج در خطبه‌نگاشت سیاسی.
+                9. religiousQuote: یک فراز مستقل، بسیار زیبا، شیوا، معنوی و طولانی (حدود ۲ الی ۳ جمله کامل و تاثیرگذار) از متن خطبه اول برای درج در خطبه‌نگاشت مذهبی. بسیار مهم: این مقدار باید دقیقا و عینا بخشی از خود متن خطبه ورودی اول باشد (بدون کوچک‌ترین تغییر در ساختار جمله یا تغییر معنا). شما فقط و فقط مجاز به اصلاح علائم نگارشی، غلط‌های املایی یا اشتباهات فاحش دستور زبانی هستید تا متن روان‌تر خوانده شود. نباید جمله را بازنویسی کنید، عینا همان فراز طلایی و تاثیرگذار خطبه را استخراج کنید.
+                10. politicalQuote: یک فراز مستقل، بسیار قوی، سیاسی/اجتماعی، کوبنده و طولانی (حدود ۲ الی ۳ جمله کامل و حماسی) از متن خطبه دوم برای درج در خطبه‌نگاشت سیاسی. بسیار مهم: این مقدار باید دقیقا و عینا بخشی از خود متن خطبه ورودی دوم باشد (بدون کوچک‌ترین تغییر در ساختار جمله یا تغییر معنا). شما فقط و فقط مجاز به اصلاح علائم نگارشی، غلط‌های املایی یا اشتباهات فاحش دستور زبانی هستید تا متن روان‌تر خوانده شود. نباید جمله را بازنویسی کنید، عینا همان فراز طلایی و تاثیرگذار خطبه را استخراج کنید.
                 فقط JSON برگردان.
             `;
 
@@ -718,7 +730,7 @@
 
         // متد بهینه برای لود کردن بک‌گراند به صورت باینری (Blob) جهت حذف قطعی خطای CORS و سیاهی تصویر بوم
         async function fetchTemplateBlob() {
-            // دریافت تصویر خام از گیت‌هاب با یک پارامتر رندوم تصادفی جهت دور زدن کش مروگر
+            // دریافت تصویر خام از گیت‌هاب با یک پارامتر رندوم تصادفی جهت پاکسازی کش مروگر
             const url = "https://raw.githubusercontent.com/amirhossein-gandomkar/friday-prayer-ai/abe11c45e603f9699058dfffa2229c34fb4ab9d9/kh.png?t=" + new Date().getTime();
             try {
                 const response = await fetch(url, { mode: 'cors' });
@@ -775,7 +787,7 @@
                     // استخراج ایمن سایز پیکسل فونت از هر نوع استرینگ استایل با تکنیک RegEx (برای جلوگیری از NaN شدن ارتفاع خطوط)
                     const fontSizeMatch = font.match(/(\d+)px/);
                     const fontSize = fontSizeMatch ? parseInt(fontSizeMatch[1]) : 24;
-                    const lineHeight = fontSize * 1.45;
+                    const lineHeight = fontSize * 1.35; // کاهش اندک ارتفاع خط برای تناسب بهینه متون درشت
 
                     if (maxW) {
                         const words = text.split(' ');
@@ -806,24 +818,24 @@
                     }
                 }
 
-                // ۱. خط اول: درج تاریخ (سایز ۱۰ معادل تقریبی ۲۲ پیکسل، سفید، دور سیاه)
-                const dateFont = "bold 22px 'B Nazanin', 'Vazirmatn', sans-serif";
+                // ۱. خط اول: درج تاریخ (سایز ارتقا یافته به ۲۸ پیکسل، سفید، دور سیاه)
+                const dateFont = "bold 28px 'B Nazanin', 'Vazirmatn', sans-serif";
                 currentY = drawTextWithOutline(toPersianDigits(dateText), centerX, currentY, dateFont, '#FFFFFF');
 
                 currentY += 12; // فاصله خط
 
-                // ۲. خط دوم: تفکیک مشخصات ائمه جمعه به دو سطر شکیل تر (سایز ۱۵ معادل تقریبی ۲۷ پیکسل، سفید، دور سیاه)
-                const speakerFont = "bold 27px 'B Nazanin', 'Vazirmatn', sans-serif";
+                // ۲. خط دوم: مشخصات ائمه جمعه به دو سطر با ابعاد بزرگ‌تر (اندازه ارتقا یافته به ۳۴ پیکسل، سفید، دور سیاه)
+                const speakerFont = "bold 34px 'B Nazanin', 'Vazirmatn', sans-serif";
                 currentY = drawTextWithOutline("امام جمعه محترم دهستان میانکاله(زاغمرز)", centerX, currentY, speakerFont, '#FFFFFF');
                 currentY += 5;
                 currentY = drawTextWithOutline("حجت الاسلام والمسلمین حاج حسین انزائی:", centerX, currentY, speakerFont, '#FFFFFF');
 
                 currentY += 20; // فاصله خط
 
-                // ۳. خط سوم: نقل قول برگزیده بلند (سایز ۱۵.۵ معادل تقریبی ۳۳ پیکسل، زرد، دور سیاه) با حداکثر عرض مجاز ۸۲ درصد بوم
-                const quoteFont = "bold 33px 'B Titr', 'Vazirmatn', sans-serif";
+                // ۳. خط سوم: نقل قول برگزیده عینی و درشت (اندازه ارتقا یافته به ۴۲ پیکسل، زرد، دور سیاه) با پهنای بهینه ۸۴ درصد بوم
+                const quoteFont = "bold 42px 'B Titr', 'Vazirmatn', sans-serif";
                 const formattedQuote = `«${quote}»`;
-                drawTextWithOutline(formattedQuote, centerX, currentY, quoteFont, '#FFDF00', w * 0.82);
+                drawTextWithOutline(formattedQuote, centerX, currentY, quoteFont, '#FFDF00', w * 0.84);
 
                 try {
                     previewImg.src = canvas.toDataURL('image/png');
@@ -836,7 +848,7 @@
                     downloadBtn.classList.remove('hidden');
 
                 } catch (err) {
-                    console.error("خطای بارگذاری بوم:", err);
+                    console.error("خطای بارگذاری داده بوم:", err);
                     loader.classList.add('hidden');
                 }
 
@@ -1033,9 +1045,4 @@
                     icon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />`;
                 }, 3000);
             } catch (err) { 
-                alert('مشکلی در کپی کردن پیش آمد یا مرورگر شما پشتیبانی نمی‌کند.'); 
-            }
-        }
-    </script>
-</body>
-</html>
+                alert('مشکلی
