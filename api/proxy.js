@@ -5,7 +5,7 @@ export const config = {
 };
 
 export default async function handler(req) {
-  // تنظیم هدرهای CORS برای اینکه بتوانید از فایل لوکال یا دامین دیگر درخواست بدهید
+  // تنظیم هدرهای CORS برای دسترسی بدون محدودیت
   const headers = {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': 'POST, OPTIONS',
@@ -13,7 +13,6 @@ export default async function handler(req) {
     'Content-Type': 'application/json'
   };
 
-  // اگر درخواست از نوع OPTIONS بود (چک کردن دسترسی)، سریع تایید کن
   if (req.method === 'OPTIONS') {
     return new Response(null, { status: 200, headers });
   }
@@ -24,8 +23,6 @@ export default async function handler(req) {
 
   try {
     const body = await req.json();
-    
-    // دریافت کلید API از تنظیمات Vercel (امنیت بالا)
     const apiKey = process.env.GOOGLE_API_KEY;
 
     if (!apiKey) {
@@ -34,7 +31,6 @@ export default async function handler(req) {
 
     const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
 
-    // ارسال درخواست به گوگل از سمت سرور Vercel
     const googleResponse = await fetch(apiUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -42,7 +38,6 @@ export default async function handler(req) {
     });
 
     const data = await googleResponse.json();
-
     return new Response(JSON.stringify(data), { status: 200, headers });
 
   } catch (error) {
