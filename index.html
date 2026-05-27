@@ -827,11 +827,12 @@
 
                 const w = canvas.width;
                 const h = canvas.height;
-                let currentY = h * 0.67; // تغییر تراز به h * 0.67 جهت انتقال اصولی تمام متون به داخل کادر آبی‌رنگ پایین تصویر
+                // شروع رسم متن تاریخ از تراز h * 0.575 (بالای کادر آبی رنگ به منظور توزیع متوازن‌تر فضا)
+                let currentY = h * 0.575; 
                 const centerX = w / 2;
 
                 // تابع ترسیم متن راست‌چین با سایه‌رنگ بیرونی سیاه (Stroke) بدون مشکل NaN عددی
-                function drawTextWithOutline(text, x, y, font, fillColor, maxW = null) {
+                function drawTextWithOutline(text, x, y, font, fillColor, maxW = null, lineHeightFactor = 1.2) {
                     ctx.font = font;
                     ctx.textAlign = 'center';
                     ctx.textBaseline = 'middle';
@@ -844,7 +845,7 @@
                     // استخراج ایمن سایز پیکسل فونت از هر نوع استرینگ استایل با تکنیک RegEx (برای جلوگیری از NaN شدن ارتفاع خطوط)
                     const fontSizeMatch = font.match(/(\d+)px/);
                     const fontSize = fontSizeMatch ? parseInt(fontSizeMatch[1]) : 24;
-                    const lineHeight = fontSize * 1.35;
+                    const lineHeight = fontSize * lineHeightFactor;
 
                     if (maxW) {
                         const words = text.split(' ');
@@ -875,24 +876,24 @@
                     }
                 }
 
-                // ۱. خط اول: درج تاریخ (اندازه قلم ۲۸ پیکسل)
+                // ۱. خط اول: درج تاریخ در بالای کادر آبی بدون بیرون‌زدگی (اندازه قلم ۲۸ پیکسل)
                 const dateFont = "bold 28px 'B Nazanin', 'Vazirmatn', sans-serif";
-                currentY = drawTextWithOutline(toPersianDigits(dateText), centerX, currentY, dateFont, '#FFFFFF');
+                currentY = drawTextWithOutline(toPersianDigits(dateText), centerX, currentY, dateFont, '#FFFFFF', null, 1.2);
 
-                currentY += 8; // فاصله خط ملایم
+                currentY += 10; // فاصله مناسب با سطر بعدی
 
-                // ۲. خط دوم: تفکیک مشخصات ائمه جمعه به دو سطر شکیل تر (اندازه قلم به ۳۶ پیکسل بزرگ‌تر شد)
-                const speakerFont = "bold 36px 'B Nazanin', 'Vazirmatn', sans-serif";
-                currentY = drawTextWithOutline("امام جمعه محترم دهستان میانکاله (زاغمرز)", centerX, currentY, speakerFont, '#FFFFFF');
-                currentY += 4;
-                currentY = drawTextWithOutline("حجت الاسلام والمسلمین حاج حسین انزائی:", centerX, currentY, speakerFont, '#FFFFFF');
+                // ۲. خط دوم: مشخصات امام جمعه با کمی فاصله در زیر تاریخ (اندازه قلم به ۳۸ پیکسل افزایش یافته و فاصله‌ها تراز شد)
+                const speakerFont = "bold 38px 'B Nazanin', 'Vazirmatn', sans-serif";
+                currentY = drawTextWithOutline("امام جمعه محترم دهستان میانکاله (زاغمرز)", centerX, currentY, speakerFont, '#FFFFFF', null, 1.2);
+                currentY += 6;
+                currentY = drawTextWithOutline("حجت الاسلام والمسلمین حاج حسین انزائی:", centerX, currentY, speakerFont, '#FFFFFF', null, 1.2);
 
-                currentY += 12; // فاصله خط ملایم برای شروع نقل قول
+                currentY += 18; // فاصله کافی قبل از شروع متن خطبه جهت ایجاد نظم بصری
 
-                // ۳. خط سوم: نقل قول برگزیده بلند (اندازه قلم ۴۴ پیکسل، زرد، دور سیاه) با حداکثر عرض مجاز ۸۲ درصد بوم برای عدم خروج از حاشیه‌های چپ و راست
+                // ۳. خط سوم: متن خطبه در وسط رو به پایین کادر آبی (اندازه قلم ۴۴ پیکسل، زرد، با فشرده‌سازی ملایم ارتفاع خطوط ۱.۱۸ جهت جلوگیری از سرریز)
                 const quoteFont = "bold 44px 'B Titr', 'Vazirmatn', sans-serif";
                 const formattedQuote = `« ${quote} »`;
-                drawTextWithOutline(formattedQuote, centerX, currentY, quoteFont, '#FFDF00', w * 0.82);
+                drawTextWithOutline(formattedQuote, centerX, currentY, quoteFont, '#FFDF00', w * 0.82, 1.18);
 
                 try {
                     previewImg.src = canvas.toDataURL('image/png');
