@@ -102,17 +102,6 @@
         .cursor-blink::after { content: '|'; animation: blink 1s step-end infinite; color: var(--primary); }
         @keyframes blink { 50% { opacity: 0; } }
 
-        /* استایل سفارشی گزینه‌های منوی کشویی به منظور همخوانی کامل با تم نئونی و شیشه‌ای سایت */
-        #summaryLength {
-            text-align: center;
-            text-align-last: center;
-        }
-        #summaryLength option {
-            background-color: #0b1329 !important;
-            color: #38bdf8 !important;
-            text-align: center;
-        }
-
         @media (max-width: 768px) {
             #particle-canvas { display: none !important; }
             #ai-core { display: none !important; }
@@ -137,7 +126,7 @@
             </button>
             <div class="text-center mb-6">
                 <h2 class="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-purple-500">معرفی سامانه جمعه یار</h2>
-                <p class="text-gray-400 mt-2">دستیار هوشمند استخراج و خلاصه سازی خطبه‌های نماز جمعه</p>
+                <p class="text-gray-400 mt-2">دستیار هوشمند استخراج و خلاصه‌سازی خطبه‌های نماز جمعه</p>
             </div>
             <div class="space-y-4 text-sm md:text-base text-gray-300 leading-relaxed">
                 <p>
@@ -147,9 +136,9 @@
                     <h4 class="font-bold text-sky-400 mb-2">💡 ویژگی‌ها و قابلیت‌های کلیدی:</h4>
                     <ul class="list-disc list-inside space-y-2 pr-4 text-right">
                         <li><strong>خلاصه‌سازی سفارشی:</strong> امکان تعیین اندازه خلاصه‌ها (کوتاه، متوسط یا بلند) به صورت اختصاصی از منوی کشویی قبل از شروع پردازش.</li>
-                        <li><strong>تولید دلخواه خطبه‌نگاشت:</strong> استخراج دقیق‌ترین و کوبنده‌ترین فرازهای عینی خطبه‌های مذهبی و سیاسی و درج خودکار آن‌ها بر روی پوسترها تنها با مشخص کردن تاریخ نماز جمعه.</li>
+                        <li><strong>تولید دلخواه خطبه‌نگاشت:</strong> استخراج دقیق‌ترین و تاثیرگذارترین بخش‌های خطبه‌های مذهبی و سیاسی و نشاندن بر روی پوسترها تنها با مشخص کردن تاریخ شمسی دلخواه.</li>
                         <li><strong>خروجی‌های چندگانه:</strong> کپی ساده متن، دریافت فایل تمیز Word یا فایل PDF بدون خطا و به‌هم‌ریختگی ظاهری.</li>
-                        <li><strong>بدون نیاز به فیلترشکن:</strong> متصل به زیرساخت ابری اختصاصی و پایدار جهت ارتباط سریع و بدون محدودیت IP.</li>
+                        <li><strong>بدون نیاز به فیلترشکن:</strong> متصل به پروکسی ابری هوشمند جهت ارتباط مستقیم و پرسرعت.</li>
                     </ul>
                 </div>
             </div>
@@ -181,7 +170,7 @@
                 جمعه یار
             </h1>
             <p class="text-gray-400 text-base md:text-xl font-light">
-                نسخه امن و بدون محدودیت IP (متصل به سرورهای ابری اختصاصی و ایمن)
+                نسخه امن و بدون محدودیت IP (متصل به سرور ابری اختصاصی و پرسرعت)
             </p>
         </header>
 
@@ -204,20 +193,25 @@
                 </div>
             </div>
 
-            <!-- پنل شروع فرآیند پردازش و منوی کشویی مدرن انتخاب حجم خلاصه با پدینگ متوازن (pl-12 pr-12) جهت عدم هم‌پوشانی با فلش -->
+            <!-- پنل شروع فرآیند پردازش و منوی کشویی انتخاب حجم خلاصه (نسخه شیک و نئونی متناسب با تم سایت) -->
             <div class="flex flex-col md:flex-row items-center justify-center gap-4 mb-6 relative z-10 w-full max-w-2xl mx-auto">
-                <div class="relative w-full md:w-1/3">
-                    <select id="summaryLength" class="neon-input w-full py-4 pl-12 pr-12 rounded-full text-base font-bold outline-none cursor-pointer bg-slate-900 border border-sky-500/30 text-sky-400 hover:border-sky-400 transition-all duration-300 focus:border-sky-400 focus:shadow-[0_0_15px_rgba(14,165,233,0.3)] appearance-none text-center">
+                <div class="w-full md:w-1/3 relative" id="customSelectContainer">
+                    <button id="customSelectBtn" type="button" class="neon-input w-full p-4 rounded-full text-base font-bold outline-none cursor-pointer bg-slate-900 border border-sky-500/30 text-sky-300 transition-all duration-300 flex items-center justify-between px-6 shadow-[0_0_15px_rgba(14,165,233,0.15)]">
+                        <span id="customSelectValue">خلاصه متوسط (پیش‌فرض)</span>
+                        <svg class="w-5 h-5 text-sky-400 transition-transform duration-300" id="customSelectArrow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <!-- منوی دراپ‌داون نئونی زیبا -->
+                    <div id="customSelectDropdown" class="hidden absolute bottom-full mb-2 md:bottom-auto md:top-full md:mt-2 left-0 right-0 bg-slate-950/95 backdrop-blur-md border border-sky-500/30 rounded-2xl overflow-hidden shadow-2xl z-50 transition-all duration-300 scale-95 opacity-0 origin-top">
+                        <div class="custom-option py-3.5 px-6 hover:bg-sky-500/20 text-gray-300 hover:text-sky-300 cursor-pointer transition-colors duration-200 font-bold" data-value="short">خلاصه کوتاه</div>
+                        <div class="custom-option py-3.5 px-6 hover:bg-sky-500/20 text-sky-300 bg-sky-500/10 cursor-pointer transition-colors duration-200 font-bold" data-value="medium">خلاصه متوسط (پیش‌فرض)</div>
+                        <div class="custom-option py-3.5 px-6 hover:bg-sky-500/20 text-gray-300 hover:text-sky-300 cursor-pointer transition-colors duration-200 font-bold" data-value="long">خلاصه بلند</div>
+                    </div>
+                    <!-- تگ سلکت اصلی به صورت مخفی جهت سازگاری کامل با کدهای جاوااسکریپت پردازش قدیمی -->
+                    <select id="summaryLength" class="hidden">
                         <option value="short">خلاصه کوتاه</option>
                         <option value="medium" selected>خلاصه متوسط (پیش‌فرض)</option>
                         <option value="long">خلاصه بلند</option>
                     </select>
-                    <!-- فلش راهنمای اختصاصی نئونی منو در منتهی‌الیه سمت چپ -->
-                    <div class="absolute inset-y-0 left-4 flex items-center pointer-events-none text-sky-400">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                        </svg>
-                    </div>
                 </div>
                 
                 <button id="generateBtn" class="cyber-btn flex items-center justify-center text-white font-black text-lg md:text-xl py-4 px-8 md:px-12 rounded-full cursor-pointer shadow-lg w-full md:w-2/3">
@@ -228,7 +222,7 @@
             
             <div id="loading" class="hidden flex flex-col items-center justify-center my-10 transition-all duration-500 opacity-0 w-full">
                 <div class="radar-loader"></div>
-                <p id="loadingText" class="mt-6 text-sky-400 font-bold text-base md:text-lg tracking-widest text-center">ارتباط با سرور ابری اختصاصی...</p>
+                <p id="loadingText" class="mt-6 text-sky-400 font-bold text-base md:text-lg tracking-widest text-center">ارتباط با سرور پردازش ابری هوشمند...</p>
             </div>
 
             <div id="resultContainer" class="hidden mt-8 transform transition-all duration-700 opacity-0 translate-y-10">
@@ -291,6 +285,7 @@
                                     <option value="شهریور">شهریور</option>
                                     <option value="مهر">مهر</option>
                                     <option value="آبان">آبان</option>
+                                    <option value="آبان">آبان</option>
                                     <option value="آذر">آذر</option>
                                     <option value="دی">دی</option>
                                     <option value="بهمن">بهمن</option>
@@ -326,7 +321,7 @@
                                         <div class="radar-loader"></div>
                                     </div>
                                 </div>
-                                <!-- دکمه دانلود ابتدا کاملاً مخفی است -->
+                                <!-- دکمه دانلود ابتدا کاملاً مخفی است و کادر تصویر هم تا قبل از اتمام رندر دیده نمی‌شود -->
                                 <button id="downloadReligiousBtn" class="cyber-btn w-full max-w-sm py-2 px-4 rounded-xl text-white font-bold flex items-center justify-center gap-2 hidden">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
                                     دانلود تصویر مذهبی
@@ -370,168 +365,6 @@
     <textarea id="copyHelper" class="hidden absolute -left-full -top-full"></textarea>
 
     <script>
-        // --- بخش اول: تعاریف و توابع پایه (جهت تضمین عدم بروز خطاهای hoisting) ---
-
-        const introText = "به گزارش معاونت ارتباطات و رسانه دفتر امام جمعه دهستان میانکاله (زاغمرز)، حجت الاسلام والمسلمین حاج حسین انزائی در خطبه‌های این هفته از نماز جمعه، ضمن سفارش به تقوا اظهار کرد:";
-
-        // تبدیل ارقام به فارسی
-        function toPersianDigits(str) {
-            const persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
-            return str.toString().replace(/\d/g, x => persianDigits[x]);
-        }
-
-        // متد کمکی برای لود کردن بک‌گراند به صورت باینری (Blob) جهت حذف قطعی خطای CORS و سیاهی تصویر بوم
-        async function fetchTemplateBlob() {
-            const url = "https://raw.githubusercontent.com/amirhossein-gandomkar/friday-prayer-ai/abe11c45e603f9699058dfffa2229c34fb4ab9d9/kh.png?t=" + new Date().getTime();
-            try {
-                const response = await fetch(url, { mode: 'cors' });
-                if (!response.ok) throw new Error("قالب تصویر خام از گیت‌هاب دریافت نشد.");
-                return await response.blob();
-            } catch (err) {
-                console.error("ارتباط ناموفق با مخزن گیت‌هاب:", err);
-                return null;
-            }
-        }
-
-        // ترسیم متن راست‌چین با سایه‌رنگ بیرونی سیاه (Stroke) بدون مشکل NaN عددی
-        function drawTextWithOutline(ctx, text, x, y, font, fillColor, maxW = null) {
-            ctx.font = font;
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.lineJoin = 'round';
-            ctx.miterLimit = 2;
-            ctx.lineWidth = 5;
-            ctx.strokeStyle = '#000000';
-            ctx.fillStyle = fillColor;
-
-            // استخراج ایمن سایز پیکسل فونت از هر نوع استرینگ استایل با تکنیک RegEx (برای جلوگیری از NaN شدن ارتفاع خطوط)
-            const fontSizeMatch = font.match(/(\d+)px/);
-            const fontSize = fontSizeMatch ? parseInt(fontSizeMatch[1]) : 24;
-            const lineHeight = fontSize * 1.35; // کاهش اندک ارتفاع خط برای تناسب بهینه متون درشت
-
-            if (maxW) {
-                const words = text.split(' ');
-                let line = '';
-                let lines = [];
-                for (let n = 0; n < words.length; n++) {
-                    let testLine = line + words[n] + ' ';
-                    let metrics = ctx.measureText(testLine);
-                    if (metrics.width > maxW && n > 0) {
-                        lines.push(line.trim());
-                        line = words[n] + ' ';
-                    } else {
-                        line = testLine;
-                    }
-                }
-                lines.push(line.trim());
-
-                lines.forEach(l => {
-                    ctx.strokeText(l, x, y);
-                    ctx.fillText(l, x, y);
-                    y += lineHeight;
-                });
-                return y;
-            } else {
-                ctx.strokeText(text, x, y);
-                ctx.fillText(text, x, y);
-                return y + lineHeight;
-            }
-        }
-
-        // رندرگیری زنده خطبه‌نگاشت بر روی بوم ۲ بعدی (کادر آبی پایین تصویر) - دارای اصلاح پارامتر ششم (dateText)
-        async function renderKhutbahNegasht(quote, canvasId, previewId, loaderId, downloadBtnId, dateText) {
-            const canvas = document.getElementById(canvasId);
-            const ctx = canvas.getContext('2d');
-            const previewImg = document.getElementById(previewId);
-            const loader = document.getElementById(loaderId);
-            const downloadBtn = document.getElementById(downloadBtnId);
-
-            const blob = await fetchTemplateBlob();
-            if (!blob) {
-                loader.classList.add('hidden');
-                alert("خطا در بارگیری مستقیم فایل الگو از گیت‌هاب. لطفاً اتصال اینترنت خود را چک کنید.");
-                return;
-            }
-
-            const objectURL = URL.createObjectURL(blob);
-            const bgImg = new Image();
-            bgImg.src = objectURL;
-
-            bgImg.onload = function() {
-                // تعیین ابعاد بوم متناسب با اندازه تصویر الگو
-                canvas.width = bgImg.naturalWidth || 1024;
-                canvas.height = bgImg.naturalHeight || 1024;
-
-                ctx.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
-
-                const w = canvas.width;
-                const h = canvas.height;
-                let currentY = h * 0.58; // تراز مطمئن شروع متن در کادر آبی تصویر
-                const centerX = w / 2;
-
-                // ۱. خط اول: درج تاریخ (سایز ارتقا یافته به ۲۸ پیکسل، سفید، دور سیاه)
-                const dateFont = "bold 28px 'B Nazanin', 'Vazirmatn', sans-serif";
-                currentY = drawTextWithOutline(ctx, toPersianDigits(dateText), centerX, currentY, dateFont, '#FFFFFF');
-
-                currentY += 12; // فاصله خط
-
-                // ۲. خط دوم: مشخصات ائمه جمعه به دو سطر با ابعاد بزرگ‌تر (اندازه ارتقا یافته به ۳۴ پیکسل، سفید، دور سیاه)
-                const speakerFont = "bold 34px 'B Nazanin', 'Vazirmatn', sans-serif";
-                currentY = drawTextWithOutline(ctx, "امام جمعه محترم دهستان میانکاله(زاغمرز)", centerX, currentY, speakerFont, '#FFFFFF');
-                currentY += 5;
-                currentY = drawTextWithOutline(ctx, "حجت الاسلام والمسلمین حاج حسین انزائی:", centerX, currentY, speakerFont, '#FFFFFF');
-
-                currentY += 20; // فاصله خط
-
-                // ۳. خط سوم: نقل قول برگزیده عینی و درشت (اندازه ارتقا یافته به ۴۲ پیکسل، زرد، دور سیاه) با پهنای بهینه ۸۴ درصد بوم
-                const quoteFont = "bold 42px 'B Titr', 'Vazirmatn', sans-serif";
-                const formattedQuote = `«${quote}»`;
-                drawTextWithOutline(ctx, formattedQuote, centerX, currentY, quoteFont, '#FFDF00', w * 0.84);
-
-                try {
-                    previewImg.src = canvas.toDataURL('image/png');
-                    
-                    // پنهان کردن لودرها پس از تکمیل موفق فرآیند رندر
-                    loader.classList.add('hidden');
-                    
-                    // نمایان کردن فریم نهایی پوستر خطبه‌نگاشت و دکمه دانلود متناظر با آن
-                    previewImg.classList.remove('hidden');
-                    downloadBtn.classList.remove('hidden');
-
-                } catch (err) {
-                    console.error("خطای بارگذاری داده بوم:", err);
-                    loader.classList.add('hidden');
-                }
-
-                URL.revokeObjectURL(objectURL); // پاکسازی برای بهینه‌سازی حافظه مرورگر
-            };
-
-            bgImg.onerror = function() {
-                loader.classList.add('hidden');
-                alert("بارگذاری فایل الگو بر روی مرورگر با خطا روبه‌رو شد.");
-                URL.revokeObjectURL(objectURL);
-            };
-        }
-
-        // بارگذاری و دانلود خودکار تصاویر بدون خطا
-        function downloadImage(canvasId, filename) {
-            try {
-                const canvas = document.getElementById(canvasId);
-                const dataUrl = canvas.toDataURL('image/png');
-                const link = document.createElement('a');
-                link.download = filename;
-                link.href = dataUrl;
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-            } catch (err) {
-                console.error("عدم دانلود تصویر:", err);
-                alert("امکان دانلود مستقیم فراهم نشد. لطفاً انگشت خود را روی عکس نگه داشته و آن را ذخیره کنید.");
-            }
-        }
-
-        // --- بخش دوم: تعامل با بوم شبکه عصبی و انیمیشن‌ها در دسکتاپ ---
-
         const isMobileDevice = window.innerWidth <= 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
         if (!isMobileDevice) {
@@ -604,7 +437,102 @@
             window.addEventListener('mouseout', () => { mouse.x = null; mouse.y = null; });
         }
 
-        // --- بخش سوم: مدیریت ارجاعات عناصر و رویدادهای تعاملی کاربر ---
+        // منطق مدیریت مدال معرفی سامانه
+        const infoBtn = document.getElementById('infoBtn');
+        const infoModal = document.getElementById('infoModal');
+        const closeInfoBtn = document.getElementById('closeInfoBtn');
+        const closeInfoBtnOk = document.getElementById('closeInfoBtnOk');
+
+        infoBtn.addEventListener('click', () => {
+            infoModal.classList.remove('hidden');
+        });
+        const closeModal = () => {
+            infoModal.classList.add('hidden');
+        };
+        closeInfoBtn.addEventListener('click', closeModal);
+        closeInfoBtnOk.addEventListener('click', closeModal);
+        infoModal.addEventListener('click', (e) => {
+            if (e.target === infoModal) closeModal();
+        });
+
+        // تکمیل پویای منوهای کشویی تاریخ و مدیریت دراپ‌داون سفارشی حجم پردازش
+        document.addEventListener('DOMContentLoaded', () => {
+            const selDay = document.getElementById('selDay');
+            for (let i = 1; i <= 31; i++) {
+                const opt = document.createElement('option');
+                opt.value = i;
+                opt.textContent = toPersianDigits(i);
+                if (i === 30) opt.selected = true; // پیش‌فرض روز ۳۰
+                selDay.appendChild(opt);
+            }
+
+            const selYear = document.getElementById('selYear');
+            for (let i = 1404; i <= 1410; i++) {
+                const opt = document.createElement('option');
+                opt.value = i;
+                opt.textContent = toPersianDigits(i);
+                if (i === 1404) opt.selected = true; // پیش‌فرض سال ۱۴۰۴
+                selYear.appendChild(opt);
+            }
+
+            // منطق کنترل دراپ‌داون حجم خلاصه سفارشی
+            const customSelectContainer = document.getElementById('customSelectContainer');
+            const customSelectBtn = document.getElementById('customSelectBtn');
+            const customSelectDropdown = document.getElementById('customSelectDropdown');
+            const customSelectArrow = document.getElementById('customSelectArrow');
+            const customSelectValue = document.getElementById('customSelectValue');
+            const hiddenSelect = document.getElementById('summaryLength');
+            const customOptions = document.querySelectorAll('.custom-option');
+
+            customSelectBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const isHidden = customSelectDropdown.classList.contains('hidden');
+                if (isHidden) {
+                    customSelectDropdown.classList.remove('hidden');
+                    setTimeout(() => {
+                        customSelectDropdown.classList.remove('scale-95', 'opacity-0');
+                        customSelectDropdown.classList.add('scale-100', 'opacity-100');
+                    }, 10);
+                    customSelectArrow.classList.add('rotate-180');
+                } else {
+                    closeCustomSelect();
+                }
+            });
+
+            function closeCustomSelect() {
+                customSelectDropdown.classList.remove('scale-100', 'opacity-100');
+                customSelectDropdown.classList.add('scale-95', 'opacity-0');
+                customSelectArrow.classList.remove('rotate-180');
+                setTimeout(() => {
+                    customSelectDropdown.classList.add('hidden');
+                }, 200);
+            }
+
+            customOptions.forEach(opt => {
+                opt.addEventListener('click', () => {
+                    const val = opt.getAttribute('data-value');
+                    const txt = opt.textContent;
+                    
+                    hiddenSelect.value = val;
+                    customSelectValue.textContent = txt;
+                    
+                    customOptions.forEach(o => {
+                        o.classList.remove('text-sky-300', 'bg-sky-500/10');
+                        o.classList.add('text-gray-300');
+                    });
+                    opt.classList.add('text-sky-300', 'bg-sky-500/10');
+                    opt.classList.remove('text-gray-300');
+                    
+                    closeCustomSelect();
+                });
+            });
+
+            document.addEventListener('click', (e) => {
+                if (!customSelectContainer.contains(e.target)) {
+                    closeCustomSelect();
+                }
+            });
+        });
 
         const generateBtn = document.getElementById('generateBtn');
         const khutbah1Input = document.getElementById('khutbah1');
@@ -627,40 +555,19 @@
         const negashtShowroom = document.getElementById('negashtShowroom');
 
         let currentReportData = null; 
+        const introText = "به گزارش معاونت ارتباطات و رسانه دفتر امام جمعه دهستان میانکاله (زاغمرز)، حجت الاسلام والمسلمین حاج حسین انزائی در خطبه‌های این هفته از نماز جمعه، ضمن سفارش به تقوا اظهار کرد:";
 
-        // متد ایمن اجرای لود گزینه‌های کشویی تاریخ
-        function initDateDropdowns() {
-            const selDay = document.getElementById('selDay');
-            if (selDay && selDay.children.length === 0) {
-                for (let i = 1; i <= 31; i++) {
-                    const opt = document.createElement('option');
-                    opt.value = i;
-                    opt.textContent = toPersianDigits(i);
-                    if (i === 30) opt.selected = true; // پیش‌فرض روز ۳۰
-                    selDay.appendChild(opt);
-                }
-            }
-
-            const selYear = document.getElementById('selYear');
-            if (selYear && selYear.children.length === 0) {
-                for (let i = 1404; i <= 1410; i++) {
-                    const opt = document.createElement('option');
-                    opt.value = i;
-                    opt.textContent = toPersianDigits(i);
-                    if (i === 1404) opt.selected = true; // پیش‌فرض سال ۱۴۰۴
-                    selYear.appendChild(opt);
-                }
-            }
+        function toPersianDigits(str) {
+            const persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+            return str.toString().replace(/\d/g, x => persianDigits[x]);
         }
 
-        // چک کردن زمان آماده بودن ساختار DOM قبل از آغاز لود هندلرها
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', initDateDropdowns);
-        } else {
-            initDateDropdowns();
-        }
+        const loadingMessages = [
+            "در حال خواندن متون...", "انتقال به سرور واسط...", "تجزیه و تحلیل شبکه‌های معنایی...",
+            "استخراج نکات کلیدی...", "آماده‌سازی خروجی..."
+        ];
 
-        // ثبت رویدادهای اصلی روی تمامی دکمه‌های کنترلی وبسایت
+        let loadingInterval;
         generateBtn.addEventListener('click', handleGeneration);
         copyBtn.addEventListener('click', copyOutputToClipboard);
         wordBtn.addEventListener('click', exportToWord);
@@ -685,7 +592,7 @@
             document.getElementById('downloadReligiousBtn').classList.add('hidden');
             document.getElementById('downloadPoliticalBtn').classList.add('hidden');
 
-            // نمایش لودرهای چرخشی
+            // نمایش دائمی لودرهای چرخشی
             document.getElementById('loaderReligious').classList.remove('hidden');
             document.getElementById('loaderPolitical').classList.remove('hidden');
 
@@ -695,9 +602,13 @@
             const y = document.getElementById('selYear').value;
             const fullDateString = `نماز جمعه ${d} ${m} ${y} دهستان میانکاله (زاغمرز)`;
 
-            // فرآیند رسم زنده تصویر قالب خطبه‌نگاشت با استفاده از Blob باینری بدون خطا و سیاهی تصویر
+            // فرآیند رسم زنده تصویر قالب خطبه‌نگاشت با استفاده از Blob باینری
             renderKhutbahNegasht(currentReportData.religiousQuote, 'canvasReligious', 'imgReligiousPreview', 'loaderReligious', 'downloadReligiousBtn', fullDateString);
             renderKhutbahNegasht(currentReportData.politicalQuote, 'canvasPolitical', 'imgPoliticalPreview', 'loaderPolitical', 'downloadPoliticalBtn', fullDateString);
+
+            // اعمال لایو کلیک هندلرهای دکمه دانلود
+            document.getElementById('downloadReligiousBtn').onclick = () => downloadImage('canvasReligious', 'khutbah_religious.png');
+            document.getElementById('downloadPoliticalBtn').onclick = () => downloadImage('canvasPolitical', 'khutbah_political.png');
 
             setTimeout(() => {
                 const scrollYTarget = negashtShowroom.getBoundingClientRect().top + window.scrollY - 20;
@@ -705,7 +616,117 @@
             }, 300);
         });
 
-        // رندر و نمایش ساختار خلاصه خطبه‌ها توسط هوش مصنوعی
+        async function handleGeneration() {
+            khutbah1Input.blur();
+            khutbah2Input.blur();
+
+            resultContainer.classList.remove('opacity-100', 'translate-y-0');
+            resultContainer.classList.add('opacity-0', 'translate-y-10');
+            setTimeout(() => {
+                resultContainer.classList.add('hidden');
+                negashtSetupForm.classList.add('hidden');
+                negashtShowroom.classList.add('hidden');
+            }, 500);
+            errorDiv.classList.add('hidden');
+            
+            const khutbah1Text = khutbah1Input.value.trim();
+            const khutbah2Text = khutbah2Input.value.trim();
+
+            if (!khutbah1Text || !khutbah2Text) {
+                showError("خطا: اطلاعات ورودی ناقص است. لطفاً هر دو فیلد را پر کنید."); return;
+            }
+
+            const summaryLengthValue = document.getElementById('summaryLength').value;
+            let lengthInstruction = "";
+            if (summaryLengthValue === "short") {
+                lengthInstruction = "خلاصه خطبه اول و دوم به صورت کاملاً فشرده و کوتاه (هر کدام ۲ الی ۳ بند بسیار کوتاه) باشد.";
+            } else if (summaryLengthValue === "long") {
+                lengthInstruction = "خلاصه خطبه اول و دوم به صورت بسیار مفصل، جامع و با جزئیات کامل (هر کدام ۵ الی ۶ بند طولانی) باشد.";
+            } else {
+                lengthInstruction = "خلاصه خطبه اول و دوم به صورت متعادل و استاندارد (هر کدام ۳ الی ۴ بند متوسط) باشد.";
+            }
+
+            generateBtn.disabled = true;
+            generateBtn.innerHTML = `<svg class="animate-spin -ml-1 mr-3 h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> در حال پردازش...`;
+            generateBtn.classList.add('opacity-50', 'cursor-not-allowed', 'scale-95');
+            
+            loadingDiv.classList.remove('hidden');
+            setTimeout(() => loadingDiv.classList.remove('opacity-0'), 50);
+            
+            let msgIndex = 0; loadingText.innerText = loadingMessages[0];
+            loadingInterval = setInterval(() => {
+                msgIndex = (msgIndex + 1) % loadingMessages.length;
+                loadingText.innerText = loadingMessages[msgIndex];
+            }, 1500);
+
+            const prompt = `
+                شما یک دستیار متخصص در خلاصه‌سازی و تحلیل محتوای خطبه‌های نماز جمعه هستید.
+                متن خطبه اول: ${khutbah1Text}
+                متن خطبه دوم: ${khutbah2Text}
+                دستورالعمل‌ها:
+                1. فرمت خلاصه سازی خطبه‌ها: ${lengthInstruction}
+                2. impactfulTitle: تیتر کلی، تاثیرگذار و جذاب (یک جمله کوتاه).
+                3. khutbah1.title: تیتر خطبه اول (۲ تا ۴ کلمه).
+                4. khutbah1.summary: خلاصه خطبه اول (مذهبی/اخلاقی) بر اساس ساختار طولی بالا (شامل بخش‌های heading و explanation).
+                5. khutbah2.title: تیتر خطبه دوم (۲ تا ۴ کلمه).
+                6. khutbah2.summary: خلاصه خطبه دوم (سیاسی/اجتماعی) بر اساس ساختار طولی بالا.
+                7. overallSummary.title: تیتر خلاصه نهایی.
+                8. overallSummary.text: خلاصه کلی (حدود ۴ الی ۶ خط).
+                9. religiousQuote: یک بخش یا فراز مستقل، طولانی و تأثیرگذار (حدود ۲ الی ۳ جمله کامل) که دقیقا و بدون هیچگونه تغییر در جمله‌بندی یا تغییر در معنی، مستقیماً از خود متن خطبه اولِ واردشده برداشته شده باشد. شما به هیچ وجه مجاز به خلاصه کردن یا بازنویسی این جملات نیستید؛ جملات باید با همان لحن و ساختار اصلی خطبه اول باشند و فقط مجاز هستید غلط‌های املایی، غلط‌های نگارشی و علائم دستوری (ویرگول، نقطه و...) را روی آن اصلاح کنید تا برای درج روی تصویر خطبه‌نگاشت مذهبی کاملاً روان و صحیح باشد.
+                10. politicalQuote: یک بخش یا فراز مستقل، طولانی و حماسی (حدود ۲ الی ۳ جمله کامل) که دقیقا و بدون هیچگونه تغییر در جمله‌بندی یا تغییر در معنی، مستقیماً از خود متن خطبه دومِ واردشده برداشته شده باشد. شما به هیچ وجه مجاز به خلاصه کردن یا بازنویسی این جملات نیستید؛ جملات باید با همان لحن و ساختار اصلی خطبه دوم باشند و فقط مجاز هستید غلط‌های املایی، غلط‌های نگارشی و علائم دستوری را روی آن اصلاح کنید تا برای درج روی تصویر خطبه‌نگاشت سیاسی کاملاً روان و صحیح باشد.
+                فقط JSON برگردان.
+            `;
+
+            const schema = {
+                type: "OBJECT", properties: {
+                    "impactfulTitle": { "type": "STRING" },
+                    "khutbah1": { "type": "OBJECT", "properties": { "title": { "type": "STRING" }, "summary": { "type": "ARRAY", "items": { "type": "OBJECT", "properties": { "heading": { "type": "STRING" }, "explanation": { "type": "STRING" } }, "required": ["heading", "explanation"] } } }, "required": ["title", "summary"] },
+                    "khutbah2": { "type": "OBJECT", "properties": { "title": { "type": "STRING" }, "summary": { "type": "ARRAY", "items": { "type": "OBJECT", "properties": { "heading": { "type": "STRING" }, "explanation": { "type": "STRING" } }, "required": ["heading", "explanation"] } } }, "required": ["title", "summary"] },
+                    "overallSummary": { "type": "OBJECT", "properties": { "title": { "type": "STRING" }, "text": { "type": "STRING" } }, "required": ["title", "text"] },
+                    "religiousQuote": { "type": "STRING" },
+                    "politicalQuote": { "type": "STRING" }
+                }, "required": ["impactfulTitle", "khutbah1", "khutbah2", "overallSummary", "religiousQuote", "politicalQuote"]
+            };
+            
+            try {
+                const payload = { contents: [{ role: "user", parts: [{ text: prompt }] }], generationConfig: { responseMimeType: "application/json", responseSchema: schema } };
+                
+                const endpoint = '/api/proxy'; 
+                const response = await fetch(endpoint, { 
+                    method: 'POST', 
+                    headers: { 'Content-Type': 'application/json' }, 
+                    body: JSON.stringify(payload) 
+                });
+
+                if (!response.ok) {
+                    const errorBody = await response.json();
+                    throw new Error(errorBody.error || response.statusText);
+                }
+                
+                const result = await response.json();
+                
+                if (result.candidates?.[0]?.content?.parts?.[0]?.text) {
+                    const jsonText = result.candidates[0].content.parts[0].text;
+                    const data = JSON.parse(jsonText);
+                    currentReportData = data; 
+                    buildAndRevealOutput(data);
+                } else {
+                    throw new Error("پاسخ دریافتی از هوش مصنوعی ساختار معتبری ندارد.");
+                }
+
+            } catch (err) {
+                showError(`نقص فنی: ${err.message}`);
+            } finally {
+                clearInterval(loadingInterval);
+                loadingDiv.classList.add('opacity-0');
+                setTimeout(() => loadingDiv.classList.add('hidden'), 500);
+                
+                generateBtn.disabled = false;
+                generateBtn.innerHTML = `<svg class="w-6 h-6 md:w-7 md:h-7 ml-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg> آغاز پردازش مجدد`;
+                generateBtn.classList.remove('opacity-50', 'cursor-not-allowed', 'scale-95');
+            }
+        }
+
         function buildAndRevealOutput(data) {
             let rawText = `بِسْمِ اللهِ الرَّحْمنِ الرَّحِیم\n\n«${data.impactfulTitle}»\n\n${introText}\n\n`;
             rawText += `🔸 خطبه اول: ${data.khutbah1.title}\n`;
@@ -765,114 +786,154 @@
             }, 100);
         }
 
-        async function handleGeneration() {
-            khutbah1Input.blur();
-            khutbah2Input.blur();
-
-            resultContainer.classList.remove('opacity-100', 'translate-y-0');
-            resultContainer.classList.add('opacity-0', 'translate-y-10');
-            setTimeout(() => {
-                resultContainer.classList.add('hidden');
-                negashtSetupForm.classList.add('hidden');
-                negashtShowroom.classList.add('hidden');
-            }, 500);
-            errorDiv.classList.add('hidden');
-            
-            const khutbah1Text = khutbah1Input.value.trim();
-            const khutbah2Text = khutbah2Input.value.trim();
-
-            if (!khutbah1Text || !khutbah2Text) {
-                showError("خطا: اطلاعات ورودی ناقص است. لطفاً هر دو فیلد را پر کنید."); return;
-            }
-
-            const summaryLengthValue = document.getElementById('summaryLength').value;
-            let lengthInstruction = "";
-            if (summaryLengthValue === "short") {
-                lengthInstruction = "خلاصه خطبه اول و دوم به صورت کاملاً فشرده و کوتاه (هر کدام ۲ الی ۳ بند بسیار کوتاه) باشد.";
-            } else if (summaryLengthValue === "long") {
-                lengthInstruction = "خلاصه خطبه اول و دوم به صورت بسیار مفصل، جامع و با جزئیات کامل (هر کدام ۵ الی ۶ بند طولانی) باشد.";
-            } else {
-                lengthInstruction = "خلاصه خطبه اول و دوم به صورت متعادل و استاندارد (هر کدام ۳ الی ۴ بند متوسط) باشد.";
-            }
-
-            generateBtn.disabled = true;
-            generateBtn.innerHTML = `<svg class="animate-spin -ml-1 mr-3 h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> در حال پردازش...`;
-            generateBtn.classList.add('opacity-50', 'cursor-not-allowed', 'scale-95');
-            
-            loadingDiv.classList.remove('hidden');
-            setTimeout(() => loadingDiv.classList.remove('opacity-0'), 50);
-            
-            let msgIndex = 0; loadingText.innerText = loadingMessages[0];
-            loadingInterval = setInterval(() => {
-                msgIndex = (msgIndex + 1) % loadingMessages.length;
-                loadingText.innerText = loadingMessages[msgIndex];
-            }, 1500);
-
-            const prompt = `
-                شما یک دستیار متخصص در خلاصه‌سازی و تحلیل محتوای خطبه‌های نماز جمعه هستید.
-                متن خطبه اول: ${khutbah1Text}
-                متن خطبه دوم: ${khutbah2Text}
-                دستورالعمل‌ها:
-                1. فرمت خلاصه سازی خطبه‌ها: ${lengthInstruction}
-                2. impactfulTitle: تیتر کلی، تاثیرگذار و جذاب (یک جمله کوتاه).
-                3. khutbah1.title: تیتر خطبه اول (۲ تا ۴ کلمه).
-                4. khutbah1.summary: خلاصه خطبه اول (مذهبی/اخلاقی) بر اساس ساختار طولی بالا (شامل بخش‌های heading و explanation).
-                5. khutbah2.title: تیتر خطبه دوم (۲ تا ۴ کلمه).
-                6. khutbah2.summary: خلاصه خطبه دوم (سیاسی/اجتماعی) بر اساس ساختار طولی بالا.
-                7. overallSummary.title: تیتر خلاصه نهایی.
-                8. overallSummary.text: خلاصه کلی (حدود ۴ الی ۶ خط).
-                9. religiousQuote: یک فراز مستقل، بسیار زیبا، شیوا، معنوی و طولانی (حدود ۲ الی ۳ جمله کامل و تاثیرگذار) از متن خطبه اول برای درج در خطبه‌نگاشت مذهبی. بسیار مهم: این مقدار باید دقیقا و عینا بخشی از خود متن خطبه ورودی اول باشد (بدون کوچک‌ترین تغییر در ساختار جمله یا تغییر معنا). شما فقط و فقط مجاز به اصلاح علائم نگارشی، غلط‌های املایی یا اشتباهات فاحش دستور زبانی هستید تا متن روان‌تر خوانده شود. نباید جمله را بازنویسی کنید، عینا همان فراز طلایی و تاثیرگذار خطبه را استخراج کنید.
-                10. politicalQuote: یک فراز مستقل، بسیار قوی، سیاسی/اجتماعی، کوبنده و طولانی (حدود ۲ الی ۳ جمله کامل و حماسی) از متن خطبه دوم برای درج در خطبه‌نگاشت سیاسی. بسیار مهم: این مقدار باید دقیقا و عینا بخشی از خود متن خطبه ورودی دوم باشد (بدون کوچک‌ترین تغییر در ساختار جمله یا تغییر معنا). شما فقط و فقط مجاز به اصلاح علائم نگارشی، غلط‌های املایی یا اشتباهات فاحش دستور زبانی هستید تا متن روان‌تر خوانده شود. نباید جمله را بازنویسی کنید، عینا همان فراز طلایی و تاثیرگذار خطبه را استخراج کنید.
-                فقط JSON برگردان.
-            `;
-
-            const schema = {
-                type: "OBJECT", properties: {
-                    "impactfulTitle": { "type": "STRING" },
-                    "khutbah1": { "type": "OBJECT", "properties": { "title": { "type": "STRING" }, "summary": { "type": "ARRAY", "items": { "type": "OBJECT", "properties": { "heading": { "type": "STRING" }, "explanation": { "type": "STRING" } }, "required": ["heading", "explanation"] } } }, "required": ["title", "summary"] },
-                    "khutbah2": { "type": "OBJECT", "properties": { "title": { "type": "STRING" }, "summary": { "type": "ARRAY", "items": { "type": "OBJECT", "properties": { "heading": { "type": "STRING" }, "explanation": { "type": "STRING" } }, "required": ["heading", "explanation"] } } }, "required": ["title", "summary"] },
-                    "overallSummary": { "type": "OBJECT", "properties": { "title": { "type": "STRING" }, "text": { "type": "STRING" } }, "required": ["title", "text"] },
-                    "religiousQuote": { "type": "STRING" },
-                    "politicalQuote": { "type": "STRING" }
-                }, "required": ["impactfulTitle", "khutbah1", "khutbah2", "overallSummary", "religiousQuote", "politicalQuote"]
-            };
-            
+        // متد بهینه برای لود کردن بک‌گراند به صورت باینری (Blob) جهت حذف قطعی خطای CORS و سیاهی تصویر بوم
+        async function fetchTemplateBlob() {
+            // دریافت تصویر خام از گیت‌هاب با یک پارامتر رندوم تصادفی جهت دور زدن کش مروگر
+            const url = "https://raw.githubusercontent.com/amirhossein-gandomkar/friday-prayer-ai/abe11c45e603f9699058dfffa2229c34fb4ab9d9/kh.png?t=" + new Date().getTime();
             try {
-                const payload = { contents: [{ role: "user", parts: [{ text: prompt }] }], generationConfig: { responseMimeType: "application/json", responseSchema: schema } };
-                
-                const endpoint = '/api/proxy'; 
-                const response = await fetch(endpoint, { 
-                    method: 'POST', 
-                    headers: { 'Content-Type': 'application/json' }, 
-                    body: JSON.stringify(payload) 
-                });
-
-                if (!response.ok) {
-                    const errorBody = await response.json();
-                    throw new Error(errorBody.error || response.statusText);
-                }
-                
-                const result = await response.json();
-                
-                if (result.candidates?.[0]?.content?.parts?.[0]?.text) {
-                    const jsonText = result.candidates[0].content.parts[0].text;
-                    const data = JSON.parse(jsonText);
-                    currentReportData = data; 
-                    buildAndRevealOutput(data);
-                } else {
-                    throw new Error("پاسخ دریافتی از هوش مصنوعی ساختار معتبری ندارد.");
-                }
-
+                const response = await fetch(url, { mode: 'cors' });
+                if (!response.ok) throw new Error("قالب تصویر خام از گیت‌هاب دریافت نشد.");
+                return await response.blob();
             } catch (err) {
-                showError(`نقص فنی: ${err.message}`);
-            } finally {
-                clearInterval(loadingInterval);
-                loadingDiv.classList.add('opacity-0');
-                setTimeout(() => loadingDiv.classList.add('hidden'), 500);
-                
-                generateBtn.disabled = false;
-                generateBtn.innerHTML = `<svg class="w-6 h-6 md:w-7 md:h-7 ml-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg> آغاز پردازش مجدد`;
-                generateBtn.classList.remove('opacity-50', 'cursor-not-allowed', 'scale-95');
+                console.error("ارتباط ناموفق با مخزن گیت‌هاب:", err);
+                return null;
+            }
+        }
+
+        // رندرگیری زنده خطبه‌نگاشت بر روی بوم ۲ بعدی (کادر آبی پایین تصویر)
+        async function renderKhutbahNegasht(quote, canvasId, previewId, loaderId, downloadBtnId, dateText) {
+            const canvas = document.getElementById(canvasId);
+            const ctx = canvas.getContext('2d');
+            const previewImg = document.getElementById(previewId);
+            const loader = document.getElementById(loaderId);
+            const downloadBtn = document.getElementById(downloadBtnId);
+
+            const blob = await fetchTemplateBlob();
+            if (!blob) {
+                loader.classList.add('hidden');
+                alert("خطا در بارگیری مستقیم فایل الگو از گیت‌هاب. لطفاً اتصال اینترنت خود را چک کنید.");
+                return;
+            }
+
+            const objectURL = URL.createObjectURL(blob);
+            const bgImg = new Image();
+            bgImg.src = objectURL;
+
+            bgImg.onload = function() {
+                // تعیین ابعاد بوم متناسب با اندازه تصویر الگو
+                canvas.width = bgImg.naturalWidth || 1024;
+                canvas.height = bgImg.naturalHeight || 1024;
+
+                ctx.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
+
+                const w = canvas.width;
+                const h = canvas.height;
+                let currentY = h * 0.54; // نقطه شروع متوازن‌تر و کمی بالاتر جهت جاگیری تمام المان‌ها
+                const centerX = w / 2;
+
+                // تابع ترسیم متن راست‌چین با سایه‌رنگ بیرونی سیاه (Stroke) بدون مشکل NaN عددی
+                function drawTextWithOutline(text, x, y, font, fillColor, maxW = null) {
+                    ctx.font = font;
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.lineJoin = 'round';
+                    ctx.miterLimit = 2;
+                    ctx.lineWidth = 6;
+                    ctx.strokeStyle = '#000000';
+                    ctx.fillStyle = fillColor;
+
+                    // استخراج ایمن سایز پیکسل فونت از هر نوع استرینگ استایل با تکنیک RegEx (برای جلوگیری از NaN شدن ارتفاع خطوط)
+                    const fontSizeMatch = font.match(/(\d+)px/);
+                    const fontSize = fontSizeMatch ? parseInt(fontSizeMatch[1]) : 24;
+                    const lineHeight = fontSize * 1.35;
+
+                    if (maxW) {
+                        const words = text.split(' ');
+                        let line = '';
+                        let lines = [];
+                        for (let n = 0; n < words.length; n++) {
+                            let testLine = line + words[n] + ' ';
+                            let metrics = ctx.measureText(testLine);
+                            if (metrics.width > maxW && n > 0) {
+                                lines.push(line.trim());
+                                line = words[n] + ' ';
+                            } else {
+                                line = testLine;
+                            }
+                        }
+                        lines.push(line.trim());
+
+                        lines.forEach(l => {
+                            ctx.strokeText(l, x, y);
+                            ctx.fillText(l, x, y);
+                            y += lineHeight;
+                        });
+                        return y;
+                    } else {
+                        ctx.strokeText(text, x, y);
+                        ctx.fillText(text, x, y);
+                        return y + lineHeight;
+                    }
+                }
+
+                // ۱. خط اول: درج تاریخ (اندازه فونت از ۲۲ به ۲۸ افزایش یافت)
+                const dateFont = "bold 28px 'B Nazanin', 'Vazirmatn', sans-serif";
+                currentY = drawTextWithOutline(toPersianDigits(dateText), centerX, currentY, dateFont, '#FFFFFF');
+
+                currentY += 10; // فاصله خط
+
+                // ۲. خط دوم: تفکیک مشخصات ائمه جمعه به دو سطر شکیل تر (اندازه فونت از ۲۷ به ۳۴ افزایش یافت که بزرگتر از تاریخ است)
+                const speakerFont = "bold 34px 'B Nazanin', 'Vazirmatn', sans-serif";
+                currentY = drawTextWithOutline("امام جمعه محترم دهستان میانکاله (زاغمرز)", centerX, currentY, speakerFont, '#FFFFFF');
+                currentY += 5;
+                currentY = drawTextWithOutline("حجت الاسلام والمسلمین حاج حسین انزائی:", centerX, currentY, speakerFont, '#FFFFFF');
+
+                currentY += 15; // فاصله خط
+
+                // ۳. خط سوم: نقل قول برگزیده بلند (اندازه فونت از ۳۳ به ۴۴ افزایش یافت و عرض مجاز به ۸۵ درصد گسترش پیدا کرد)
+                const quoteFont = "bold 44px 'B Titr', 'Vazirmatn', sans-serif";
+                const formattedQuote = `« ${quote} »`;
+                drawTextWithOutline(formattedQuote, centerX, currentY, quoteFont, '#FFDF00', w * 0.85);
+
+                try {
+                    previewImg.src = canvas.toDataURL('image/png');
+                    
+                    // پنهان کردن لودرها پس از تکمیل موفق فرآیند رندر
+                    loader.classList.add('hidden');
+                    
+                    // نمایان کردن فریم نهایی پوستر خطبه‌نگاشت و دکمه دانلود متناظر با آن
+                    previewImg.classList.remove('hidden');
+                    downloadBtn.classList.remove('hidden');
+
+                } catch (err) {
+                    console.error("خطای بارگذاری بوم:", err);
+                    loader.classList.add('hidden');
+                }
+
+                URL.revokeObjectURL(objectURL); // پاکسازی برای بهینه‌سازی حافظه مرورگر
+            };
+
+            bgImg.onerror = function() {
+                loader.classList.add('hidden');
+                alert("بارگذاری فایل الگو بر روی مرورگر با خطا روبه‌رو شد.");
+                URL.revokeObjectURL(objectURL);
+            };
+        }
+
+        // بارگذاری و دانلود خودکار تصاویر بدون خطا
+        function downloadImage(canvasId, filename) {
+            try {
+                const canvas = document.getElementById(canvasId);
+                const dataUrl = canvas.toDataURL('image/png');
+                const link = document.createElement('a');
+                link.download = filename;
+                link.href = dataUrl;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            } catch (err) {
+                console.error("عدم دانلود تصویر:", err);
+                alert("امکان دانلود مستقیم فراهم نشد. لطفاً انگشت خود را روی عکس نگه داشته و آن را ذخیره کنید.");
             }
         }
 
@@ -1016,6 +1077,33 @@
                 alert("تولید مستقیم فایل PDF با خطا روبرو شد.");
             } finally {
                 document.body.removeChild(cleanPDFContainer);
+            }
+        }
+
+        function showError(message) { errorMessageSpan.textContent = message; errorDiv.classList.remove('hidden'); }
+        
+        async function copyOutputToClipboard() {
+            const btn = document.getElementById('copyBtn'); 
+            const icon = document.getElementById('copyIcon'); 
+            const text = document.getElementById('copyText');
+            const textToCopy = copyHelper.value;
+
+            try {
+                await navigator.clipboard.writeText(textToCopy);
+                
+                btn.classList.add('bg-emerald-600', 'border-emerald-500', 'text-white'); 
+                btn.classList.remove('bg-gray-800/80', 'text-gray-300');
+                text.innerText = 'کپی شد!'; 
+                icon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />`;
+                
+                setTimeout(() => {
+                    btn.classList.remove('bg-emerald-600', 'border-emerald-500', 'text-white'); 
+                    btn.classList.add('bg-gray-800/80', 'text-gray-300');
+                    text.innerText = 'کپی متن'; 
+                    icon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />`;
+                }, 3000);
+            } catch (err) { 
+                alert('مشکلی در کپی کردن پیش آمد یا مرورگر شما پشتیبانی نمی‌کند.'); 
             }
         }
     </script>
