@@ -785,16 +785,16 @@
             }, 100);
         }
 
-        // متد بهینه برای لود کردن بک‌گراند به صورت باینری (Blob) جهت حذف قطعی خطای CORS و سیاهی تصویر بوم
+// متد بهینه برای لود کردن بک‌گراند به صورت محلی جهت حذف قطعی فیلترینگ و خطای CORS
         async function fetchTemplateBlob() {
-            // دریافت تصویر خام از گیت‌هاب با یک پارامتر رندوم تصادفی جهت دور زدن کش مروگر
-            const url = "https://raw.githubusercontent.com/amirhossein-gandomkar/friday-prayer-ai/abe11c45e603f9699058dfffa2229c34fb4ab9d9/kh.png?t=" + new Date().getTime();
+            // بارگیری فایل تصویر مستقیماً از روی هاست خودتان (کنار فایل index.html)
+            const url = "kh.png?t=" + new Date().getTime();
             try {
-                const response = await fetch(url, { mode: 'cors' });
-                if (!response.ok) throw new Error("قالب تصویر خام از گیت‌هاب دریافت نشد.");
+                const response = await fetch(url);
+                if (!response.ok) throw new Error("قالب تصویر خام روی هاست یافت نشد.");
                 return await response.blob();
             } catch (err) {
-                console.error("ارتباط ناموفق با مخزن گیت‌هاب:", err);
+                console.error("ارتباط ناموفق با فایل تصویر روی هاست:", err);
                 return null;
             }
         }
