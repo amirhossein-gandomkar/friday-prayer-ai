@@ -118,7 +118,7 @@
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
     </button>
 
-    <!-- مدال یا پاپ‌آپ معرفی سایت -->
+    <!-- مدال معرفی سایت -->
     <div id="infoModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4">
         <div class="glass-panel w-full max-w-2xl rounded-3xl p-6 md:p-8 relative border border-sky-500/30">
             <button id="closeInfoBtn" class="absolute top-4 left-4 text-gray-400 hover:text-white transition-colors">
@@ -126,19 +126,19 @@
             </button>
             <div class="text-center mb-6">
                 <h2 class="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-purple-500">معرفی سامانه جمعه یار</h2>
-                <p class="text-gray-400 mt-2">دستیار هوشمند استخراج و خلاصه سازی خطبه‌های نماز جمعه</p>
+                <p class="text-gray-400 mt-2">دستیار هوشمند استخراج و خلاصه‌سازی خطبه‌های نماز جمعه</p>
             </div>
             <div class="space-y-4 text-sm md:text-base text-gray-300 leading-relaxed">
                 <p>
-                    <strong>جمعه یار</strong> سامانه‌ای پیشرفته و مجهز به هوش مصنوعی است که فرایند پردازش، گزارش‌نویسی و بازتاب رسانه‌ای خطبه‌های نماز جمعه را تا حد امکان سرعت می‌بخشد.
+                    <strong>جمعه یار</strong> سامانه‌ای پیشرفته و مجهز به هوش مصنوعی است که جهت تسهیل فرایند گزارش‌نویسی، پردازش و بازتاب رسانه‌ای خطبه‌های نماز جمعه توسعه یافته است.
                 </p>
                 <div class="border-t border-gray-700/50 pt-4">
                     <h4 class="font-bold text-sky-400 mb-2">💡 ویژگی‌ها و قابلیت‌های کلیدی:</h4>
                     <ul class="list-disc list-inside space-y-2 pr-4 text-right">
-                        <li><strong>خلاصه‌سازی سفارشی:</strong> امکان تعیین حجم خلاصه‌ها (کوتاه، متوسط یا بلند) به انتخاب شما پیش از آغاز پردازش.</li>
-                        <li><strong>تولید خودکار خطبه‌نگاشت:</strong> استخراج دقیق‌ترین و کوبنده‌ترین فرازهای خطبه اول (مذهبی) و دوم (سیاسی) و نشاندن خودکار آن‌ها در کادر تصویر با مشخصات تاریخ و ائمه جمعه.</li>
-                        <li><strong>خروجی‌های چندگانه:</strong> امکان کپی ساده متن، دریافت فایل تمیز Word یا فایل PDF استاندارد با سیستم هوشمند دور زدن تداخل‌های ظاهری.</li>
-                        <li><strong>بدون نیاز به فیلترشکن:</strong> ارتباط پایدار و امن از طریق سرور پروکسی واسط Vercel.</li>
+                        <li><strong>خلاصه‌سازی سفارشی:</strong> امکان تعیین اندازه خلاصه‌ها (کوتاه، متوسط یا بلند) به صورت اختصاصی از منوی کشویی قبل از شروع پردازش.</li>
+                        <li><strong>تولید دلخواه خطبه‌نگاشت:</strong> استخراج دقیق‌ترین و تاثیرگذارترین بخش‌های خطبه‌های مذهبی و سیاسی و نشاندن بر روی پوسترها تنها با مشخص کردن تاریخ شمسی دلخواه.</li>
+                        <li><strong>خروجی‌های چندگانه:</strong> کپی ساده متن، دریافت فایل تمیز Word یا فایل PDF بدون خطا و به‌هم‌ریختگی ظاهری.</li>
+                        <li><strong>بدون نیاز به فیلترشکن:</strong> متصل به پروکسی ابری Vercel جهت ارتباط مستقیم و پرسرعت.</li>
                     </ul>
                 </div>
             </div>
@@ -176,31 +176,6 @@
 
         <main id="mainCard" class="glass-panel w-full p-5 md:p-10 rounded-3xl transition-all duration-500 relative">
             
-            <!-- کادر جدید تنظیمات خلاصه سازی و اطلاعات خطبه نگاشت -->
-            <div class="glass-panel p-5 rounded-2xl mb-8 border border-sky-500/20 grid grid-cols-1 md:grid-cols-2 gap-6 relative">
-                <div>
-                    <label class="block mb-2 font-bold text-sky-300 text-sm md:text-base">حجم پردازش هوش مصنوعی:</label>
-                    <div class="flex gap-4 mt-2">
-                        <label class="flex items-center gap-2 cursor-pointer text-gray-400 hover:text-white transition">
-                            <input type="radio" name="summaryLength" value="short" class="accent-sky-500 w-4 h-4">
-                            <span>کوتاه</span>
-                        </label>
-                        <label class="flex items-center gap-2 cursor-pointer text-sky-400 font-bold hover:text-white transition">
-                            <input type="radio" name="summaryLength" value="medium" checked class="accent-sky-500 w-4 h-4">
-                            <span>متوسط (پیش‌فرض)</span>
-                        </label>
-                        <label class="flex items-center gap-2 cursor-pointer text-gray-400 hover:text-white transition">
-                            <input type="radio" name="summaryLength" value="long" class="accent-sky-500 w-4 h-4">
-                            <span>بلند</span>
-                        </label>
-                    </div>
-                </div>
-                <div>
-                    <label class="block mb-2 font-bold text-sky-300 text-sm md:text-base" for="sermonDate">تاریخ نماز جمعه (جهت درج در خطبه‌نگاشت):</label>
-                    <input type="text" id="sermonDate" class="neon-input w-full p-2.5 rounded-xl outline-none text-sm" placeholder="مثال: نماز جمعه ۳۰ خرداد ۱۴۰۴" value="نماز جمعه ۳۰ خرداد ۱۴۰۴ دهستان میانکاله (زاغمرز)">
-                </div>
-            </div>
-
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 mb-10">
                 <div class="group relative">
                     <label class="block mb-3 font-bold text-sky-300 text-base md:text-lg flex items-center">
@@ -218,8 +193,17 @@
                 </div>
             </div>
 
-            <div class="text-center mb-6 relative z-10 flex justify-center">
-                <button id="generateBtn" class="cyber-btn flex items-center justify-center text-white font-black text-lg md:text-xl py-4 px-8 md:px-12 rounded-full cursor-pointer shadow-lg w-full md:w-auto">
+            <!-- پنل شروع فرآیند پردازش و منوی کشویی انتخاب حجم -->
+            <div class="flex flex-col md:flex-row items-center justify-center gap-4 mb-6 relative z-10 w-full max-w-2xl mx-auto">
+                <div class="w-full md:w-1/3">
+                    <select id="summaryLength" class="neon-input w-full p-4 rounded-full text-base font-bold outline-none cursor-pointer bg-slate-900 border border-sky-500/30 text-sky-300 transition-all duration-300">
+                        <option value="short">خلاصه کوتاه</option>
+                        <option value="medium" selected>خلاصه متوسط (پیش‌فرض)</option>
+                        <option value="long">خلاصه بلند</option>
+                    </select>
+                </div>
+                
+                <button id="generateBtn" class="cyber-btn flex items-center justify-center text-white font-black text-lg md:text-xl py-4 px-8 md:px-12 rounded-full cursor-pointer shadow-lg w-full md:w-2/3">
                     <svg class="w-6 h-6 md:w-7 md:h-7 ml-3 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                     آغاز پردازش هوش مصنوعی
                 </button>
@@ -237,7 +221,6 @@
                         گزارش نهایی استخراج شد
                     </h2>
                     
-                    <!-- گروه دکمه‌های کپی، دانلود ورد و PDF -->
                     <div class="flex flex-wrap gap-3 w-full lg:w-auto justify-center">
                         <button id="copyBtn" class="w-full sm:w-auto group flex items-center justify-center bg-gray-800/80 hover:bg-emerald-600 border border-gray-600 hover:border-emerald-500 text-gray-300 hover:text-white font-bold py-3 px-5 rounded-xl transition-all duration-300 shadow-lg">
                             <svg id="copyIcon" class="w-5 h-5 ml-2 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -253,7 +236,6 @@
                             <span>خروجی فایل Word</span>
                         </button>
 
-                        <!-- دکمه خروجی PDF -->
                         <button id="pdfBtn" class="w-full sm:w-auto group flex items-center justify-center bg-red-900/50 hover:bg-red-600 border border-red-700/50 hover:border-red-500 text-red-200 hover:text-white font-bold py-3 px-5 rounded-xl transition-all duration-300 shadow-lg">
                             <svg class="w-5 h-5 ml-2 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
@@ -265,41 +247,86 @@
                 
                 <div id="output" class="text-base md:text-lg leading-loose text-gray-300 font-medium"></div>
 
-                <!-- بخش خطبه نگاشت‌ها -->
-                <div class="mt-12 border-t border-gray-700/50 pt-8">
-                    <h3 class="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-amber-500 mb-6 text-center lg:text-right">
-                        🖼️ خطبه‌نگاشت‌های هوشمند تولید شده
-                    </h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <!-- خطبه‌نگاشت مذهبی -->
-                        <div class="glass-panel p-4 rounded-2xl flex flex-col items-center">
-                            <h4 class="text-lg font-bold text-sky-300 mb-3">خطبه‌نگاشت مذهبی (خطبه اول)</h4>
-                            <div class="relative w-full max-w-sm rounded-xl overflow-hidden shadow-lg border border-sky-500/20 mb-4 bg-gray-950">
-                                <canvas id="canvasReligious" class="w-full hidden"></canvas>
-                                <img id="imgReligiousPreview" class="w-full object-contain" alt="خطبه‌نگاشت مذهبی">
-                                <div id="loaderReligious" class="absolute inset-0 flex items-center justify-center bg-black/70">
-                                    <div class="radar-loader"></div>
-                                </div>
+                <!-- ماژول جدید فعال‌سازی و ساخت خطبه‌نگاشت -->
+                <div id="negashtModule" class="mt-12 border-t border-gray-700/50 pt-8 flex flex-col items-center">
+                    <button id="negashtTriggerBtn" class="cyber-btn flex items-center justify-center text-white font-black text-lg py-4 px-10 rounded-2xl shadow-lg w-full max-w-md transition-all duration-300">
+                        🎨 ایجاد خطبه‌نگاشت (مذهبی و سیاسی)
+                    </button>
+                    
+                    <!-- منوی انتخاب تاریخ نماز جمعه به صورت کشویی (شروع پیش‌فرض خرداد ۱۴۰۴) -->
+                    <div id="negashtSetupForm" class="hidden w-full max-w-xl mt-6 p-6 glass-panel rounded-2xl border border-sky-500/20 text-center transition-all duration-500">
+                        <h3 class="text-lg font-bold text-sky-400 mb-4">تنظیم تاریخ برگزاری نماز جمعه</h3>
+                        <div class="flex justify-center items-center gap-4 mb-6">
+                            <!-- روز -->
+                            <div class="flex flex-col">
+                                <span class="text-xs text-gray-400 mb-1">روز</span>
+                                <select id="selDay" class="neon-input p-2.5 rounded-xl bg-slate-950 border border-gray-700 text-gray-200 outline-none w-20 text-center"></select>
                             </div>
-                            <button id="downloadReligiousBtn" class="cyber-btn w-full max-w-sm py-2 px-4 rounded-xl text-white font-bold flex items-center justify-center gap-2">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                                دانلود خطبه‌نگاشت مذهبی
-                            </button>
+                            <!-- ماه -->
+                            <div class="flex flex-col">
+                                <span class="text-xs text-gray-400 mb-1">ماه</span>
+                                <select id="selMonth" class="neon-input p-2.5 rounded-xl bg-slate-950 border border-gray-700 text-gray-200 outline-none w-32 text-center">
+                                    <option value="فروردین">فروردین</option>
+                                    <option value="اردیبهشت">اردیبهشت</option>
+                                    <option value="خرداد" selected>خرداد</option>
+                                    <option value="تیر">تیر</option>
+                                    <option value="مرداد">مرداد</option>
+                                    <option value="شهریور">شهریور</option>
+                                    <option value="مهر">مهر</option>
+                                    <option value="آبان">آبان</option>
+                                    <option value="آذر">آذر</option>
+                                    <option value="دی">دی</option>
+                                    <option value="بهمن">بهمن</option>
+                                    <option value="اسفند">اسفند</option>
+                                </select>
+                            </div>
+                            <!-- سال -->
+                            <div class="flex flex-col">
+                                <span class="text-xs text-gray-400 mb-1">سال</span>
+                                <select id="selYear" class="neon-input p-2.5 rounded-xl bg-slate-950 border border-gray-700 text-gray-200 outline-none w-24 text-center"></select>
+                            </div>
                         </div>
-                        <!-- خطبه‌نگاشت سیاسی -->
-                        <div class="glass-panel p-4 rounded-2xl flex flex-col items-center">
-                            <h4 class="text-lg font-bold text-purple-300 mb-3">خطبه‌نگاشت سیاسی (خطبه دوم)</h4>
-                            <div class="relative w-full max-w-sm rounded-xl overflow-hidden shadow-lg border border-purple-500/20 mb-4 bg-gray-950">
-                                <canvas id="canvasPolitical" class="w-full hidden"></canvas>
-                                <img id="imgPoliticalPreview" class="w-full object-contain" alt="خطبه‌نگاشت سیاسی">
-                                <div id="loaderPolitical" class="absolute inset-0 flex items-center justify-center bg-black/70">
-                                    <div class="radar-loader"></div>
+                        <button id="renderNegashtBtn" class="bg-emerald-600 hover:bg-emerald-500 text-white font-black py-2.5 px-8 rounded-xl transition duration-300">
+                            🚀 ساخت تصاویر خطبه‌نگاشت
+                        </button>
+                    </div>
+                    
+                    <!-- ویترین نمایش خطبه‌نگاشت‌های آماده شده -->
+                    <div id="negashtShowroom" class="hidden w-full mt-8">
+                        <h4 class="text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-amber-500 mb-6 text-center lg:text-right">
+                            🖼️ خطبه‌نگاشت‌های هوشمند تولید شده
+                        </h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <!-- خطبه‌نگاشت مذهبی -->
+                            <div class="glass-panel p-4 rounded-2xl flex flex-col items-center">
+                                <h5 class="text-md font-bold text-sky-300 mb-3">خطبه‌نگاشت مذهبی (خطبه اول)</h5>
+                                <div class="relative w-full max-w-sm rounded-xl overflow-hidden shadow-lg border border-sky-500/20 mb-4 bg-gray-950">
+                                    <canvas id="canvasReligious" class="w-full hidden"></canvas>
+                                    <img id="imgReligiousPreview" class="w-full object-contain" alt="خطبه‌نگاشت مذهبی">
+                                    <div id="loaderReligious" class="absolute inset-0 flex items-center justify-center bg-black/70">
+                                        <div class="radar-loader"></div>
+                                    </div>
                                 </div>
+                                <button id="downloadReligiousBtn" class="cyber-btn w-full max-w-sm py-2 px-4 rounded-xl text-white font-bold flex items-center justify-center gap-2">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                                    دانلود تصویر مذهبی
+                                </button>
                             </div>
-                            <button id="downloadPoliticalBtn" class="cyber-btn w-full max-w-sm py-2 px-4 rounded-xl text-white font-bold flex items-center justify-center gap-2">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                                دانلود خطبه‌نگاشت سیاسی
-                            </button>
+                            <!-- خطبه‌نگاشت سیاسی -->
+                            <div class="glass-panel p-4 rounded-2xl flex flex-col items-center">
+                                <h5 class="text-md font-bold text-purple-300 mb-3">خطبه‌نگاشت سیاسی (خطبه دوم)</h5>
+                                <div class="relative w-full max-w-sm rounded-xl overflow-hidden shadow-lg border border-purple-500/20 mb-4 bg-gray-950">
+                                    <canvas id="canvasPolitical" class="w-full hidden"></canvas>
+                                    <img id="imgPoliticalPreview" class="w-full object-contain" alt="خطبه‌نگاشت سیاسی">
+                                    <div id="loaderPolitical" class="absolute inset-0 flex items-center justify-center bg-black/70">
+                                        <div class="radar-loader"></div>
+                                    </div>
+                                </div>
+                                <button id="downloadPoliticalBtn" class="cyber-btn w-full max-w-sm py-2 px-4 rounded-xl text-white font-bold flex items-center justify-center gap-2">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                                    دانلود تصویر سیاسی
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -391,7 +418,7 @@
             window.addEventListener('mouseout', () => { mouse.x = null; mouse.y = null; });
         }
 
-        // منطق مدیریت مدال شناور معرفی
+        // منطق مدیریت مدال معرفی سامانه
         const infoBtn = document.getElementById('infoBtn');
         const infoModal = document.getElementById('infoModal');
         const closeInfoBtn = document.getElementById('closeInfoBtn');
@@ -409,6 +436,27 @@
             if (e.target === infoModal) closeModal();
         });
 
+        // تکمیل پویای منوهای کشویی تاریخ
+        document.addEventListener('DOMContentLoaded', () => {
+            const selDay = document.getElementById('selDay');
+            for (let i = 1; i <= 31; i++) {
+                const opt = document.createElement('option');
+                opt.value = i;
+                opt.textContent = toPersianDigits(i);
+                if (i === 30) opt.selected = true; // پیش‌فرض روز ۳۰
+                selDay.appendChild(opt);
+            }
+
+            const selYear = document.getElementById('selYear');
+            for (let i = 1404; i <= 1410; i++) {
+                const opt = document.createElement('option');
+                opt.value = i;
+                opt.textContent = toPersianDigits(i);
+                if (i === 1404) opt.selected = true; // پیش‌فرض سال ۱۴۰۴
+                selYear.appendChild(opt);
+            }
+        });
+
         const generateBtn = document.getElementById('generateBtn');
         const khutbah1Input = document.getElementById('khutbah1');
         const khutbah2Input = document.getElementById('khutbah2');
@@ -422,6 +470,12 @@
         const copyHelper = document.getElementById('copyHelper');
         const errorDiv = document.getElementById('error');
         const errorMessageSpan = document.getElementById('errorMessage');
+
+        // اجزای ماژول خطبه‌نگاشت
+        const negashtTriggerBtn = document.getElementById('negashtTriggerBtn');
+        const negashtSetupForm = document.getElementById('negashtSetupForm');
+        const renderNegashtBtn = document.getElementById('renderNegashtBtn');
+        const negashtShowroom = document.getElementById('negashtShowroom');
 
         let currentReportData = null; 
         const introText = "به گزارش معاونت ارتباطات و رسانه دفتر امام جمعه دهستان میانکاله (زاغمرز)، حجت الاسلام والمسلمین حاج حسین انزائی در خطبه‌های این هفته از نماز جمعه، ضمن سفارش به تقوا اظهار کرد:";
@@ -442,13 +496,49 @@
         wordBtn.addEventListener('click', exportToWord);
         pdfBtn.addEventListener('click', exportToPDF);
 
+        // مدیریت تعامل دکمه‌های بازشدنی خطبه‌نگاشت
+        negashtTriggerBtn.addEventListener('click', () => {
+            negashtSetupForm.classList.toggle('hidden');
+            const y = negashtSetupForm.getBoundingClientRect().top + window.scrollY - 30;
+            window.scrollTo({top: y, behavior: 'smooth'});
+        });
+
+        renderNegashtBtn.addEventListener('click', () => {
+            if (!currentReportData) return;
+            
+            negashtShowroom.classList.remove('hidden');
+            
+            // قالب‌بندی تاریخ نهایی بر اساس مقادیر کشویی
+            const d = document.getElementById('selDay').value;
+            const m = document.getElementById('selMonth').value;
+            const y = document.getElementById('selYear').value;
+            const fullDateString = `نماز جمعه ${d} ${m} ${y} دهستان میانکاله (زاغمرز)`;
+
+            // شروع فرآیند رندرگیری هوشمند تصاویر بر روی بوم بدون ترس از Tainted Canvas
+            renderKhutbahNegasht(currentReportData.religiousQuote, 'canvasReligious', 'imgReligiousPreview', 'loaderReligious', fullDateString);
+            renderKhutbahNegasht(currentReportData.politicalQuote, 'canvasPolitical', 'imgPoliticalPreview', 'loaderPolitical', fullDateString);
+
+            // لینک‌دهی مستقیم دکمه دانلود
+            document.getElementById('downloadReligiousBtn').onclick = () => downloadImage('canvasReligious', 'khutbah_religious.png');
+            document.getElementById('downloadPoliticalBtn').onclick = () => downloadImage('canvasPolitical', 'khutbah_political.png');
+
+            setTimeout(() => {
+                const scrollYTarget = negashtShowroom.getBoundingClientRect().top + window.scrollY - 20;
+                window.scrollTo({top: scrollYTarget, behavior: 'smooth'});
+            }, 300);
+        });
+
         async function handleGeneration() {
             khutbah1Input.blur();
             khutbah2Input.blur();
 
             resultContainer.classList.remove('opacity-100', 'translate-y-0');
             resultContainer.classList.add('opacity-0', 'translate-y-10');
-            setTimeout(() => resultContainer.classList.add('hidden'), 500);
+            setTimeout(() => {
+                resultContainer.classList.add('hidden');
+                negashtSetupForm.classList.add('hidden');
+                negashtShowroom.classList.add('hidden');
+            }, 500);
             errorDiv.classList.add('hidden');
             
             const khutbah1Text = khutbah1Input.value.trim();
@@ -458,8 +548,8 @@
                 showError("خطا: اطلاعات ورودی ناقص است. لطفاً هر دو فیلد را پر کنید."); return;
             }
 
-            // گرفتن اندازه خلاصه از رادیو باتن‌ها
-            const summaryLengthValue = document.querySelector('input[name="summaryLength"]:checked').value;
+            // خواندن فاکتور طولی خلاصه‌سازی
+            const summaryLengthValue = document.getElementById('summaryLength').value;
             let lengthInstruction = "";
             if (summaryLengthValue === "short") {
                 lengthInstruction = "خلاصه خطبه اول و دوم به صورت کاملاً فشرده و کوتاه (هر کدام ۲ الی ۳ بند بسیار کوتاه) باشد.";
@@ -495,8 +585,8 @@
                 6. khutbah2.summary: خلاصه خطبه دوم (سیاسی/اجتماعی) بر اساس ساختار طولی بالا.
                 7. overallSummary.title: تیتر خلاصه نهایی.
                 8. overallSummary.text: خلاصه کلی (حدود ۴ الی ۶ خط).
-                9. religiousQuote: یک بخش نسبتاً طولانی، تکان دهنده، پرمغز و بسیار قشنگ از خطبه اول (بدون پیشوند، فقط متن نقل قول مستقیم) برای خطبه‌نگاشت مذهبی.
-                10. politicalQuote: یک بخش نسبتاً طولانی، جذاب، حماسی و تاثیرگذار از خطبه دوم (بدون پیشوند، فقط متن نقل قول مستقیم) برای خطبه‌نگاشت سیاسی.
+                9. religiousQuote: یک فراز مستقل، نسبتاً طولانی، تکان دهنده، پرمغز و بسیار قشنگ از متن خطبه اول (بدون پیشوند یا نام گوینده، فقط متن نقل قول مستقیم) برای درج در خطبه‌نگاشت مذهبی.
+                10. politicalQuote: یک فراز مستقل، نسبتاً طولانی، جذاب، حماسی و تاثیرگذار از متن خطبه دوم (بدون پیشوند یا نام گوینده، فقط متن نقل قول مستقیم) برای درج در خطبه‌نگاشت سیاسی.
                 فقط JSON برگردان.
             `;
 
@@ -606,21 +696,25 @@
                 
                 const y = resultContainer.getBoundingClientRect().top + window.scrollY - 20;
                 window.scrollTo({top: y, behavior: 'smooth'});
-
-                // فراخوانی رندر خطبه‌نگاشت‌ها بعد از تکمیل خروجی متنی
-                const userDateText = document.getElementById('sermonDate').value.trim() || "نماز جمعه ۳۰ خرداد ۱۴۰۴ دهستان میانکاله (زاغمرز)";
-                renderKhutbahNegasht(data.religiousQuote, 'canvasReligious', 'imgReligiousPreview', 'loaderReligious', userDateText);
-                renderKhutbahNegasht(data.politicalQuote, 'canvasPolitical', 'imgPoliticalPreview', 'loaderPolitical', userDateText);
-                
-                // هندلر اختصاصی برای دکمه‌های دانلود تصاویر
-                document.getElementById('downloadReligiousBtn').onclick = () => downloadImage('canvasReligious', 'khutbah_religious.png');
-                document.getElementById('downloadPoliticalBtn').onclick = () => downloadImage('canvasPolitical', 'khutbah_political.png');
-
             }, 100);
         }
 
-        // تابع هوشمند تولید خطبه‌نگاشت بر روی بوم ۲ بعدی (کادر آبی پایین تصویر)
-        function renderKhutbahNegasht(quote, canvasId, previewId, loaderId, dateText) {
+        // متد کمکی برای لود کردن بک‌گراند به صورت باینری (Blob) جهت حذف خطای CORS و سیاهی تصویر بوم
+        async function fetchTemplateBlob() {
+            // آدرس مستقیم تصویر الگو در گیت‌هاب همراه با پارامتر تصادفی زمان جهت پاکسازی کش مرورگر
+            const url = "https://raw.githubusercontent.com/amirhossein-gandomkar/friday-prayer-ai/abe11c45e603f9699058dfffa2229c34fb4ab9d9/kh.png?t=" + new Date().getTime();
+            try {
+                const response = await fetch(url, { mode: 'cors' });
+                if (!response.ok) throw new Error("قالب تصویر خام از گیت‌هاب دریافت نشد.");
+                return await response.blob();
+            } catch (err) {
+                console.error("ارتباط ناموفق با مخزن گیت‌هاب:", err);
+                return null;
+            }
+        }
+
+        // رندرگیری زنده خطبه‌نگاشت بر روی بوم ۲ بعدی (کادر آبی پایین تصویر)
+        async function renderKhutbahNegasht(quote, canvasId, previewId, loaderId, dateText) {
             const canvas = document.getElementById(canvasId);
             const ctx = canvas.getContext('2d');
             const previewImg = document.getElementById(previewId);
@@ -628,26 +722,30 @@
 
             loader.classList.remove('hidden');
 
+            const blob = await fetchTemplateBlob();
+            if (!blob) {
+                loader.classList.add('hidden');
+                alert("خطا در بارگیری مستقیم فایل الگو از گیت‌هاب. لطفاً اتصال اینترنت خود را چک کنید.");
+                return;
+            }
+
+            const objectURL = URL.createObjectURL(blob);
             const bgImg = new Image();
-            bgImg.crossOrigin = "anonymous";
-            // استفاده از لینک مستقیم (Raw) بستر گیت‌هاب جهت دور زدن مشکلات CORS و فرمت HTML
-            bgImg.src = "https://raw.githubusercontent.com/amirhossein-gandomkar/friday-prayer-ai/abe11c45e603f9699058dfffa2229c34fb4ab9d9/kh.png";
+            bgImg.src = objectURL;
 
             bgImg.onload = function() {
-                canvas.width = bgImg.naturalWidth || 1080;
-                canvas.height = bgImg.naturalHeight || 1080;
+                // تعیین ابعاد واقعی بوم متناسب با سایز اصلی عکس الگو
+                canvas.width = bgImg.naturalWidth || 1024;
+                canvas.height = bgImg.naturalHeight || 1024;
 
-                // ترسیم پس‌زمینه
                 ctx.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
 
                 const w = canvas.width;
                 const h = canvas.height;
-
-                // محاسبه موقعیت مرکزی شروع متن در کادر آبی
+                let currentY = h * 0.58; // تراز مطمئن در کادر آبی
                 const centerX = w / 2;
-                let currentY = h * 0.59; // شروع مطمئن در بخش پایینی تصویر
 
-                // تابع ترسیم متن با افکت دور سیاه (Stroke)
+                // ترسیم متن راست‌چین با سایه‌رنگ بیرونی سیاه (Stroke)
                 function drawTextWithOutline(text, x, y, font, fillColor, maxW = null) {
                     ctx.font = font;
                     ctx.textAlign = 'center';
@@ -655,7 +753,7 @@
                     ctx.lineJoin = 'round';
                     ctx.miterLimit = 2;
                     ctx.lineWidth = 5;
-                    ctx.strokeStyle = '#000000'; // دور متن سیاه
+                    ctx.strokeStyle = '#000000';
                     ctx.fillStyle = fillColor;
 
                     if (maxW) {
@@ -691,41 +789,43 @@
                     }
                 }
 
-                // خط اول: تاریخ (فونت b nazanin سایز ۱۰ نسبی، سفید، دور سیاه)
+                // ۱. خط اول: درج تاریخ (سفید، دور سیاه)
                 const dateFont = "bold 22px 'B Nazanin', 'Vazirmatn', sans-serif";
                 currentY = drawTextWithOutline(toPersianDigits(dateText), centerX, currentY, dateFont, '#FFFFFF');
 
-                currentY += 12; // فاصله خطوط
+                currentY += 12;
 
-                // خط دوم: اطلاعات امام جمعه (فونت b nazanin سایز ۱۵ نسبی، سفید، دور سیاه)
+                // ۲. خط دوم: اطلاعات تبریکی امام جمعه (سفید، دور سیاه)
                 const speakerFont = "bold 27px 'B Nazanin', 'Vazirmatn', sans-serif";
                 const speakerText = "امام جمعه محترم دهستان میانکاله(زاغمرز) حجت الاسلام والمسلمین حاج حسین انزائی:";
                 currentY = drawTextWithOutline(speakerText, centerX, currentY, speakerFont, '#FFFFFF');
 
-                currentY += 20; // فاصله خطوط
+                currentY += 20;
 
-                // خط سوم به بعد: بخش انتخابی خطبه (فونت B titr سایز ۱۵.۵ نسبی، زرد، دور سیاه، حداکثر عرض ۸۲٪ تصویر جهت فیت شدن)
+                // ۳. خط سوم: نقل قول برگزیده (طلایی/زرد، دور سیاه) با حداکثر عرض مجاز ۸۲ درصد بوم
                 const quoteFont = "bold 33px 'B Titr', 'Vazirmatn', sans-serif";
                 const formattedQuote = `«${quote}»`;
                 drawTextWithOutline(formattedQuote, centerX, currentY, quoteFont, '#FFDF00', w * 0.82);
 
-                // ایجاد تصویر پیش‌نمایش به صورت Base64
                 try {
                     previewImg.src = canvas.toDataURL('image/png');
                     loader.classList.add('hidden');
                 } catch (err) {
-                    console.error("بم‌بست امنیتی بوم:", err);
+                    console.error("خطای بارگذاری داده بوم:", err);
                     loader.classList.add('hidden');
                 }
+
+                URL.revokeObjectURL(objectURL); // حذف امن لینک موقت جهت بهینه‌سازی رم سیستم
             };
 
             bgImg.onerror = function() {
                 loader.classList.add('hidden');
-                alert("خطا در بارگذاری تصویر الگو از گیت‌هاب رخ داد.");
+                alert("بارگذاری فایل الگو بر روی مرورگر با خطا روبه‌رو شد.");
+                URL.revokeObjectURL(objectURL);
             };
         }
 
-        // تابع ایمن و پایدار دانلود تصویر بوم
+        // بارگذاری و دانلود خودکار تصاویر بدون خطا
         function downloadImage(canvasId, filename) {
             try {
                 const canvas = document.getElementById(canvasId);
@@ -737,12 +837,11 @@
                 link.click();
                 document.body.removeChild(link);
             } catch (err) {
-                console.error("ناموفق در تولید خروجی تصویر:", err);
-                alert("امکان دریافت مستقیم فایل تصویری مهیا نشد. لطفاً روی پیش‌نمایش عکس نگه داشته و گزینه ذخیره را بزنید.");
+                console.error("عدم دانلود تصویر:", err);
+                alert("به نظر می‌رسد مرورگر شما اجازه ذخیره خودکار را نمی‌دهد. لطفاً روی عکس نگه داشته و آن را مستقیماً ذخیره کنید.");
             }
         }
 
-        // تولید فایل تمیز مایکروسافت ورد (DOC) راست‌چین بدون به هم ریختگی
         function exportToWord() {
             if (!currentReportData) return;
 
@@ -803,11 +902,9 @@
             URL.revokeObjectURL(url);
         }
 
-        // رویکرد تهاجمی جهت تولید PDF عاری از ارورهای ناسازگاری oklch و oklab تیل‌وند نسخه ۴
         async function exportToPDF() {
             if (!currentReportData) return;
 
-            // ساخت بوم اختصاصی، تمیز و مخفی فقط با کدهای ساده CSS و رنگ‌های هگزادسیمال استاندارد
             const cleanPDFContainer = document.createElement('div');
             cleanPDFContainer.style.position = 'absolute';
             cleanPDFContainer.style.left = '-9999px';
@@ -854,7 +951,6 @@
             document.body.appendChild(cleanPDFContainer);
 
             try {
-                // رندر گرفتن از بوم ایزوله شده بدون خطا
                 const canvas = await html2canvas(cleanPDFContainer, {
                     scale: 2, 
                     useCORS: true,
@@ -882,8 +978,8 @@
                 
                 pdf.save('گزارش_جمعه_یار.pdf');
             } catch (err) {
-                console.error("PDF generator error:", err);
-                alert("تولید فایل PDF با خطا مواجه شد.");
+                console.error("PDF generation failure:", err);
+                alert("تولید مستقیم فایل PDF با خطا روبرو شد.");
             } finally {
                 document.body.removeChild(cleanPDFContainer);
             }
