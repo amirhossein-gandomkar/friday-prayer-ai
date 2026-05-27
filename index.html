@@ -638,9 +638,15 @@
             renderKhutbahNegasht(currentReportData.religiousQuote, 'canvasReligious', 'imgReligiousPreview', 'loaderReligious', 'downloadReligiousBtn', fullDateString);
             renderKhutbahNegasht(currentReportData.politicalQuote, 'canvasPolitical', 'imgPoliticalPreview', 'loaderPolitical', 'downloadPoliticalBtn', fullDateString);
 
-            // اعمال لایو کلیک هندلرهای دکمه دانلود
-            document.getElementById('downloadReligiousBtn').onclick = () => downloadImage('canvasReligious', 'khutbah_religious.png');
-            document.getElementById('downloadPoliticalBtn').onclick = () => downloadImage('canvasPolitical', 'khutbah_political.png');
+            // محاسبه اسامی تصاویر دانلود با حروف و اعداد فارسی پویا
+            const dFa = toPersianDigits(d);
+            const yFa = toPersianDigits(y);
+            const fileNameRel = `خطبه_نگاشت_مذهبی_نماز_جمعه_${dFa}_${m}-${yFa}_جمعه_یار.png`;
+            const fileNamePol = `خطبه_نگاشت_سیاسی_نماز_جمعه_${dFa}_${m}-${yFa}_جمعه_یار.png`;
+
+            // اعمال لایو کلیک هندلرهای دکمه دانلود تصاویر با نام سفارشی و پویا
+            document.getElementById('downloadReligiousBtn').onclick = () => downloadImage('canvasReligious', fileNameRel);
+            document.getElementById('downloadPoliticalBtn').onclick = () => downloadImage('canvasPolitical', fileNamePol);
 
             setTimeout(() => {
                 const scrollYTarget = negashtShowroom.getBoundingClientRect().top + window.scrollY - 20;
@@ -973,6 +979,12 @@
         function exportToWord() {
             if (!currentReportData) return;
 
+            // دریافت مقادیر و تنظیم نام پویای فایل با اعداد فارسی
+            const d = toPersianDigits(document.getElementById('selDay').value);
+            const m = document.getElementById('selMonth').value;
+            const y = toPersianDigits(document.getElementById('selYear').value);
+            const fileName = `خلاصه_خطبه_نماز_جمعه_${d}_${m}-${y}_جمعه_یار.doc`;
+
             let wordHTML = `
             <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
             <head>
@@ -1023,7 +1035,7 @@
             const link = document.createElement('a');
             
             link.href = url;
-            link.download = 'گزارش_خطبه_جمعه_یار.doc';
+            link.download = fileName;
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
@@ -1104,7 +1116,13 @@
                     heightLeft -= pageHeight;
                 }
                 
-                pdf.save('گزارش_جمعه_یار.pdf');
+                // دریافت مقادیر و تنظیم نام پویای فایل با اعداد فارسی
+                const d = toPersianDigits(document.getElementById('selDay').value);
+                const m = document.getElementById('selMonth').value;
+                const y = toPersianDigits(document.getElementById('selYear').value);
+                const fileName = `خلاصه_خطبه_نماز_جمعه_${d}_${m}-${y}_جمعه_یار.pdf`;
+
+                pdf.save(fileName);
             } catch (err) {
                 console.error("PDF generation failure:", err);
                 alert("تولید مستقیم فایل PDF با خطا روبرو شد.");
