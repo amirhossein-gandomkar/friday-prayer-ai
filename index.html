@@ -285,7 +285,6 @@
                                     <option value="شهریور">شهریور</option>
                                     <option value="مهر">مهر</option>
                                     <option value="آبان">آبان</option>
-                                    <option value="آبان">آبان</option>
                                     <option value="آذر">آذر</option>
                                     <option value="دی">دی</option>
                                     <option value="بهمن">بهمن</option>
@@ -800,7 +799,7 @@
             }
         }
 
-        // رندرگیری زنده خطبه‌نگاشت بر روی بوم ۲ بعدی (کادر آبی پایین تصویر)
+        // رندرگیری زنده خطبه‌نگاشت بر روی بوم ۲ بعدی (کادر آبی پایینی تصویر)
         async function renderKhutbahNegasht(quote, canvasId, previewId, loaderId, downloadBtnId, dateText) {
             const canvas = document.getElementById(canvasId);
             const ctx = canvas.getContext('2d');
@@ -828,7 +827,7 @@
 
                 const w = canvas.width;
                 const h = canvas.height;
-                let currentY = h * 0.54; // نقطه شروع متوازن‌تر و کمی بالاتر جهت جاگیری تمام المان‌ها
+                let currentY = h * 0.67; // تغییر تراز به h * 0.67 جهت انتقال اصولی تمام متون به داخل کادر آبی‌رنگ پایین تصویر
                 const centerX = w / 2;
 
                 // تابع ترسیم متن راست‌چین با سایه‌رنگ بیرونی سیاه (Stroke) بدون مشکل NaN عددی
@@ -876,24 +875,24 @@
                     }
                 }
 
-                // ۱. خط اول: درج تاریخ (اندازه فونت از ۲۲ به ۲۸ افزایش یافت)
+                // ۱. خط اول: درج تاریخ (اندازه قلم ۲۸ پیکسل)
                 const dateFont = "bold 28px 'B Nazanin', 'Vazirmatn', sans-serif";
                 currentY = drawTextWithOutline(toPersianDigits(dateText), centerX, currentY, dateFont, '#FFFFFF');
 
-                currentY += 10; // فاصله خط
+                currentY += 8; // فاصله خط ملایم
 
-                // ۲. خط دوم: تفکیک مشخصات ائمه جمعه به دو سطر شکیل تر (اندازه فونت از ۲۷ به ۳۴ افزایش یافت که بزرگتر از تاریخ است)
-                const speakerFont = "bold 34px 'B Nazanin', 'Vazirmatn', sans-serif";
+                // ۲. خط دوم: تفکیک مشخصات ائمه جمعه به دو سطر شکیل تر (اندازه قلم به ۳۶ پیکسل بزرگ‌تر شد)
+                const speakerFont = "bold 36px 'B Nazanin', 'Vazirmatn', sans-serif";
                 currentY = drawTextWithOutline("امام جمعه محترم دهستان میانکاله (زاغمرز)", centerX, currentY, speakerFont, '#FFFFFF');
-                currentY += 5;
+                currentY += 4;
                 currentY = drawTextWithOutline("حجت الاسلام والمسلمین حاج حسین انزائی:", centerX, currentY, speakerFont, '#FFFFFF');
 
-                currentY += 15; // فاصله خط
+                currentY += 12; // فاصله خط ملایم برای شروع نقل قول
 
-                // ۳. خط سوم: نقل قول برگزیده بلند (اندازه فونت از ۳۳ به ۴۴ افزایش یافت و عرض مجاز به ۸۵ درصد گسترش پیدا کرد)
+                // ۳. خط سوم: نقل قول برگزیده بلند (اندازه قلم ۴۴ پیکسل، زرد، دور سیاه) با حداکثر عرض مجاز ۸۲ درصد بوم برای عدم خروج از حاشیه‌های چپ و راست
                 const quoteFont = "bold 44px 'B Titr', 'Vazirmatn', sans-serif";
                 const formattedQuote = `« ${quote} »`;
-                drawTextWithOutline(formattedQuote, centerX, currentY, quoteFont, '#FFDF00', w * 0.85);
+                drawTextWithOutline(formattedQuote, centerX, currentY, quoteFont, '#FFDF00', w * 0.82);
 
                 try {
                     previewImg.src = canvas.toDataURL('image/png');
