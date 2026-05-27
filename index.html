@@ -102,6 +102,13 @@
         .cursor-blink::after { content: '|'; animation: blink 1s step-end infinite; color: var(--primary); }
         @keyframes blink { 50% { opacity: 0; } }
 
+        /* استایل سفارشی برای هماهنگی بیشتر گزینه‌های دراپ‌داون با تم تاریک */
+        select option {
+            background-color: #090d16 !important;
+            color: #38bdf8 !important;
+            font-weight: bold;
+        }
+
         @media (max-width: 768px) {
             #particle-canvas { display: none !important; }
             #ai-core { display: none !important; }
@@ -264,22 +271,22 @@
                         🎨 ایجاد خطبه‌نگاشت (مذهبی و سیاسی)
                     </button>
                     
-                    <!-- منوی انتخاب تاریخ نماز جمعه به صورت کشویی -->
+                    <!-- منوی انتخاب تاریخ نماز جمعه به صورت کشویی (شیک و همسان با تم سایت) -->
                     <div id="negashtSetupForm" class="hidden w-full max-w-xl mt-6 p-6 glass-panel rounded-2xl border border-sky-500/20 text-center transition-all duration-500">
                         <h3 class="text-lg font-bold text-sky-400 mb-4">تنظیم تاریخ برگزاری نماز جمعه</h3>
                         <div class="flex justify-center items-center gap-4 mb-6">
                             <!-- روز -->
                             <div class="flex flex-col">
                                 <span class="text-xs text-gray-400 mb-1">روز</span>
-                                <select id="selDay" class="neon-input p-2.5 rounded-xl bg-slate-950 border border-gray-700 text-gray-200 outline-none w-20 text-center"></select>
+                                <select id="selDay" class="neon-input p-2.5 rounded-xl bg-slate-900 border border-sky-500/30 text-sky-300 shadow-[0_0_15px_rgba(14,165,233,0.15)] outline-none w-20 text-center font-bold cursor-pointer transition-all duration-300"></select>
                             </div>
                             <!-- ماه -->
                             <div class="flex flex-col">
                                 <span class="text-xs text-gray-400 mb-1">ماه</span>
-                                <select id="selMonth" class="neon-input p-2.5 rounded-xl bg-slate-950 border border-gray-700 text-gray-200 outline-none w-32 text-center">
+                                <select id="selMonth" class="neon-input p-2.5 rounded-xl bg-slate-900 border border-sky-500/30 text-sky-300 shadow-[0_0_15px_rgba(14,165,233,0.15)] outline-none w-32 text-center font-bold cursor-pointer transition-all duration-300">
                                     <option value="فروردین">فروردین</option>
                                     <option value="اردیبهشت">اردیبهشت</option>
-                                    <option value="خرداد" selected>خرداد</option>
+                                    <option value="خرداد">خرداد</option>
                                     <option value="تیر">تیر</option>
                                     <option value="مرداد">مرداد</option>
                                     <option value="شهریور">شهریور</option>
@@ -294,7 +301,7 @@
                             <!-- سال -->
                             <div class="flex flex-col">
                                 <span class="text-xs text-gray-400 mb-1">سال</span>
-                                <select id="selYear" class="neon-input p-2.5 rounded-xl bg-slate-950 border border-gray-700 text-gray-200 outline-none w-24 text-center"></select>
+                                <select id="selYear" class="neon-input p-2.5 rounded-xl bg-slate-900 border border-sky-500/30 text-sky-300 shadow-[0_0_15px_rgba(14,165,233,0.15)] outline-none w-24 text-center font-bold cursor-pointer transition-all duration-300"></select>
                             </div>
                         </div>
                         <button id="renderNegashtBtn" class="bg-emerald-600 hover:bg-emerald-500 text-white font-black py-2.5 px-8 rounded-xl transition duration-300">
@@ -320,10 +327,10 @@
                                         <div class="radar-loader"></div>
                                     </div>
                                 </div>
-                                <!-- دکمه دانلود ابتدا کاملاً مخفی است و کادر تصویر هم تا قبل از اتمام رندر دیده نمی‌شود -->
+                                <!-- دکمه دانلود مذهبی -->
                                 <button id="downloadReligiousBtn" class="cyber-btn w-full max-w-sm py-2 px-4 rounded-xl text-white font-bold flex items-center justify-center gap-2 hidden">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                                    دانلود تصویر مذهبی
+                                    دانلود خطبه نگاشت مذهبی
                                 </button>
                             </div>
 
@@ -339,10 +346,10 @@
                                         <div class="radar-loader"></div>
                                     </div>
                                 </div>
-                                <!-- دکمه دانلود ابتدا کاملاً مخفی است -->
+                                <!-- دکمه دانلود سیاسی -->
                                 <button id="downloadPoliticalBtn" class="cyber-btn w-full max-w-sm py-2 px-4 rounded-xl text-white font-bold flex items-center justify-center gap-2 hidden">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                                    دانلود تصویر سیاسی
+                                    دانلود خطبه نگاشت سیاسی
                                 </button>
                             </div>
                         </div>
@@ -456,23 +463,49 @@
 
         // تکمیل پویای منوهای کشویی تاریخ و مدیریت دراپ‌داون سفارشی حجم پردازش
         document.addEventListener('DOMContentLoaded', () => {
+            // محاسبه هوشمند تاریخ امروز شمسی با استفاده از API مرورگر
+            const today = new Date();
+            const formatter = new Intl.DateTimeFormat('en-US-u-ca-persian', {
+                year: 'numeric',
+                month: 'numeric',
+                day: 'numeric'
+            });
+            const parts = formatter.formatToParts(today);
+            const shamsiYear = parseInt(parts.find(p => p.type === 'year').value);
+            const shamsiMonthNum = parseInt(parts.find(p => p.type === 'month').value);
+            const shamsiDay = parseInt(parts.find(p => p.type === 'day').value);
+
+            const shamsiMonths = [
+                "فروردین", "اردیبهشت", "خرداد", "تیر", "مرداد", "شهریور",
+                "مهر", "آبان", "آذر", "دی", "بهمن", "اسفند"
+            ];
+            const currentMonthName = shamsiMonths[shamsiMonthNum - 1];
+
+            // مقداردهی پویای روزها بر اساس تاریخ امروز
             const selDay = document.getElementById('selDay');
             for (let i = 1; i <= 31; i++) {
                 const opt = document.createElement('option');
                 opt.value = i;
                 opt.textContent = toPersianDigits(i);
-                if (i === 30) opt.selected = true; // پیش‌فرض روز ۳۰
+                if (i === shamsiDay) opt.selected = true;
                 selDay.appendChild(opt);
             }
 
+            // مقداردهی پویای سال‌ها حول سال جاری
             const selYear = document.getElementById('selYear');
-            for (let i = 1404; i <= 1410; i++) {
+            const startYear = Math.min(1404, shamsiYear - 1);
+            const endYear = Math.max(1415, shamsiYear + 5);
+            for (let i = startYear; i <= endYear; i++) {
                 const opt = document.createElement('option');
                 opt.value = i;
                 opt.textContent = toPersianDigits(i);
-                if (i === 1404) opt.selected = true; // پیش‌فرض سال ۱۴۰۴
+                if (i === shamsiYear) opt.selected = true;
                 selYear.appendChild(opt);
             }
+
+            // انتخاب ماه جاری شمسی
+            const selMonth = document.getElementById('selMonth');
+            selMonth.value = currentMonthName;
 
             // منطق کنترل دراپ‌داون حجم خلاصه سفارشی
             const customSelectContainer = document.getElementById('customSelectContainer');
@@ -785,7 +818,7 @@
             }, 100);
         }
 
-// متد بهینه برای لود کردن بک‌گراند به صورت محلی جهت حذف قطعی فیلترینگ و خطای CORS
+        // متد بهینه برای لود کردن بک‌گراند به صورت محلی جهت حذف قطعی فیلترینگ و خطای CORS
         async function fetchTemplateBlob() {
             // بارگیری فایل تصویر مستقیماً از روی هاست خودتان (کنار فایل index.html)
             const url = "kh.png?t=" + new Date().getTime();
@@ -882,7 +915,7 @@
 
                 currentY += 10; // فاصله مناسب با سطر بعدی
 
-                // ۲. خط دوم: مشخصات امام جمعه با کمی فاصله در زیر تاریخ (اندازه قلم به ۳۸ پیکسل افزایش یافته و فاصله‌ها تراز شد)
+                // ۲. خط دوم: مشخصات امام جمعه با کمی فاصله در زیر تاریخ
                 const speakerFont = "bold 38px 'B Nazanin', 'Vazirmatn', sans-serif";
                 currentY = drawTextWithOutline("امام جمعه محترم دهستان میانکاله (زاغمرز)", centerX, currentY, speakerFont, '#FFFFFF', null, 1.2);
                 currentY += 6;
