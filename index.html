@@ -103,9 +103,14 @@
         @keyframes blink { 50% { opacity: 0; } }
 
         /* استایل سفارشی گزینه‌های منوی کشویی به منظور همخوانی کامل با تم نئونی و شیشه‌ای سایت */
+        #summaryLength {
+            text-align: center;
+            text-align-last: center;
+        }
         #summaryLength option {
-            background-color: #0f172a !important;
+            background-color: #0b1329 !important;
             color: #38bdf8 !important;
+            text-align: center;
         }
 
         @media (max-width: 768px) {
@@ -199,15 +204,15 @@
                 </div>
             </div>
 
-            <!-- پنل شروع فرآیند پردازش و منوی کشویی مدرن انتخاب حجم خلاصه -->
+            <!-- پنل شروع فرآیند پردازش و منوی کشویی مدرن انتخاب حجم خلاصه با پدینگ متوازن (pl-12 pr-12) جهت عدم هم‌پوشانی با فلش -->
             <div class="flex flex-col md:flex-row items-center justify-center gap-4 mb-6 relative z-10 w-full max-w-2xl mx-auto">
                 <div class="relative w-full md:w-1/3">
-                    <select id="summaryLength" class="neon-input w-full p-4 pr-10 pl-4 rounded-full text-base font-bold outline-none cursor-pointer bg-slate-900 border border-sky-500/30 text-sky-400 hover:border-sky-400 transition-all duration-300 focus:border-sky-400 focus:shadow-[0_0_15px_rgba(14,165,233,0.3)] appearance-none text-center">
+                    <select id="summaryLength" class="neon-input w-full py-4 pl-12 pr-12 rounded-full text-base font-bold outline-none cursor-pointer bg-slate-900 border border-sky-500/30 text-sky-400 hover:border-sky-400 transition-all duration-300 focus:border-sky-400 focus:shadow-[0_0_15px_rgba(14,165,233,0.3)] appearance-none text-center">
                         <option value="short">خلاصه کوتاه</option>
                         <option value="medium" selected>خلاصه متوسط (پیش‌فرض)</option>
                         <option value="long">خلاصه بلند</option>
                     </select>
-                    <!-- فلش راهنمای اختصاصی نئونی منو -->
+                    <!-- فلش راهنمای اختصاصی نئونی منو در منتهی‌الیه سمت چپ -->
                     <div class="absolute inset-y-0 left-4 flex items-center pointer-events-none text-sky-400">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
@@ -365,6 +370,168 @@
     <textarea id="copyHelper" class="hidden absolute -left-full -top-full"></textarea>
 
     <script>
+        // --- بخش اول: تعاریف و توابع پایه (جهت تضمین عدم بروز خطاهای hoisting) ---
+
+        const introText = "به گزارش معاونت ارتباطات و رسانه دفتر امام جمعه دهستان میانکاله (زاغمرز)، حجت الاسلام والمسلمین حاج حسین انزائی در خطبه‌های این هفته از نماز جمعه، ضمن سفارش به تقوا اظهار کرد:";
+
+        // تبدیل ارقام به فارسی
+        function toPersianDigits(str) {
+            const persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+            return str.toString().replace(/\d/g, x => persianDigits[x]);
+        }
+
+        // متد کمکی برای لود کردن بک‌گراند به صورت باینری (Blob) جهت حذف قطعی خطای CORS و سیاهی تصویر بوم
+        async function fetchTemplateBlob() {
+            const url = "https://raw.githubusercontent.com/amirhossein-gandomkar/friday-prayer-ai/abe11c45e603f9699058dfffa2229c34fb4ab9d9/kh.png?t=" + new Date().getTime();
+            try {
+                const response = await fetch(url, { mode: 'cors' });
+                if (!response.ok) throw new Error("قالب تصویر خام از گیت‌هاب دریافت نشد.");
+                return await response.blob();
+            } catch (err) {
+                console.error("ارتباط ناموفق با مخزن گیت‌هاب:", err);
+                return null;
+            }
+        }
+
+        // ترسیم متن راست‌چین با سایه‌رنگ بیرونی سیاه (Stroke) بدون مشکل NaN عددی
+        function drawTextWithOutline(ctx, text, x, y, font, fillColor, maxW = null) {
+            ctx.font = font;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.lineJoin = 'round';
+            ctx.miterLimit = 2;
+            ctx.lineWidth = 5;
+            ctx.strokeStyle = '#000000';
+            ctx.fillStyle = fillColor;
+
+            // استخراج ایمن سایز پیکسل فونت از هر نوع استرینگ استایل با تکنیک RegEx (برای جلوگیری از NaN شدن ارتفاع خطوط)
+            const fontSizeMatch = font.match(/(\d+)px/);
+            const fontSize = fontSizeMatch ? parseInt(fontSizeMatch[1]) : 24;
+            const lineHeight = fontSize * 1.35; // کاهش اندک ارتفاع خط برای تناسب بهینه متون درشت
+
+            if (maxW) {
+                const words = text.split(' ');
+                let line = '';
+                let lines = [];
+                for (let n = 0; n < words.length; n++) {
+                    let testLine = line + words[n] + ' ';
+                    let metrics = ctx.measureText(testLine);
+                    if (metrics.width > maxW && n > 0) {
+                        lines.push(line.trim());
+                        line = words[n] + ' ';
+                    } else {
+                        line = testLine;
+                    }
+                }
+                lines.push(line.trim());
+
+                lines.forEach(l => {
+                    ctx.strokeText(l, x, y);
+                    ctx.fillText(l, x, y);
+                    y += lineHeight;
+                });
+                return y;
+            } else {
+                ctx.strokeText(text, x, y);
+                ctx.fillText(text, x, y);
+                return y + lineHeight;
+            }
+        }
+
+        // رندرگیری زنده خطبه‌نگاشت بر روی بوم ۲ بعدی (کادر آبی پایین تصویر) - دارای اصلاح پارامتر ششم (dateText)
+        async function renderKhutbahNegasht(quote, canvasId, previewId, loaderId, downloadBtnId, dateText) {
+            const canvas = document.getElementById(canvasId);
+            const ctx = canvas.getContext('2d');
+            const previewImg = document.getElementById(previewId);
+            const loader = document.getElementById(loaderId);
+            const downloadBtn = document.getElementById(downloadBtnId);
+
+            const blob = await fetchTemplateBlob();
+            if (!blob) {
+                loader.classList.add('hidden');
+                alert("خطا در بارگیری مستقیم فایل الگو از گیت‌هاب. لطفاً اتصال اینترنت خود را چک کنید.");
+                return;
+            }
+
+            const objectURL = URL.createObjectURL(blob);
+            const bgImg = new Image();
+            bgImg.src = objectURL;
+
+            bgImg.onload = function() {
+                // تعیین ابعاد بوم متناسب با اندازه تصویر الگو
+                canvas.width = bgImg.naturalWidth || 1024;
+                canvas.height = bgImg.naturalHeight || 1024;
+
+                ctx.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
+
+                const w = canvas.width;
+                const h = canvas.height;
+                let currentY = h * 0.58; // تراز مطمئن شروع متن در کادر آبی تصویر
+                const centerX = w / 2;
+
+                // ۱. خط اول: درج تاریخ (سایز ارتقا یافته به ۲۸ پیکسل، سفید، دور سیاه)
+                const dateFont = "bold 28px 'B Nazanin', 'Vazirmatn', sans-serif";
+                currentY = drawTextWithOutline(ctx, toPersianDigits(dateText), centerX, currentY, dateFont, '#FFFFFF');
+
+                currentY += 12; // فاصله خط
+
+                // ۲. خط دوم: مشخصات ائمه جمعه به دو سطر با ابعاد بزرگ‌تر (اندازه ارتقا یافته به ۳۴ پیکسل، سفید، دور سیاه)
+                const speakerFont = "bold 34px 'B Nazanin', 'Vazirmatn', sans-serif";
+                currentY = drawTextWithOutline(ctx, "امام جمعه محترم دهستان میانکاله(زاغمرز)", centerX, currentY, speakerFont, '#FFFFFF');
+                currentY += 5;
+                currentY = drawTextWithOutline(ctx, "حجت الاسلام والمسلمین حاج حسین انزائی:", centerX, currentY, speakerFont, '#FFFFFF');
+
+                currentY += 20; // فاصله خط
+
+                // ۳. خط سوم: نقل قول برگزیده عینی و درشت (اندازه ارتقا یافته به ۴۲ پیکسل، زرد، دور سیاه) با پهنای بهینه ۸۴ درصد بوم
+                const quoteFont = "bold 42px 'B Titr', 'Vazirmatn', sans-serif";
+                const formattedQuote = `«${quote}»`;
+                drawTextWithOutline(ctx, formattedQuote, centerX, currentY, quoteFont, '#FFDF00', w * 0.84);
+
+                try {
+                    previewImg.src = canvas.toDataURL('image/png');
+                    
+                    // پنهان کردن لودرها پس از تکمیل موفق فرآیند رندر
+                    loader.classList.add('hidden');
+                    
+                    // نمایان کردن فریم نهایی پوستر خطبه‌نگاشت و دکمه دانلود متناظر با آن
+                    previewImg.classList.remove('hidden');
+                    downloadBtn.classList.remove('hidden');
+
+                } catch (err) {
+                    console.error("خطای بارگذاری داده بوم:", err);
+                    loader.classList.add('hidden');
+                }
+
+                URL.revokeObjectURL(objectURL); // پاکسازی برای بهینه‌سازی حافظه مرورگر
+            };
+
+            bgImg.onerror = function() {
+                loader.classList.add('hidden');
+                alert("بارگذاری فایل الگو بر روی مرورگر با خطا روبه‌رو شد.");
+                URL.revokeObjectURL(objectURL);
+            };
+        }
+
+        // بارگذاری و دانلود خودکار تصاویر بدون خطا
+        function downloadImage(canvasId, filename) {
+            try {
+                const canvas = document.getElementById(canvasId);
+                const dataUrl = canvas.toDataURL('image/png');
+                const link = document.createElement('a');
+                link.download = filename;
+                link.href = dataUrl;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            } catch (err) {
+                console.error("عدم دانلود تصویر:", err);
+                alert("امکان دانلود مستقیم فراهم نشد. لطفاً انگشت خود را روی عکس نگه داشته و آن را ذخیره کنید.");
+            }
+        }
+
+        // --- بخش دوم: تعامل با بوم شبکه عصبی و انیمیشن‌ها در دسکتاپ ---
+
         const isMobileDevice = window.innerWidth <= 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
         if (!isMobileDevice) {
@@ -437,44 +604,7 @@
             window.addEventListener('mouseout', () => { mouse.x = null; mouse.y = null; });
         }
 
-        // منطق مدیریت مدال معرفی سامانه
-        const infoBtn = document.getElementById('infoBtn');
-        const infoModal = document.getElementById('infoModal');
-        const closeInfoBtn = document.getElementById('closeInfoBtn');
-        const closeInfoBtnOk = document.getElementById('closeInfoBtnOk');
-
-        infoBtn.addEventListener('click', () => {
-            infoModal.classList.remove('hidden');
-        });
-        const closeModal = () => {
-            infoModal.classList.add('hidden');
-        };
-        closeInfoBtn.addEventListener('click', closeModal);
-        closeInfoBtnOk.addEventListener('click', closeModal);
-        infoModal.addEventListener('click', (e) => {
-            if (e.target === infoModal) closeModal();
-        });
-
-        // تکمیل پویای منوهای کشویی تاریخ
-        document.addEventListener('DOMContentLoaded', () => {
-            const selDay = document.getElementById('selDay');
-            for (let i = 1; i <= 31; i++) {
-                const opt = document.createElement('option');
-                opt.value = i;
-                opt.textContent = toPersianDigits(i);
-                if (i === 30) opt.selected = true; // پیش‌فرض روز ۳۰
-                selDay.appendChild(opt);
-            }
-
-            const selYear = document.getElementById('selYear');
-            for (let i = 1404; i <= 1410; i++) {
-                const opt = document.createElement('option');
-                opt.value = i;
-                opt.textContent = toPersianDigits(i);
-                if (i === 1404) opt.selected = true; // پیش‌فرض سال ۱۴۰۴
-                selYear.appendChild(opt);
-            }
-        });
+        // --- بخش سوم: مدیریت ارجاعات عناصر و رویدادهای تعاملی کاربر ---
 
         const generateBtn = document.getElementById('generateBtn');
         const khutbah1Input = document.getElementById('khutbah1');
@@ -497,19 +627,40 @@
         const negashtShowroom = document.getElementById('negashtShowroom');
 
         let currentReportData = null; 
-        const introText = "به گزارش معاونت ارتباطات و رسانه دفتر امام جمعه دهستان میانکاله (زاغمرز)، حجت الاسلام والمسلمین حاج حسین انزائی در خطبه‌های این هفته از نماز جمعه، ضمن سفارش به تقوا اظهار کرد:";
 
-        function toPersianDigits(str) {
-            const persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
-            return str.toString().replace(/\d/g, x => persianDigits[x]);
+        // متد ایمن اجرای لود گزینه‌های کشویی تاریخ
+        function initDateDropdowns() {
+            const selDay = document.getElementById('selDay');
+            if (selDay && selDay.children.length === 0) {
+                for (let i = 1; i <= 31; i++) {
+                    const opt = document.createElement('option');
+                    opt.value = i;
+                    opt.textContent = toPersianDigits(i);
+                    if (i === 30) opt.selected = true; // پیش‌فرض روز ۳۰
+                    selDay.appendChild(opt);
+                }
+            }
+
+            const selYear = document.getElementById('selYear');
+            if (selYear && selYear.children.length === 0) {
+                for (let i = 1404; i <= 1410; i++) {
+                    const opt = document.createElement('option');
+                    opt.value = i;
+                    opt.textContent = toPersianDigits(i);
+                    if (i === 1404) opt.selected = true; // پیش‌فرض سال ۱۴۰۴
+                    selYear.appendChild(opt);
+                }
+            }
         }
 
-        const loadingMessages = [
-            "در حال خواندن متون...", "انتقال به سرور ابری...", "تجزیه و تحلیل شبکه‌های معنایی...",
-            "استخراج نکات کلیدی...", "آماده‌سازی خروجی..."
-        ];
+        // چک کردن زمان آماده بودن ساختار DOM قبل از آغاز لود هندلرها
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initDateDropdowns);
+        } else {
+            initDateDropdowns();
+        }
 
-        let loadingInterval;
+        // ثبت رویدادهای اصلی روی تمامی دکمه‌های کنترلی وبسایت
         generateBtn.addEventListener('click', handleGeneration);
         copyBtn.addEventListener('click', copyOutputToClipboard);
         wordBtn.addEventListener('click', exportToWord);
@@ -548,15 +699,71 @@
             renderKhutbahNegasht(currentReportData.religiousQuote, 'canvasReligious', 'imgReligiousPreview', 'loaderReligious', 'downloadReligiousBtn', fullDateString);
             renderKhutbahNegasht(currentReportData.politicalQuote, 'canvasPolitical', 'imgPoliticalPreview', 'loaderPolitical', 'downloadPoliticalBtn', fullDateString);
 
-            // اعمال کلیک هندلرهای دکمه دانلود
-            document.getElementById('downloadReligiousBtn').onclick = () => downloadImage('canvasReligious', 'khutbah_religious.png');
-            document.getElementById('downloadPoliticalBtn').onclick = () => downloadImage('canvasPolitical', 'khutbah_political.png');
-
             setTimeout(() => {
                 const scrollYTarget = negashtShowroom.getBoundingClientRect().top + window.scrollY - 20;
                 window.scrollTo({top: scrollYTarget, behavior: 'smooth'});
             }, 300);
         });
+
+        // رندر و نمایش ساختار خلاصه خطبه‌ها توسط هوش مصنوعی
+        function buildAndRevealOutput(data) {
+            let rawText = `بِسْمِ اللهِ الرَّحْمنِ الرَّحِیم\n\n«${data.impactfulTitle}»\n\n${introText}\n\n`;
+            rawText += `🔸 خطبه اول: ${data.khutbah1.title}\n`;
+            data.khutbah1.summary.forEach((i, idx) => rawText += `${idx + 1}. ${i.heading}\n   ${i.explanation}\n\n`);
+            rawText += `---\n🔹 خطبه دوم: ${data.khutbah2.title}\n`;
+            data.khutbah2.summary.forEach((i, idx) => rawText += `${idx + 1}. ${i.heading}\n   ${i.explanation}\n\n`);
+            rawText += `---\n📌 ${data.overallSummary.title}\n${data.overallSummary.text}`;
+            copyHelper.value = toPersianDigits(rawText.trim());
+
+            let htmlContent = `
+                <div class="text-center mb-8">
+                    <span class="text-gray-400 text-sm tracking-widest">بِسْمِ اللهِ الرَّحْمنِ الرَّحِیم</span>
+                    <h3 class="text-xl md:text-3xl font-black text-sky-300 mt-4 mb-4 leading-normal px-2 md:px-4">«${toPersianDigits(data.impactfulTitle)}»</h3>
+                    <p class="text-gray-300 text-sm md:text-lg max-w-3xl mx-auto border-b border-gray-700/50 pb-6">${toPersianDigits(introText)}</p>
+                </div>
+                <div class="output-card output-khutbah1">
+                    <h4 class="text-lg md:text-xl font-bold text-blue-400 mb-4 flex items-center">
+                        <span class="bg-blue-500/20 p-2 rounded-lg ml-3"><svg class="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z"></path></svg></span>
+                        خطبه اول: ${toPersianDigits(data.khutbah1.title)}
+                    </h4>
+                    <div class="space-y-4 pr-2">
+                        ${data.khutbah1.summary.map((i, idx) => `<div class="border-r-2 border-blue-500/30 pr-4"><strong class="text-blue-300 block mb-1 text-base md:text-lg">${toPersianDigits(idx + 1)}. ${toPersianDigits(i.heading)}</strong><span class="text-gray-400 text-sm md:text-base">${toPersianDigits(i.explanation)}</span></div>`).join('')}
+                    </div>
+                </div>
+                <div class="output-card output-khutbah2">
+                    <h4 class="text-lg md:text-xl font-bold text-emerald-400 mb-4 flex items-center">
+                        <span class="bg-emerald-500/20 p-2 rounded-lg ml-3"><svg class="w-5 h-5 text-emerald-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd"></path></svg></span>
+                        خطبه دوم: ${toPersianDigits(data.khutbah2.title)}
+                    </h4>
+                    <div class="space-y-4 pr-2">
+                        ${data.khutbah2.summary.map((i, idx) => `<div class="border-r-2 border-emerald-500/30 pr-4"><strong class="text-emerald-300 block mb-1 text-base md:text-lg">${toPersianDigits(idx + 1)}. ${toPersianDigits(i.heading)}</strong><span class="text-gray-400 text-sm md:text-base">${toPersianDigits(i.explanation)}</span></div>`).join('')}
+                    </div>
+                </div>
+                <div class="output-card output-overall">
+                    <h4 class="text-lg md:text-xl font-bold text-amber-400 mb-4 flex items-center">
+                        <span class="bg-amber-500/20 p-2 rounded-lg ml-3"><svg class="w-5 h-5 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg></span>
+                        ${toPersianDigits(data.overallSummary.title)}
+                    </h4>
+                    <p class="text-gray-300 pr-2 leading-relaxed text-sm md:text-base">${toPersianDigits(data.overallSummary.text)}</p>
+                </div>
+            `;
+
+            outputDiv.innerHTML = "";
+            resultContainer.classList.remove('hidden');
+            setTimeout(() => {
+                resultContainer.classList.remove('opacity-0', 'translate-y-10');
+                resultContainer.classList.add('opacity-100', 'translate-y-0');
+                outputDiv.classList.add('cursor-blink');
+                outputDiv.innerHTML = htmlContent; outputDiv.style.opacity = 0;
+                let fadeEffect = setInterval(function () {
+                    if (outputDiv.style.opacity < 1) outputDiv.style.opacity = parseFloat(outputDiv.style.opacity) + 0.1;
+                    else { clearInterval(fadeEffect); outputDiv.classList.remove('cursor-blink'); }
+                }, 50);
+                
+                const y = resultContainer.getBoundingClientRect().top + window.scrollY - 20;
+                window.scrollTo({top: y, behavior: 'smooth'});
+            }, 100);
+        }
 
         async function handleGeneration() {
             khutbah1Input.blur();
@@ -666,216 +873,6 @@
                 generateBtn.disabled = false;
                 generateBtn.innerHTML = `<svg class="w-6 h-6 md:w-7 md:h-7 ml-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg> آغاز پردازش مجدد`;
                 generateBtn.classList.remove('opacity-50', 'cursor-not-allowed', 'scale-95');
-            }
-        }
-
-        function buildAndRevealOutput(data) {
-            let rawText = `بِسْمِ اللهِ الرَّحْمنِ الرَّحِیم\n\n«${data.impactfulTitle}»\n\n${introText}\n\n`;
-            rawText += `🔸 خطبه اول: ${data.khutbah1.title}\n`;
-            data.khutbah1.summary.forEach((i, idx) => rawText += `${idx + 1}. ${i.heading}\n   ${i.explanation}\n\n`);
-            rawText += `---\n🔹 خطبه دوم: ${data.khutbah2.title}\n`;
-            data.khutbah2.summary.forEach((i, idx) => rawText += `${idx + 1}. ${i.heading}\n   ${i.explanation}\n\n`);
-            rawText += `---\n📌 ${data.overallSummary.title}\n${data.overallSummary.text}`;
-            copyHelper.value = toPersianDigits(rawText.trim());
-
-            let htmlContent = `
-                <div class="text-center mb-8">
-                    <span class="text-gray-400 text-sm tracking-widest">بِسْمِ اللهِ الرَّحْمنِ الرَّحِیم</span>
-                    <h3 class="text-xl md:text-3xl font-black text-sky-300 mt-4 mb-4 leading-normal px-2 md:px-4">«${toPersianDigits(data.impactfulTitle)}»</h3>
-                    <p class="text-gray-300 text-sm md:text-lg max-w-3xl mx-auto border-b border-gray-700/50 pb-6">${toPersianDigits(introText)}</p>
-                </div>
-                <div class="output-card output-khutbah1">
-                    <h4 class="text-lg md:text-xl font-bold text-blue-400 mb-4 flex items-center">
-                        <span class="bg-blue-500/20 p-2 rounded-lg ml-3"><svg class="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z"></path></svg></span>
-                        خطبه اول: ${toPersianDigits(data.khutbah1.title)}
-                    </h4>
-                    <div class="space-y-4 pr-2">
-                        ${data.khutbah1.summary.map((i, idx) => `<div class="border-r-2 border-blue-500/30 pr-4"><strong class="text-blue-300 block mb-1 text-base md:text-lg">${toPersianDigits(idx + 1)}. ${toPersianDigits(i.heading)}</strong><span class="text-gray-400 text-sm md:text-base">${toPersianDigits(i.explanation)}</span></div>`).join('')}
-                    </div>
-                </div>
-                <div class="output-card output-khutbah2">
-                    <h4 class="text-lg md:text-xl font-bold text-emerald-400 mb-4 flex items-center">
-                        <span class="bg-emerald-500/20 p-2 rounded-lg ml-3"><svg class="w-5 h-5 text-emerald-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd"></path></svg></span>
-                        خطبه دوم: ${toPersianDigits(data.khutbah2.title)}
-                    </h4>
-                    <div class="space-y-4 pr-2">
-                        ${data.khutbah2.summary.map((i, idx) => `<div class="border-r-2 border-emerald-500/30 pr-4"><strong class="text-emerald-300 block mb-1 text-base md:text-lg">${toPersianDigits(idx + 1)}. ${toPersianDigits(i.heading)}</strong><span class="text-gray-400 text-sm md:text-base">${toPersianDigits(i.explanation)}</span></div>`).join('')}
-                    </div>
-                </div>
-                <div class="output-card output-overall">
-                    <h4 class="text-lg md:text-xl font-bold text-amber-400 mb-4 flex items-center">
-                        <span class="bg-amber-500/20 p-2 rounded-lg ml-3"><svg class="w-5 h-5 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg></span>
-                        ${toPersianDigits(data.overallSummary.title)}
-                    </h4>
-                    <p class="text-gray-300 pr-2 leading-relaxed text-sm md:text-base">${toPersianDigits(data.overallSummary.text)}</p>
-                </div>
-            `;
-
-            outputDiv.innerHTML = "";
-            resultContainer.classList.remove('hidden');
-            setTimeout(() => {
-                resultContainer.classList.remove('opacity-0', 'translate-y-10');
-                resultContainer.classList.add('opacity-100', 'translate-y-0');
-                outputDiv.classList.add('cursor-blink');
-                outputDiv.innerHTML = htmlContent; outputDiv.style.opacity = 0;
-                let fadeEffect = setInterval(function () {
-                    if (outputDiv.style.opacity < 1) outputDiv.style.opacity = parseFloat(outputDiv.style.opacity) + 0.1;
-                    else { clearInterval(fadeEffect); outputDiv.classList.remove('cursor-blink'); }
-                }, 50);
-                
-                const y = resultContainer.getBoundingClientRect().top + window.scrollY - 20;
-                window.scrollTo({top: y, behavior: 'smooth'});
-            }, 100);
-        }
-
-        // متد بهینه برای لود کردن بک‌گراند به صورت باینری (Blob) جهت حذف قطعی خطای CORS و سیاهی تصویر بوم
-        async function fetchTemplateBlob() {
-            // دریافت تصویر خام از گیت‌هاب با یک پارامتر رندوم تصادفی جهت پاکسازی کش مروگر
-            const url = "https://raw.githubusercontent.com/amirhossein-gandomkar/friday-prayer-ai/abe11c45e603f9699058dfffa2229c34fb4ab9d9/kh.png?t=" + new Date().getTime();
-            try {
-                const response = await fetch(url, { mode: 'cors' });
-                if (!response.ok) throw new Error("قالب تصویر خام از گیت‌هاب دریافت نشد.");
-                return await response.blob();
-            } catch (err) {
-                console.error("ارتباط ناموفق با مخزن گیت‌هاب:", err);
-                return null;
-            }
-        }
-
-        // رندرگیری زنده خطبه‌نگاشت بر روی بوم ۲ بعدی (کادر آبی پایین تصویر)
-        async function renderKhutbahNegasht(quote, canvasId, previewId, loaderId, downloadBtnId, dateText) {
-            const canvas = document.getElementById(canvasId);
-            const ctx = canvas.getContext('2d');
-            const previewImg = document.getElementById(previewId);
-            const loader = document.getElementById(loaderId);
-            const downloadBtn = document.getElementById(downloadBtnId);
-
-            const blob = await fetchTemplateBlob();
-            if (!blob) {
-                loader.classList.add('hidden');
-                alert("خطا در بارگیری مستقیم فایل الگو از گیت‌هاب. لطفاً اتصال اینترنت خود را چک کنید.");
-                return;
-            }
-
-            const objectURL = URL.createObjectURL(blob);
-            const bgImg = new Image();
-            bgImg.src = objectURL;
-
-            bgImg.onload = function() {
-                // تعیین ابعاد بوم متناسب با اندازه تصویر الگو
-                canvas.width = bgImg.naturalWidth || 1024;
-                canvas.height = bgImg.naturalHeight || 1024;
-
-                ctx.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
-
-                const w = canvas.width;
-                const h = canvas.height;
-                let currentY = h * 0.58; // تراز مطمئن شروع متن در کادر آبی تصویر
-                const centerX = w / 2;
-
-                // تابع ترسیم متن راست‌چین با سایه‌رنگ بیرونی سیاه (Stroke) بدون مشکل NaN عددی
-                function drawTextWithOutline(text, x, y, font, fillColor, maxW = null) {
-                    ctx.font = font;
-                    ctx.textAlign = 'center';
-                    ctx.textBaseline = 'middle';
-                    ctx.lineJoin = 'round';
-                    ctx.miterLimit = 2;
-                    ctx.lineWidth = 5;
-                    ctx.strokeStyle = '#000000';
-                    ctx.fillStyle = fillColor;
-
-                    // استخراج ایمن سایز پیکسل فونت از هر نوع استرینگ استایل با تکنیک RegEx (برای جلوگیری از NaN شدن ارتفاع خطوط)
-                    const fontSizeMatch = font.match(/(\d+)px/);
-                    const fontSize = fontSizeMatch ? parseInt(fontSizeMatch[1]) : 24;
-                    const lineHeight = fontSize * 1.35; // کاهش اندک ارتفاع خط برای تناسب بهینه متون درشت
-
-                    if (maxW) {
-                        const words = text.split(' ');
-                        let line = '';
-                        let lines = [];
-                        for (let n = 0; n < words.length; n++) {
-                            let testLine = line + words[n] + ' ';
-                            let metrics = ctx.measureText(testLine);
-                            if (metrics.width > maxW && n > 0) {
-                                lines.push(line.trim());
-                                line = words[n] + ' ';
-                            } else {
-                                line = testLine;
-                            }
-                        }
-                        lines.push(line.trim());
-
-                        lines.forEach(l => {
-                            ctx.strokeText(l, x, y);
-                            ctx.fillText(l, x, y);
-                            y += lineHeight;
-                        });
-                        return y;
-                    } else {
-                        ctx.strokeText(text, x, y);
-                        ctx.fillText(text, x, y);
-                        return y + lineHeight;
-                    }
-                }
-
-                // ۱. خط اول: درج تاریخ (سایز ارتقا یافته به ۲۸ پیکسل، سفید، دور سیاه)
-                const dateFont = "bold 28px 'B Nazanin', 'Vazirmatn', sans-serif";
-                currentY = drawTextWithOutline(toPersianDigits(dateText), centerX, currentY, dateFont, '#FFFFFF');
-
-                currentY += 12; // فاصله خط
-
-                // ۲. خط دوم: مشخصات ائمه جمعه به دو سطر با ابعاد بزرگ‌تر (اندازه ارتقا یافته به ۳۴ پیکسل، سفید، دور سیاه)
-                const speakerFont = "bold 34px 'B Nazanin', 'Vazirmatn', sans-serif";
-                currentY = drawTextWithOutline("امام جمعه محترم دهستان میانکاله(زاغمرز)", centerX, currentY, speakerFont, '#FFFFFF');
-                currentY += 5;
-                currentY = drawTextWithOutline("حجت الاسلام والمسلمین حاج حسین انزائی:", centerX, currentY, speakerFont, '#FFFFFF');
-
-                currentY += 20; // فاصله خط
-
-                // ۳. خط سوم: نقل قول برگزیده عینی و درشت (اندازه ارتقا یافته به ۴۲ پیکسل، زرد، دور سیاه) با پهنای بهینه ۸۴ درصد بوم
-                const quoteFont = "bold 42px 'B Titr', 'Vazirmatn', sans-serif";
-                const formattedQuote = `«${quote}»`;
-                drawTextWithOutline(formattedQuote, centerX, currentY, quoteFont, '#FFDF00', w * 0.84);
-
-                try {
-                    previewImg.src = canvas.toDataURL('image/png');
-                    
-                    // پنهان کردن لودرها پس از تکمیل موفق فرآیند رندر
-                    loader.classList.add('hidden');
-                    
-                    // نمایان کردن فریم نهایی پوستر خطبه‌نگاشت و دکمه دانلود متناظر با آن
-                    previewImg.classList.remove('hidden');
-                    downloadBtn.classList.remove('hidden');
-
-                } catch (err) {
-                    console.error("خطای بارگذاری داده بوم:", err);
-                    loader.classList.add('hidden');
-                }
-
-                URL.revokeObjectURL(objectURL); // پاکسازی برای بهینه‌سازی حافظه مرورگر
-            };
-
-            bgImg.onerror = function() {
-                loader.classList.add('hidden');
-                alert("بارگذاری فایل الگو بر روی مرورگر با خطا روبه‌رو شد.");
-                URL.revokeObjectURL(objectURL);
-            };
-        }
-
-        // بارگذاری و دانلود خودکار تصاویر بدون خطا
-        function downloadImage(canvasId, filename) {
-            try {
-                const canvas = document.getElementById(canvasId);
-                const dataUrl = canvas.toDataURL('image/png');
-                const link = document.createElement('a');
-                link.download = filename;
-                link.href = dataUrl;
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-            } catch (err) {
-                console.error("عدم دانلود تصویر:", err);
-                alert("امکان دانلود مستقیم فراهم نشد. لطفاً انگشت خود را روی عکس نگه داشته و آن را ذخیره کنید.");
             }
         }
 
@@ -1021,28 +1018,6 @@
                 document.body.removeChild(cleanPDFContainer);
             }
         }
-
-        function showError(message) { errorMessageSpan.textContent = message; errorDiv.classList.remove('hidden'); }
-        
-        async function copyOutputToClipboard() {
-            const btn = document.getElementById('copyBtn'); 
-            const icon = document.getElementById('copyIcon'); 
-            const text = document.getElementById('copyText');
-            const textToCopy = copyHelper.value;
-
-            try {
-                await navigator.clipboard.writeText(textToCopy);
-                
-                btn.classList.add('bg-emerald-600', 'border-emerald-500', 'text-white'); 
-                btn.classList.remove('bg-gray-800/80', 'text-gray-300');
-                text.innerText = 'کپی شد!'; 
-                icon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />`;
-                
-                setTimeout(() => {
-                    btn.classList.remove('bg-emerald-600', 'border-emerald-500', 'text-white'); 
-                    btn.classList.add('bg-gray-800/80', 'text-gray-300');
-                    text.innerText = 'کپی متن'; 
-                    icon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />`;
-                }, 3000);
-            } catch (err) { 
-                alert('مشکلی
+    </script>
+</body>
+</html>
