@@ -128,13 +128,13 @@
 
     <canvas id="particle-canvas"></canvas>
 
-    <!-- دکمه شناور راهنما و معرفی سایت (بروزرسانی شده با طراحی زیباتر و همنام با دستورالعمل جدید) -->
+    <!-- دکمه شناور راهنما و معرفی سایت -->
     <button id="infoBtn" class="fixed top-6 right-6 z-50 bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 text-white px-5 h-12 rounded-full flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(14,165,233,0.4)] transition-all duration-300 hover:scale-105 border border-sky-400 font-bold text-sm">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
         <span>راهنما و درباره ما</span>
     </button>
 
-    <!-- مدال راهنما و معرفی سامانه (بروزرسانی شده با تب‌های داینامیک درباره ما و راهنمای استفاده) -->
+    <!-- مدال معرفی سامانه با قابلیت تب‌بندی پویا -->
     <div id="infoModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4">
         <div class="glass-panel w-full max-w-2xl rounded-3xl p-6 md:p-8 relative border border-sky-500/30 flex flex-col max-h-[85vh]">
             <button id="closeInfoBtn" class="absolute top-4 left-4 text-gray-400 hover:text-white transition-colors">
@@ -212,7 +212,7 @@
                 <button id="tabFAQ" class="flex-1 py-2 font-bold border-b-2 border-transparent text-gray-400 hover:text-sky-300 transition-all">سوالات متداول (FAQ)</button>
                 <button id="tabSupport" class="flex-1 py-2 font-bold border-b-2 border-transparent text-gray-400 hover:text-sky-300 transition-all">پشتیبانی و ارتباط</button>
             </div>
-            <!-- محتوا تب ۱: قوانین و حریم خصوصی -->
+            <!-- محتوا تب ۱: قوانین و حریم خصوصی (آپدیت شده با بند ۶ جدید ارسالی شما) -->
             <div id="contentRules" class="space-y-4 overflow-y-auto pr-2 text-sm md:text-base text-gray-300 leading-relaxed flex-1">
                 <h3 class="font-bold text-sky-400 text-lg">شرایط و قوانین استفاده از سامانه «جمعه‌یار»</h3>
                 <p class="text-gray-400 italic">استفاده از خدمات سامانه جمعه‌یار به منزله پذیرش کامل قوانین و مقررات زیر است:</p>
@@ -227,7 +227,7 @@
                 <div class="space-y-3">
                     <p><strong>۴. حفاظت از داده‌های کاربران:</strong> تمامی متن‌ها، فایل‌ها و داده‌هایی که توسط شما جهت خلاصه‌سازی در سامانه بارگذاری می‌شود، کاملاً محرمانه تلقی می‌گردد. سامانه «جمعه‌یار» متعهد می‌شود که هیچ‌گونه اطلاعات شخصی یا محتوای پردازش‌شده را بدون اجازه کاربر در اختیار اشخاص ثالث قرار ندهد.</p>
                     <p><strong>۵. پردازش هوشمند و امنیت هوش مصنوعی:</strong> سامانه صرفاً جهت پردازش متن طراحی شده است. سیستم‌های ما به گونه‌ای بهینه‌سازی شده‌اند که پس از انجام فرآیند خلاصه‌سازی، داده‌های موقت کاربر در حداقل زمان ممکن از سرورهای پردازشی پاک‌سازی گردند تا امنیت داده‌ها تضمین شود.</p>
-                    <p><strong>۶. تعهد به امنیت اطلاعات:</strong> ما از پروتکل‌های امنیتی استاندارد برای محافظت از زیرساخت‌های سایت استفاده می‌کنیم. با این حال، حفظ امنیت حساب کاربری بر عهده کاربر است و توصیه می‌شود جهت حفظ حریم خصوصی، مراقب باشید.</p>
+                    <p><strong>۶. تعهد به امنیت اطلاعات و دستگاه کاربران:</strong> ما از پروتکل‌های امنیتی استاندارد و لایه‌های حفاظتی پیشرفته برای محافظت از زیرساخت‌های سایت و داده‌های پردازش‌شده استفاده می‌کنیم. با این حال، امنیت دستگاهی که از طریق آن به این سامانه متصل می‌شوید (مانند گوشی تلفن همراه یا کامپیوتر شخصی) و همچنین حفظ محرمانگی فایل‌های شخصی، بر عهده خود کاربر است. توصیه می‌کنیم برای حفظ حریم خصوصی، همواره از مرورگرهای به‌روز استفاده کرده و از اتصال به شبکه‌های اینترنت عمومی ناامن جهت ارسال اسناد حساس خودداری نمایید.</p>
                 </div>
                 <p class="mt-4 text-xs text-gray-400 border-t border-gray-700/30 pt-2 font-bold">پیوست به قوانین: این سیاست‌ها بخشی جدایی‌ناپذیر از «شرایط و قوانین استفاده» است و هرگونه تغییر احتمالی در آینده، از طریق همین صفحه به اطلاع کاربران خواهد رسید.</p>
             </div>
@@ -285,15 +285,15 @@
                     </div>
                 </div>
             </div>
-            <!-- محتوا تب ۳: پشتیبانی و ارتباط -->
-            <div id="contentSupport" class="hidden space-y-4 overflow-y-auto pr-2 text-sm md:text-base text-gray-300 leading-relaxed flex-1 flex flex-col justify-center text-center">
+            <!-- محتوا تب ۳: پشتیبانی و ارتباط (اصلاح لایوت با justify-start و pt-6 برای ممانعت از هم‌پوشانی خط اول) -->
+            <div id="contentSupport" class="hidden space-y-4 overflow-y-auto pr-2 text-sm md:text-base text-gray-300 leading-relaxed flex-1 flex flex-col justify-start text-center pt-6">
                 <h3 class="font-bold text-sky-400 text-xl mb-4">پشتیبانی و ارتباط با ما</h3>
                 <p class="max-w-md mx-auto">کاربران گرامی، سامانه «جمعه‌یار» متعهد به ارائه بهترین تجربه کاربری است. در صورت بروز هرگونه مشکل فنی، پرسش درباره عملکرد سامانه و یا ارائه پیشنهادات، می‌توانید از طریق ایمیل اختصاصی با ما در ارتباط باشید. تمامی پیام‌های شما در کوتاه‌ترین زمان ممکن بررسی و پاسخ داده خواهد شد.</p>
                 
                 <div class="mt-8">
                     <p class="text-gray-400 mb-2">📩 ایمیل پشتیبانی:</p>
-                    <!-- اتصال ایمیل با لینک mailto برای هدایت خودکار کاربر به برنامه میل در هر پلتفرمی -->
-                    <a href="mailto:info.jomehyar.ir@gmail.com" class="text-xl font-bold text-sky-300 hover:text-sky-400 transition-colors border-b border-dashed border-sky-300 hover:border-sky-400 pb-1">info.jomehyar.ir@gmail.com</a>
+                    <!-- اتصال ایمیل به هندلر جی‌میل هوشمند در پائین جهت بازشدن پیش‌فرض در جی‌میل -->
+                    <a href="#" id="supportEmailLink" class="text-xl font-bold text-sky-300 hover:text-sky-400 transition-colors border-b border-dashed border-sky-300 hover:border-sky-400 pb-1">info.jomehyar.ir@gmail.com</a>
                 </div>
                 <p class="text-xs text-gray-500 mt-6 max-w-sm mx-auto">نکته: جهت تسریع در رسیدگی، لطفاً در عنوان ایمیل خود موضوع دقیق مشکل یا پیشنهاد را ذکر نمایید.</p>
             </div>
@@ -303,7 +303,7 @@
         </div>
     </div>
 
-    <!-- مدال تایید قوانین و شرایط استفاده از سامانه (نمایش فقط در اولین بار قبل از پردازش هوش مصنوعی) -->
+    <!-- مدال تایید قوانین و شرایط استفاده از سامانه -->
     <div id="agreementModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4">
         <div class="glass-panel w-full max-w-xl rounded-3xl p-6 md:p-8 relative border border-sky-500/30 flex flex-col text-center shadow-[0_0_50px_rgba(14,165,233,0.2)]">
             <h2 class="text-xl md:text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-purple-500 mb-6">تایید قوانین و شرایط استفاده از سامانه</h2>
@@ -407,7 +407,7 @@
                     </select>
                 </div>
                 
-                <!-- اتصال دکمه آغاز پردازش به رویداد مدیریت حریم خصوصی و ذخیره‌سازی -->
+                <!-- اتصال دکمه آغاز پردازش به رویداد مدیریت حریم خصوصی -->
                 <button id="generateBtn" class="cyber-btn flex items-center justify-center text-white font-black text-lg md:text-xl py-4 px-8 md:px-12 rounded-full cursor-pointer shadow-lg w-full md:w-2/3">
                     <svg class="w-6 h-6 md:w-7 md:h-7 ml-3 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                     آغاز پردازش هوش مصنوعی
@@ -986,6 +986,36 @@
                     closeCustomSelect();
                 });
             });
+
+            // مدیریت سیستم هوشمند بازگشایی ایمیل در اپلیکیشن رسمی جی‌میل یا نسخه وب جی‌میل (جلوگیری از اوت‌لوک)
+            const supportEmailLink = document.getElementById('supportEmailLink');
+            if (supportEmailLink) {
+                supportEmailLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const email = "info.jomehyar.ir@gmail.com";
+                    const subject = encodeURIComponent("پشتیبانی جمعه یار");
+                    
+                    // قالب deep link جی‌میل برای پلتفرم‌های مختلف موبایل و آدرس اختصاصی نسخه وب جی‌میل
+                    const gmailAppUrl = `googlegmail:///co?to=${email}&subject=${subject}`;
+                    const gmailWebUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${email}&su=${subject}`;
+                    
+                    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+                    
+                    if (isMobile) {
+                        const start = Date.now();
+                        window.location.href = gmailAppUrl;
+                        // اگر اپ جی‌میل باز نشود، پس از ۱.۲ ثانیه کاربر به نسخه وب جی‌میل منتقل می‌شود
+                        setTimeout(() => {
+                            if (Date.now() - start < 1500) {
+                                window.open(gmailWebUrl, '_blank');
+                            }
+                        }, 1200);
+                    } else {
+                        // روی دسکتاپ به صورت مستقیم تب جدید نسخه وب جی‌میل باز می‌شود
+                        window.open(gmailWebUrl, '_blank');
+                    }
+                });
+            }
         });
 
         const generateBtn = document.getElementById('generateBtn');
