@@ -8,7 +8,7 @@
     <!-- تنظیمات فاوآیکون از پوشه logo واقع در ریشه سایت -->
     <link rel="icon" type="image/png" href="/logo/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="/logo/favicon.svg" />
-    <link rel="shortcut icon" href="/logo/favicon.ico" />
+    <link class="shortcut icon" href="/logo/favicon.ico" />
     <link class="hidden-manifest" rel="manifest" href="/logo/site.webmanifest" />
 
     <script src="https://cdn.tailwindcss.com"></script>
@@ -165,14 +165,15 @@
                     ما در جمعه‌یار باور داریم که ترکیب فناوری روز با محتوای ارزشمند، می‌تواند بستری پویا برای انتقال پیام‌ها و آموزه‌های نماز جمعه فراهم آورد. ما همواره در تلاشیم تا با به‌روزرسانی‌های مستمر، کیفیتی درخور و شایسته را به کاربران ارائه دهیم.
                 </p>
             </div>
-            <!-- محتوای تب راهنمای استفاده (به‌طور کامل طبق خواسته جدید شما بروزرسانی شد) -->
+            <!-- محتوای تب راهنمای استفاده (بروزرسانی شده با متن جدید ارسالی شما) -->
             <div id="contentGuide" class="hidden space-y-4 overflow-y-auto pr-2 text-sm md:text-base text-gray-300 leading-relaxed flex-1">
                 <h3 class="font-bold text-sky-400 text-lg">راهنمای استفاده از سامانه جمعه‌یار</h3>
                 <p>سامانه جمعه‌یار برای سادگی و سرعت در خلاصه‌سازی طراحی شده است. برای دریافت بهترین نتیجه، کافی است مراحل زیر را دنبال کنید:</p>
                 <div class="space-y-3">
                     <p><strong>گام ۱: ورود محتوا</strong><br>متن کامل خطبه را در کادر اصلی کپی کنید یا فایل متنی خود را در سامانه بارگذاری نمایید.</p>
+                    
                     <p><strong>گام ۲: تنظیمات هوشمند و تاریخ</strong></p>
-                    <ul class="list-disc list-inside pr-4 space-y-1">
+                    <ul class="list-disc list-inside pr-4 space-y-2">
                         <li><strong>اندازه خلاصه:</strong> از منوی کشویی «اندازه خلاصه»، سطح مورد نظر خود را انتخاب کنید:
                             <ul class="list-circle list-inside pr-6 space-y-1 text-gray-400 text-xs md:text-sm">
                                 <li>• <strong>خلاصه کوتاه:</strong> برای دسترسی سریع به نکات کلیدی (مناسب پیام‌رسان‌ها).</li>
@@ -180,8 +181,9 @@
                                 <li>• <strong>خلاصه بلند:</strong> برای تحلیل‌های جامع و مقالات تحلیلی.</li>
                             </ul>
                         </li>
-                        <li class="mt-2"><strong>تعیین تاریخ:</strong> تاریخ شمسی مربوط به خطبه را در کادر تاریخ وارد کنید. این تنظیم برای درج دقیق زمان در خروجی‌های نهایی (مانند خطبه‌نگاشت و نام فایل ها) الزامی است.</li>
+                        <li><strong>تعیین تاریخ:</strong> تاریخ شمسی مربوط به خطبه را در کادر تاریخ وارد کنید. این تنظیم برای درج دقیق زمان در خروجی‌های نهایی (مانند خطبه‌نگاشت و نام فایل ها) الزامی است.</li>
                     </ul>
+
                     <p><strong>گام ۳: پردازش</strong><br>پس از تکمیل تنظیمات، روی دکمه «آغاز پردازش هوش مصنوعی» کلیک کنید. سامانه در چند ثانیه محتوا را تحلیل و نکات کلیدی را استخراج می‌کند.</p>
                     <p><strong>گام ۴: دریافت خروجی</strong><br>پس از نمایش خلاصه، می‌توانید از گزینه‌های پایین کادر خروجی استفاده کنید:</p>
                     <ul class="list-disc list-inside pr-4 space-y-1">
@@ -189,6 +191,7 @@
                         <li><strong>دریافت Word یا PDF:</strong> جهت دریافت خروجی استاندارد و بدون به‌هم‌ریختگی.</li>
                         <li><strong>خطبه‌نگاشت:</strong> با استفاده از تاریخ تعیین‌شده، خروجی را در قالب پوستر گرافیکی دریافت کنید.</li>
                     </ul>
+
                     <p class="font-bold text-purple-400 mt-4">💡 نکات کلیدی برای نتیجه بهتر:</p>
                     <p><strong>دقت در تاریخ:</strong> حتماً قبل از فشردن دکمه پردازش، از صحت تاریخ شمسی وارد شده اطمینان حاصل کنید تا در خروجی‌ها (به‌ویژه خطبه‌نگاشت) دچار خطا نشوید.</p>
                     <p><strong>بازبینی نهایی:</strong> اگرچه هوش مصنوعی دقت بسیار بالایی دارد، توصیه می‌کنیم پیش از انتشار رسمی، خروجی نهایی را یک‌بار مرور کنید.</p>
@@ -243,7 +246,7 @@
                     <h4 class="font-bold text-purple-400 border-b border-gray-800 pb-1">الف) پرسش‌های مربوط به کیفیت و خروجی:</h4>
                     <div class="space-y-2">
                         <p class="font-bold text-gray-200">آیا خلاصه‌های تولید شده نیاز به بازبینی دارند؟</p>
-                        <p class="text-gray-400">بله، با وجود دقت بالای هوش مصنوعی، پیشنهاد می‌شود برای اطمینان از صحت کامل نقل‌قول‌ها و نکات حساس، خروجی نهایی پیش از انتشار توسط کاربر بازبینی شود.</p>
+                        <p class="text-gray-400">بله، با وجود دقت بالای هوش مصنوعی، پیشنهاد می‌شود برای اطمینان از صحت کامل نقل‌قول‌ها و نکات حساس, خروجی نهایی پیش از انتشار توسط کاربر بازبینی شود.</p>
                     </div>
                     <div class="space-y-2">
                         <p class="font-bold text-gray-200">آیا می‌توانم خروجی را ویرایش کنم؟</p>
@@ -396,8 +399,8 @@
                 </div>
             </div>
 
-            <!-- پنل تنظیم تاریخ نماز جمعه (حذف کامل z-indexهای محدودکننده از ردیف و کانتینرها جهت حل تداخل لایه‌ای در موبایل) -->
-            <div class="w-full max-w-2xl mx-auto mb-8 text-center relative">
+            <!-- پنل تنظیم تاریخ نماز جمعه (دارای شناسه datePickerRow جهت کنترل داینامیک اولویت نمایش لایه‌ها در موبایل) -->
+            <div id="datePickerRow" class="w-full max-w-2xl mx-auto mb-8 text-center relative transition-all duration-300">
                 <h3 class="text-base font-bold text-sky-400 mb-3">تنظیم تاریخ برگزاری نماز جمعه</h3>
                 <div class="flex justify-center items-center gap-4 relative">
                     <!-- روز (سفارشی بدون بیرون‌زدگی) -->
@@ -448,14 +451,14 @@
                 </div>
             </div>
 
-            <!-- پنل شروع فرآیند پردازش و منوی کشویی انتخاب حجم خلاصه (حذف z-10 از ردیف جهت ایجاد محیط استک مشترک و عدم فرورفتن دراپ‌داون در موبایل) -->
-            <div class="flex flex-col md:flex-row items-center justify-center gap-4 mb-6 relative w-full max-w-2xl mx-auto">
+            <!-- پنل شروع فرآیند پردازش و منوی کشویی انتخاب حجم خلاصه (دارای شناسه summaryProcessRow جهت کنترل داینامیک لایه‌ها) -->
+            <div id="summaryProcessRow" class="flex flex-col md:flex-row items-center justify-center gap-4 mb-6 relative w-full max-w-2xl mx-auto transition-all duration-300">
                 <div class="w-full md:w-1/3 relative" id="customSelectContainer">
                     <button id="customSelectBtn" type="button" class="neon-input w-full p-4 rounded-full text-base font-bold outline-none cursor-pointer bg-slate-900 border border-sky-500/30 text-sky-300 transition-all duration-300 flex items-center justify-between px-6 shadow-[0_0_15px_rgba(14,165,233,0.15)]">
                         <span id="customSelectValue">خلاصه متوسط (پیش‌فرض)</span>
                         <svg class="w-5 h-5 text-sky-400 transition-transform duration-300" id="customSelectArrow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                     </button>
-                    <!-- منوی دراپ‌داون نئونی زیبا (دارای z-50 که اکنون در محیط لایه مشترک به طور کامل روی بخش تاریخ شناور می‌شود) -->
+                    <!-- منوی دراپ‌داون نئونی زیبا -->
                     <div id="customSelectDropdown" class="hidden absolute bottom-full mb-2 md:bottom-auto md:top-full md:mt-2 left-0 right-0 bg-slate-950/95 backdrop-blur-md border border-sky-500/30 rounded-2xl overflow-hidden shadow-2xl z-50 transition-all duration-300 scale-95 opacity-0 origin-top">
                         <div class="custom-option py-3.5 px-6 hover:bg-sky-500/20 text-gray-300 hover:text-sky-300 cursor-pointer transition-colors duration-200 font-bold" data-value="short">خلاصه کوتاه</div>
                         <div class="custom-option py-3.5 px-6 hover:bg-sky-500/20 text-sky-300 bg-sky-500/10 cursor-pointer transition-colors duration-200 font-bold" data-value="medium">خلاصه متوسط (پیش‌فرض)</div>
@@ -469,7 +472,7 @@
                     </select>
                 </div>
                 
-                <!-- اتصال دکمه آغاز پردازش به رویداد مدیریت حریم خصوصی -->
+                <!-- دکمه آغاز پردازش خطبه‌ها -->
                 <button id="generateBtn" class="cyber-btn flex items-center justify-center text-white font-black text-lg md:text-xl py-4 px-8 md:px-12 rounded-full cursor-pointer shadow-lg w-full md:w-2/3">
                     <svg class="w-6 h-6 md:w-7 md:h-7 ml-3 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                     آغاز پردازش هوش مصنوعی
@@ -779,6 +782,24 @@
             }
         }
 
+        // تابع مدیریت پویای لایه‌ها (z-index) بین دو ردیف تاریخ و اندازه خلاصه برای حل تداخل در موبایل
+        function setRowZIndex(activeRowId) {
+            const dateRow = document.getElementById('datePickerRow');
+            const summaryRow = document.getElementById('summaryProcessRow');
+            if (!dateRow || !summaryRow) return;
+
+            if (activeRowId === 'datePickerRow') {
+                dateRow.style.zIndex = "40";
+                summaryRow.style.zIndex = "10";
+            } else if (activeRowId === 'summaryProcessRow') {
+                summaryRow.style.zIndex = "40";
+                dateRow.style.zIndex = "10";
+            } else {
+                dateRow.style.zIndex = "";
+                summaryRow.style.zIndex = "";
+            }
+        }
+
         // تابع کمکی برای راه‌اندازی و سینک کامل دراپ‌داون‌های تاریخ سفارشی و بومی
         function setupCustomDropdown(containerId, btnId, dropdownId, arrowId, valueId, hiddenSelectId) {
             const container = document.getElementById(containerId);
@@ -818,7 +839,8 @@
                     item.classList.add('text-sky-300', 'bg-sky-500/10');
                     item.classList.remove('text-gray-300');
 
-                    closeDropdown();
+                    // بستن تمام دراپ‌داون‌ها و بازنشانی مقدار اولویت ردیف‌ها
+                    closeAllDropdownsExcept(null);
                 });
                 dropdown.appendChild(item);
             });
@@ -836,29 +858,25 @@
                         dropdown.classList.add('scale-100', 'opacity-100');
                     }, 10);
                     arrow.classList.add('rotate-180');
+                    
+                    // تنظیم لایه رویی برای کادرهای تاریخ در زمان باز شدن منوی آن
+                    setRowZIndex('datePickerRow');
                 } else {
-                    closeDropdown();
+                    closeAllDropdownsExcept(null);
                 }
             });
-
-            function closeDropdown() {
-                dropdown.classList.remove('scale-100', 'opacity-100');
-                dropdown.classList.add('scale-95', 'opacity-0');
-                arrow.classList.remove('rotate-180');
-                setTimeout(() => {
-                    dropdown.classList.add('hidden');
-                }, 200);
-            }
         }
 
         // بستن بقیه دراپ‌داون‌ها با باز شدن هر کدام از آن‌ها جهت یکپارچگی ظاهری
         function closeAllDropdownsExcept(exceptId) {
             const list = [
-                { id: 'customSelectDropdown', arrow: 'customSelectArrow' },
-                { id: 'customDayDropdown', arrow: 'customDayArrow' },
-                { id: 'customMonthDropdown', arrow: 'customMonthArrow' },
-                { id: 'customYearDropdown', arrow: 'customYearArrow' }
+                { id: 'customSelectDropdown', arrow: 'customSelectArrow', row: 'summaryProcessRow' },
+                { id: 'customDayDropdown', arrow: 'customDayArrow', row: 'datePickerRow' },
+                { id: 'customMonthDropdown', arrow: 'customMonthArrow', row: 'datePickerRow' },
+                { id: 'customYearDropdown', arrow: 'customYearArrow', row: 'datePickerRow' }
             ];
+            
+            let activeRow = null;
             list.forEach(item => {
                 if (item.id !== exceptId) {
                     const dropdown = document.getElementById(item.id);
@@ -871,8 +889,13 @@
                             dropdown.classList.add('hidden');
                         }, 200);
                     }
+                } else {
+                    activeRow = item.row;
                 }
             });
+            
+            // فراخوانی خودکار تغییر اولویت لایه‌ای ردیف فعال
+            setRowZIndex(activeRow);
         }
 
         // تکمیل پویای منوهای کشویی تاریخ و مدیریت دراپ‌داون سفارشی حجم پردازش
@@ -929,7 +952,7 @@
             setupCustomDropdown('customMonthContainer', 'customMonthBtn', 'customMonthDropdown', 'customMonthArrow', 'customMonthValue', 'selMonth');
             setupCustomDropdown('customYearContainer', 'customYearBtn', 'customYearDropdown', 'customYearArrow', 'customYearValue', 'selYear');
 
-            // کلیک خارج از دراپ‌داون‌ها جهت بستن اتوماتیک تمامی منوها
+            // کلیک خارج از دراپ‌داون‌ها جهت بستن اتوماتیک تمامی منوها و بازنشانی لایه مادر
             document.addEventListener('click', () => {
                 closeAllDropdownsExcept(null);
             });
@@ -946,7 +969,6 @@
             customSelectBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 const isHidden = customSelectDropdown.classList.contains('hidden');
-                closeAllDropdownsExcept('customSelectDropdown');
                 if (isHidden) {
                     customSelectDropdown.classList.remove('hidden');
                     setTimeout(() => {
@@ -954,19 +976,13 @@
                         customSelectDropdown.classList.add('scale-100', 'opacity-100');
                     }, 10);
                     customSelectArrow.classList.add('rotate-180');
+                    
+                    // تغییر اولویت لایه‌ای به نفع ردیف حجم خلاصه هنگام باز شدن منوی آن
+                    closeAllDropdownsExcept('customSelectDropdown');
                 } else {
-                    closeCustomSelect();
+                    closeAllDropdownsExcept(null);
                 }
             });
-
-            function closeCustomSelect() {
-                customSelectDropdown.classList.remove('scale-100', 'opacity-100');
-                customSelectDropdown.classList.add('scale-95', 'opacity-0');
-                customSelectArrow.classList.remove('rotate-180');
-                setTimeout(() => {
-                    customSelectDropdown.classList.add('hidden');
-                }, 200);
-            }
 
             customOptions.forEach(opt => {
                 opt.addEventListener('click', (e) => {
@@ -984,7 +1000,8 @@
                     opt.classList.add('text-sky-300', 'bg-sky-500/10');
                     opt.classList.remove('text-gray-300');
                     
-                    closeCustomSelect();
+                    // بازنشانی لایه‌ها و بستن منو
+                    closeAllDropdownsExcept(null);
                 });
             });
 
@@ -1194,7 +1211,7 @@
             if (summaryLengthValue === "short") {
                 lengthInstruction = "خلاصه خطبه اول و دوم به صورت کاملاً فشرده و کوتاه (هر کدام ۲ الی ۳ بند بسیار کوتاه) باشد.";
             } else if (summaryLengthValue === "long") {
-                lengthInstruction = "خلاصه خطبه اول و دوم به صورت بسیار مفصل، جامع و با جزئیات کامل (هر کدام ۵ الی ۶ بند طولانی) باشد.";
+                lengthInstruction = "خلاصه خطبه اول و دوم به صورت بسیار مفصل, جامع و با جزئیات کامل (هر کدام ۵ الی ۶ بند طولانی) باشد.";
             } else {
                 lengthInstruction = "خلاصه خطبه اول و دوم به صورت متعادل و استاندارد (هر کدام ۳ الی ۴ بند متوسط) باشد.";
             }
