@@ -246,7 +246,7 @@
                     <h4 class="font-bold text-purple-400 border-b border-gray-800 pb-1">الف) پرسش‌های مربوط به کیفیت و خروجی:</h4>
                     <div class="space-y-2">
                         <p class="font-bold text-gray-200">آیا خلاصه‌های تولید شده نیاز به بازبینی دارند؟</p>
-                        <p class="text-gray-400">بله، با وجود دقت بالای هوش مصنوعی، پیشنهاد می‌شود برای اطمینان از صحت کامل نقل‌قول‌ها و نکات حساس, خروجی نهایی پیش از انتشار توسط کاربر بازبینی شود.</p>
+                        <p class="text-gray-400">بله، با وجود دقت بالای هوش مصنوعی، پیشنهاد می‌شود برای اطمینان از صحت کامل نقل‌قول‌ها و نکات حساس، خروجی نهایی پیش از انتشار توسط کاربر بازبینی شود.</p>
                     </div>
                     <div class="space-y-2">
                         <p class="font-bold text-gray-200">آیا می‌توانم خروجی را ویرایش کنم؟</p>
@@ -380,7 +380,8 @@
             </p>
         </header>
 
-        <main id="mainCard" class="glass-panel w-full p-5 md:p-10 rounded-3xl transition-all duration-500 relative">
+        <!-- اختصاص کلاس هماهنگ و پایدار z-20 به کادر مادر جهت ممانعت همیشگی از رفتن دراپ‌داون‌ها به زیر متن فوتر در دسکتاپ -->
+        <main id="mainCard" class="glass-panel w-full p-5 md:p-10 rounded-3xl transition-all duration-500 relative z-20">
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 mb-10">
                 <div class="group relative">
@@ -472,7 +473,7 @@
                     </select>
                 </div>
                 
-                <!-- دکمه آغاز پردازش خطبه‌ها -->
+                <!-- دکمه آغاز پردازش هوش مصنوعی -->
                 <button id="generateBtn" class="cyber-btn flex items-center justify-center text-white font-black text-lg md:text-xl py-4 px-8 md:px-12 rounded-full cursor-pointer shadow-lg w-full md:w-2/3">
                     <svg class="w-6 h-6 md:w-7 md:h-7 ml-3 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                     آغاز پردازش هوش مصنوعی
@@ -1211,7 +1212,7 @@
             if (summaryLengthValue === "short") {
                 lengthInstruction = "خلاصه خطبه اول و دوم به صورت کاملاً فشرده و کوتاه (هر کدام ۲ الی ۳ بند بسیار کوتاه) باشد.";
             } else if (summaryLengthValue === "long") {
-                lengthInstruction = "خلاصه خطبه اول و دوم به صورت بسیار مفصل, جامع و با جزئیات کامل (هر کدام ۵ الی ۶ بند طولانی) باشد.";
+                lengthInstruction = "خلاصه خطبه اول و دوم به صورت بسیار مفصل، جامع و با جزئیات کامل (هر کدام ۵ الی ۶ بند طولانی) باشد.";
             } else {
                 lengthInstruction = "خلاصه خطبه اول و دوم به صورت متعادل و استاندارد (هر کدام ۳ الی ۴ بند متوسط) باشد.";
             }
