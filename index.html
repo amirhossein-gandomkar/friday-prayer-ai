@@ -292,9 +292,10 @@
                     <!-- منوی انتخاب تاریخ نماز جمعه به صورت کشویی (شیک و همسان با تم سایت) -->
                     <div id="negashtSetupForm" class="hidden w-full max-w-xl mt-6 p-6 glass-panel rounded-2xl border border-sky-500/20 text-center transition-all duration-500">
                         <h3 class="text-lg font-bold text-sky-400 mb-4">تنظیم تاریخ برگزاری نماز جمعه</h3>
-                        <div class="flex justify-center items-center gap-4 mb-6 relative">
+                        <!-- قرار دادن z-40 برای رفع همیشگی مشکل رفتن دراپ داون‌ها زیر دکمه و بقیه کادرها -->
+                        <div class="flex justify-center items-center gap-4 mb-6 relative z-40">
                             <!-- روز (سفارشی بدون بیرون‌زدگی) -->
-                            <div class="flex flex-col relative" id="customDayContainer">
+                            <div class="flex flex-col relative z-40" id="customDayContainer">
                                 <span class="text-xs text-gray-400 mb-1">روز</span>
                                 <button id="customDayBtn" type="button" class="neon-input p-2.5 rounded-xl bg-slate-900 border border-sky-500/30 text-sky-300 shadow-[0_0_15px_rgba(14,165,233,0.15)] outline-none w-24 text-center font-bold cursor-pointer transition-all duration-300 flex items-center justify-between px-3">
                                     <span id="customDayValue" class="flex-1 text-center">۱</span>
@@ -307,7 +308,7 @@
                             </div>
                             
                             <!-- ماه (سفارشی بدون بیرون‌زدگی) -->
-                            <div class="flex flex-col relative" id="customMonthContainer">
+                            <div class="flex flex-col relative z-40" id="customMonthContainer">
                                 <span class="text-xs text-gray-400 mb-1">ماه</span>
                                 <button id="customMonthBtn" type="button" class="neon-input p-2.5 rounded-xl bg-slate-900 border border-sky-500/30 text-sky-300 shadow-[0_0_15px_rgba(14,165,233,0.15)] outline-none w-36 text-center font-bold cursor-pointer transition-all duration-300 flex items-center justify-between px-3">
                                     <span id="customMonthValue" class="flex-1 text-center">فروردین</span>
@@ -333,7 +334,7 @@
                             </div>
 
                             <!-- سال (سفارشی بدون بیرون‌زدگی) -->
-                            <div class="flex flex-col relative" id="customYearContainer">
+                            <div class="flex flex-col relative z-40" id="customYearContainer">
                                 <span class="text-xs text-gray-400 mb-1">سال</span>
                                 <button id="customYearBtn" type="button" class="neon-input p-2.5 rounded-xl bg-slate-900 border border-sky-500/30 text-sky-300 shadow-[0_0_15px_rgba(14,165,233,0.15)] outline-none w-28 text-center font-bold cursor-pointer transition-all duration-300 flex items-center justify-between px-3">
                                     <span id="customYearValue" class="flex-1 text-center">۱۴۰۵</span>
@@ -502,6 +503,23 @@
             if (e.target === infoModal) closeModal();
         });
 
+        // تابع مبدل برای تبدیل تصاویر محلی به بیس۶۴ جهت نمایش بدون باگ در فایل ورد
+        async function getBase64Image(url) {
+            try {
+                const response = await fetch(url);
+                const blob = await response.blob();
+                return new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onloadend = () => resolve(reader.result);
+                    reader.onerror = reject;
+                    reader.readAsDataURL(blob);
+                });
+            } catch (e) {
+                console.error("خطا در تبدیل تصویر لوگو به Base64", e);
+                return null;
+            }
+        }
+
         // تابع کمکی برای راه‌اندازی و سینک کامل دراپ‌داون‌های تاریخ سفارشی و بومی
         function setupCustomDropdown(containerId, btnId, dropdownId, arrowId, valueId, hiddenSelectId) {
             const container = document.getElementById(containerId);
@@ -600,7 +618,7 @@
 
         // تکمیل پویای منوهای کشویی تاریخ و مدیریت دراپ‌داون سفارشی حجم پردازش
         document.addEventListener('DOMContentLoaded', () => {
-            // محاسبه هوشمند تاریخ امروز شمسی با استفاده از API مرورگر
+            // محاسبه هوشمند تاریخ امروز شمسی با استفاده از API مقرر
             const today = new Date();
             const formatter = new Intl.DateTimeFormat('en-US-u-ca-persian', {
                 year: 'numeric',
@@ -952,7 +970,7 @@
                 </div>
                 
                 <!-- تبلیغات متنی گرادیانی جمعه یار در انتهای پردازش خلاصه -->
-                <div class="text-center mt-8 pt-4 border-t border-gray-800 font-black text-xl text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-purple-500 tracking-wider">
+                <div class="text-center mt-8 pt-4 border-t border-gray-700/50 font-black text-xl text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-purple-500 tracking-wider">
                     جمعه یار - JOMEH YAR
                 </div>
             `;
@@ -988,7 +1006,7 @@
             }
         }
 
-        // رندرگیری زنده خطبه‌نگاشت بر روی بوم ۲ بعدی و درج لوگوی adkh.png در گوشه راست پایینی
+        // رندرگیری زنده خطبه‌نگاشت بر روی بوم ۲ بعدی و درج لوگوی adkh.png در گوشه راست پایینی بدون کشیدگی
         async function renderKhutbahNegasht(quote, canvasId, previewId, loaderId, downloadBtnId, dateText) {
             const canvas = document.getElementById(canvasId);
             const ctx = canvas.getContext('2d');
@@ -1084,15 +1102,26 @@
                 const formattedQuote = `« ${quote} »`;
                 drawTextWithOutline(formattedQuote, centerX, currentY, quoteFont, '#FFDF00', w * 0.82, 1.18);
 
-                // ۴. افزودن لوگوی تبلیغاتی adkh.png در گوشه پایین سمت راست خطبه‌نگاشت
+                // ۴. افزودن لوگوی تبلیغاتی adkh.png در گوشه پایین سمت راست خطبه‌نگاشت با حفظ دقیق نسبت ابعاد اصلی (Aspect Ratio) بدون هیچگونه اعوجاج
                 const adLogo = new Image();
                 adLogo.src = "/logo/adkh.png";
                 adLogo.onload = function() {
-                    const logoSize = Math.round(w * 0.12); // تخصیص اندازه پویا به ابعاد ۱۲ درصد پهنای کل پوستر
-                    const margin = Math.round(w * 0.025);
-                    const logoX = w - logoSize - margin;
-                    const logoY = h - logoSize - margin;
-                    ctx.drawImage(adLogo, logoX, logoY, logoSize, logoSize);
+                    const logoNaturalWidth = adLogo.naturalWidth || adLogo.width || 120;
+                    const logoNaturalHeight = adLogo.naturalHeight || adLogo.height || 120;
+                    const logoAspectRatio = logoNaturalWidth / logoNaturalHeight;
+
+                    // کاهش ابعاد لوگو (به پهنای ۷.۵ درصد ارتفاع بوم اصلی) تا روی فریم کادر متن آبی بالا نیاید
+                    const logoHeight = Math.round(h * 0.075);
+                    const logoWidth = Math.round(logoHeight * logoAspectRatio);
+
+                    // کاهش فاصله مارجین به ۱.۵ درصد ابعاد بوم جهت قرارگیری کاملاً مماس و تمیز در منتهی الیه گوشه راست پایینی
+                    const marginX = Math.round(w * 0.015);
+                    const marginY = Math.round(h * 0.015);
+
+                    const logoX = w - logoWidth - marginX;
+                    const logoY = h - logoHeight - marginY;
+
+                    ctx.drawImage(adLogo, logoX, logoY, logoWidth, logoHeight);
                     
                     saveCanvasToPreview();
                 };
@@ -1140,8 +1169,16 @@
             }
         }
 
-        function exportToWord() {
+        async function exportToWord() {
             if (!currentReportData) return;
+
+            // دریافت تصویر لوگو adwp.png و تبدیل امن آن به Base64 برای جاسازی مستقیم و بدون نقص در برنامه MS Word
+            let logoBase64 = '';
+            try {
+                logoBase64 = await getBase64Image('/logo/adwp.png');
+            } catch (err) {
+                console.error("لود لوگو برای سند Word ناموفق بود:", err);
+            }
 
             // دریافت مقادیر و تنظیم نام پویای فایل با اعداد فارسی
             const d = toPersianDigits(document.getElementById('selDay').value);
@@ -1190,9 +1227,9 @@
                 <p class="section-title">📌 ${currentReportData.overallSummary.title}</p>
                 <p>${currentReportData.overallSummary.text}</p>
                 
-                <!-- درج لوگوی تبلیغاتی وسط‌چین adwp.png در انتهای فایل ورد -->
+                <!-- درج لوگوی تبدیل شده بیس۶۴ به عنوان ایمیج بومی در انتهای خروجی مستند ورد -->
                 <div style="text-align: center; margin-top: 30pt; padding-top: 20pt; border-top: 1px solid #e2e8f0;">
-                    <img src="${window.location.origin}/logo/adwp.png" alt="جمعه یار" width="160" style="width: 160pt; height: auto; display: inline-block;" />
+                    ${logoBase64 ? `<img src="${logoBase64}" alt="جمعه یار" width="150" style="width: 150pt; height: auto; display: inline-block;" />` : ''}
                 </div>
             </body>
             </html>`;
@@ -1233,6 +1270,22 @@
             cleanPDFContainer.style.direction = 'rtl';
             cleanPDFContainer.style.fontFamily = "'Vazirmatn', Arial, sans-serif";
 
+            // تخصیص اندازه ۵۵ پیکسل به تصویر لوگو (۳ برابر کوچک‌تر از اندازه قبلی جهت زیبایی و حفظ تناسب کادرها)
+            let logoHtml = '';
+            if (loadedLogo) {
+                logoHtml = `
+                <div style="text-align: center; margin-top: 25px; border-top: 2px solid #f1f5f9; padding-top: 15px;">
+                    <img src="${loadedLogo.src}" style="width: 55px; height: auto; display: inline-block;" />
+                </div>
+                `;
+            } else {
+                logoHtml = `
+                <div style="text-align: center; margin-top: 25px; border-top: 2px solid #f1f5f9; padding-top: 15px;">
+                    <img src="/logo/adwp.png" style="width: 55px; height: auto; display: inline-block;" />
+                </div>
+                `;
+            }
+
             cleanPDFContainer.innerHTML = `
                 <div style="text-align: center; margin-bottom: 30px; border-bottom: 2px solid #0284c7; padding-bottom: 20px;">
                     <p style="font-size: 14px; color: #64748b; margin: 0 0 10px 0;">بِسْمِ اللهِ الرَّحْمنِ الرَّحِیم</p>
@@ -1265,10 +1318,7 @@
                     <p style="font-size: 14px; color: #334155; margin: 0; line-height: 1.65;">${toPersianDigits(currentReportData.overallSummary.text)}</p>
                 </div>
 
-                <!-- درج لوگوی تبلیغاتی وسط‌چین adwp.png در انتهای فایل PDF -->
-                <div style="text-align: center; margin-top: 35px; border-top: 2px solid #f1f5f9; padding-top: 25px;">
-                    <img src="${loadedLogo ? loadedLogo.src : '/logo/adwp.png'}" style="width: 160px; height: auto; display: inline-block;" />
-                </div>
+                ${logoHtml}
             `;
 
             document.body.appendChild(cleanPDFContainer);
