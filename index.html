@@ -9,7 +9,6 @@
     <link rel="icon" type="image/png" href="/logo/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="/logo/favicon.svg" />
     <link rel="shortcut icon" href="/logo/favicon.ico" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/logo/apple-touch-icon.png" />
     <link class="hidden-manifest" rel="manifest" href="/logo/site.webmanifest" />
 
     <script src="https://cdn.tailwindcss.com"></script>
@@ -128,10 +127,10 @@
 
     <canvas id="particle-canvas"></canvas>
 
-    <!-- دکمه شناور راهنما و درباره ما -->
-    <button id="infoBtn" class="fixed top-6 right-6 z-50 bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 text-white px-5 h-12 rounded-full flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(14,165,233,0.4)] transition-all duration-300 hover:scale-105 border border-sky-400 font-bold text-sm">
+    <!-- دکمه شناور راهنما و درباره ما (واکنش‌گرا شده: در موبایل به صورت دایره مینی‌مال در می‌آید تا با لوگو هم‌پوشانی نداشته باشد) -->
+    <button id="infoBtn" class="fixed top-4 right-4 md:top-6 md:right-6 z-50 bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 text-white w-12 h-12 md:w-auto md:px-5 md:h-12 rounded-full flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(14,165,233,0.4)] transition-all duration-300 hover:scale-105 border border-sky-400 font-bold text-sm">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-        <span>راهنما و درباره ما</span>
+        <span class="hidden md:inline">راهنما و درباره ما</span>
     </button>
 
     <!-- مدال معرفی سامانه با قابلیت تب‌بندی پویا -->
@@ -166,29 +165,34 @@
                     ما در جمعه‌یار باور داریم که ترکیب فناوری روز با محتوای ارزشمند، می‌تواند بستری پویا برای انتقال پیام‌ها و آموزه‌های نماز جمعه فراهم آورد. ما همواره در تلاشیم تا با به‌روزرسانی‌های مستمر، کیفیتی درخور و شایسته را به کاربران ارائه دهیم.
                 </p>
             </div>
-            <!-- محتوای تب راهنمای استفاده -->
+            <!-- محتوای تب راهنمای استفاده (به‌طور کامل طبق خواسته جدید شما بروزرسانی شد) -->
             <div id="contentGuide" class="hidden space-y-4 overflow-y-auto pr-2 text-sm md:text-base text-gray-300 leading-relaxed flex-1">
                 <h3 class="font-bold text-sky-400 text-lg">راهنمای استفاده از سامانه جمعه‌یار</h3>
-                <p>با این راهنمای کوتاه، می‌توانید در کمتر از یک دقیقه، خطبه‌های نماز جمعه را به خلاصه‌ای دقیق و حرفه‌ای تبدیل کنید:</p>
+                <p>سامانه جمعه‌یار برای سادگی و سرعت در خلاصه‌سازی طراحی شده است. برای دریافت بهترین نتیجه، کافی است مراحل زیر را دنبال کنید:</p>
                 <div class="space-y-3">
-                    <p><strong>گام ۱: انتخاب محتوا</strong><br>ابتدا متن کامل خطبه را آماده کنید. سپس متن مورد نظر را در کادر مشخص شده در صفحه اصلی کپی کنید.</p>
-                    <p><strong>گام ۲: تنظیمات سفارشی</strong><br>از منوی کشویی «اندازه خلاصه»، سطح مورد نظر خود را انتخاب کنید:</p>
+                    <p><strong>گام ۱: ورود محتوا</strong><br>متن کامل خطبه را در کادر اصلی کپی کنید یا فایل متنی خود را در سامانه بارگذاری نمایید.</p>
+                    <p><strong>گام ۲: تنظیمات هوشمند و تاریخ</strong></p>
                     <ul class="list-disc list-inside pr-4 space-y-1">
-                        <li><strong>خلاصه کوتاه:</strong> برای دسترسی سریع به نکات کلیدی (مناسب پیام‌رسان‌ها).</li>
-                        <li><strong>خلاصه متوسط:</strong> برای گزارش‌های وبلاگی و خبری.</li>
-                        <li><strong>خلاصه بلند:</strong> برای تحلیل‌های جامع و مقالات تحلیلی.</li>
+                        <li><strong>اندازه خلاصه:</strong> از منوی کشویی «اندازه خلاصه»، سطح مورد نظر خود را انتخاب کنید:
+                            <ul class="list-circle list-inside pr-6 space-y-1 text-gray-400 text-xs md:text-sm">
+                                <li>• <strong>خلاصه کوتاه:</strong> برای دسترسی سریع به نکات کلیدی (مناسب پیام‌رسان‌ها).</li>
+                                <li>• <strong>خلاصه متوسط:</strong> برای گزارش‌های وبلاگی و خبری.</li>
+                                <li>• <strong>خلاصه بلند:</strong> برای تحلیل‌های جامع و مقالات تحلیلی.</li>
+                            </ul>
+                        </li>
+                        <li class="mt-2"><strong>تعیین تاریخ:</strong> تاریخ شمسی مربوط به خطبه را در کادر تاریخ وارد کنید. این تنظیم برای درج دقیق زمان در خروجی‌های نهایی (مانند خطبه‌نگاشت و نام فایل ها) الزامی است.</li>
                     </ul>
-                    <p><strong>گام ۳: پردازش و هوشمندسازی</strong><br>بر روی دکمه «آغاز پردازش هوش مصنوعی» کلیک کنید. هوش مصنوعی جمعه‌یار در عرض چند ثانیه، متن را تحلیل کرده و نکات مهم سیاسی و مذهبی را استخراج می‌کند.</p>
-                    <p><strong>گام ۴: دریافت خروجی</strong><br>پس از نمایش خلاصه در کادر خروجی، می‌توانید از گزینه‌های زیر استفاده کنید:</p>
+                    <p><strong>گام ۳: پردازش</strong><br>پس از تکمیل تنظیمات، روی دکمه «آغاز پردازش هوش مصنوعی» کلیک کنید. سامانه در چند ثانیه محتوا را تحلیل و نکات کلیدی را استخراج می‌کند.</p>
+                    <p><strong>گام ۴: دریافت خروجی</strong><br>پس از نمایش خلاصه، می‌توانید از گزینه‌های پایین کادر خروجی استفاده کنید:</p>
                     <ul class="list-disc list-inside pr-4 space-y-1">
-                        <li><strong>کپی متن:</strong> جهت استفاده سریع در سایر برنامه‌ها.</li>
-                        <li><strong>دریافت Word:</strong> جهت ویرایش‌های بعدی.</li>
-                        <li><strong>دریافت PDF:</strong> جهت انتشار رسمی و ارائه گزارش‌های چاپی.</li>
-                        <li><strong>خطبه‌نگاشت:</strong> با وارد کردن تاریخ شمسی، خطبه نگاشت را خروجی بگیرید.</li>
+                        <li><strong>کپی متن:</strong> جهت انتقال سریع به پیام‌رسان‌ها یا ویرایشگرها.</li>
+                        <li><strong>دریافت Word یا PDF:</strong> جهت دریافت خروجی استاندارد و بدون به‌هم‌ریختگی.</li>
+                        <li><strong>خطبه‌نگاشت:</strong> با استفاده از تاریخ تعیین‌شده، خروجی را در قالب پوستر گرافیکی دریافت کنید.</li>
                     </ul>
-                    <p class="font-bold text-purple-400 mt-4">نکات طلایی برای نتیجه بهتر:</p>
-                    <p><strong>دقت تاریخ:</strong> برای تولید دقیق «خطبه‌نگاشت»، حتماً تاریخ دقیق جمعه مورد نظر را به فرمت شمسی وارد کنید.</p>
-                    <p><strong>پشتیبانی:</strong> اگر در هر مرحله با خطایی مواجه شدید، می‌توانید از طریق ایمیل پشتیبانی با ما در تماس باشید.</p>
+                    <p class="font-bold text-purple-400 mt-4">💡 نکات کلیدی برای نتیجه بهتر:</p>
+                    <p><strong>دقت در تاریخ:</strong> حتماً قبل از فشردن دکمه پردازش، از صحت تاریخ شمسی وارد شده اطمینان حاصل کنید تا در خروجی‌ها (به‌ویژه خطبه‌نگاشت) دچار خطا نشوید.</p>
+                    <p><strong>بازبینی نهایی:</strong> اگرچه هوش مصنوعی دقت بسیار بالایی دارد، توصیه می‌کنیم پیش از انتشار رسمی، خروجی نهایی را یک‌بار مرور کنید.</p>
+                    <p><strong>امنیت داده‌ها:</strong> سامانه به‌صورت خودکار پس از پایان جلسه کاری، داده‌های شما را پاک‌سازی می‌کند تا حریم خصوصی شما حفظ شود.</p>
                 </div>
             </div>
             <div class="mt-6 text-center border-t border-gray-700/50 pt-4">
@@ -217,7 +221,7 @@
                 <h3 class="font-bold text-sky-400 text-lg">شرایط و قوانین استفاده از سامانه «جمعه‌یار»</h3>
                 <p class="text-gray-400 italic">استفاده از خدمات سامانه جمعه‌یار به منزله پذیرش کامل قوانین و مقررات زیر است:</p>
                 <div class="space-y-3">
-                    <p><strong>۱. مالکیت فکری و حقوق مادی:</strong> تمامی اجزای این وب‌سایت، اعم از کدهای برنامه‌نویسی، طراحی رابط کاربری, الگوریتم‌های هوش مصنوعی و محتوای استخراج‌شده، تحت مالکیت معنوی امیرحسین گندمکار قرار دارد. هرگونه کپی‌برداری، بازنشر، مهندسی معکوس و یا بهره‌برداری تجاری از این سامانه بدون کسب اجازه کتبی، ممنوع بوده و نقض صریح قوانین کپی‌رایت محسوب می‌شود.</p>
+                    <p><strong>۱. مالکیت فکری و حقوق مادی:</strong> تمامی اجزای این وب‌سایت، اعم از کدهای برنامه‌نویسی، طراحی رابط کاربری، الگوریتم‌های هوش مصنوعی و محتوای استخراج‌شده، تحت مالکیت معنوی امیرحسین گندمکار قرار دارد. هرگونه کپی‌برداری، بازنشر، مهندسی معکوس و یا بهره‌برداری تجاری از این سامانه بدون کسب اجازه کتبی، ممنوع بوده و نقض صریح قوانین کپی‌رایت محسوب می‌شود.</p>
                     <p><strong>۲. مسئولیت محتوا:</strong> این سامانه صرفاً ابزاری جهت تسهیل پردازش و خلاصه‌سازی خطبه‌ها است. مسئولیت نهایی صحت و بازتاب رسانه‌ای مطالب استخراج‌شده، بر عهده کاربر است. کاربر متعهد می‌شود از خروجی‌های این سامانه به نحوی استفاده نکند که موجب تحریف محتوا یا مغایرت با قوانین جاری کشور گردد.</p>
                     <p><strong>۳. پیگرد قانونی:</strong> در صورت مشاهده هرگونه تخلف، سرقت محتوا یا سوءاستفاده از زیرساخت‌های فنی سامانه، مدیریت «جمعه‌یار» حق دارد از طریق مراجع قضایی و پلیس فتا علیه متخلفین اقدام قانونی نماید. تمامی حقوق برای مالک سامانه محفوظ است و هرگونه اقدام غیرمجاز، عواقب قانونی برای فرد یا مجموعه خاطی در پی خواهد داشت.</p>
                 </div>
@@ -285,14 +289,20 @@
                     </div>
                 </div>
             </div>
-            <!-- محتوا تب ۳: پشتیبانی و ارتباط -->
+            <!-- محتوا تب ۳: پشتیبانی و ارتباط همراه با دکمه کپی اختصاصی آدرس ایمیل -->
             <div id="contentSupport" class="hidden space-y-4 overflow-y-auto pr-2 text-sm md:text-base text-gray-300 leading-relaxed flex-1 flex flex-col justify-start text-center pt-6">
                 <h3 class="font-bold text-sky-400 text-xl mb-4">پشتیبانی و ارتباط با ما</h3>
                 <p class="max-w-md mx-auto">کاربران گرامی، سامانه «جمعه‌یار» متعهد به ارائه بهترین تجربه کاربری است. در صورت بروز هرگونه مشکل فنی، پرسش درباره عملکرد سامانه و یا ارائه پیشنهادات، می‌توانید از طریق ایمیل اختصاصی با ما در ارتباط باشید. تمامی پیام‌های شما در کوتاه‌ترین زمان ممکن بررسی و پاسخ داده خواهد شد.</p>
                 
-                <div class="mt-8">
+                <div class="mt-8 flex flex-col items-center">
                     <p class="text-gray-400 mb-2">📩 ایمیل پشتیبانی:</p>
-                    <a href="#" id="supportEmailLink" class="text-xl font-bold text-sky-300 hover:text-sky-400 transition-colors border-b border-dashed border-sky-300 hover:border-sky-400 pb-1">info.jomehyar.ir@gmail.com</a>
+                    <a href="#" id="supportEmailLink" class="text-xl font-bold text-sky-300 hover:text-sky-400 transition-colors border-b border-dashed border-sky-300 hover:border-sky-400 pb-1 mb-3">info.jomehyar.ir@gmail.com</a>
+                    
+                    <!-- دکمه کپی آدرس ایمیل برای سهولت کار کاربران -->
+                    <button id="copyEmailBtn" class="bg-slate-900 hover:bg-sky-500/20 text-sky-300 hover:text-white px-5 py-2.5 rounded-full border border-sky-500/30 hover:border-sky-400 shadow-md transition-all duration-300 text-xs font-bold inline-flex items-center gap-1.5">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
+                        <span id="copyEmailText">کپی آدرس ایمیل</span>
+                    </button>
                 </div>
                 <p class="text-xs text-gray-500 mt-6 max-w-sm mx-auto">نکته: جهت تسریع در رسیدگی، لطفاً در عنوان ایمیل خود موضوع دقیق مشکل یا پیشنهاد را ذکر نمایید.</p>
             </div>
@@ -330,7 +340,7 @@
         </div>
     </div>
 
-    <!-- عنصر گرافیکی چشمی هوش مصنوعی پس‌زمینه (کاملاً بازیابی شده) -->
+    <!-- عنصر گرافیکی چشمی هوش مصنوعی پس‌زمینه -->
     <svg id="ai-core" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
         <circle cx="50" cy="50" r="45" fill="none" stroke="#0ea5e9" stroke-width="0.5" stroke-dasharray="2 4" />
         <circle cx="50" cy="50" r="35" fill="none" stroke="#8b5cf6" stroke-width="1" stroke-dasharray="10 5">
@@ -345,7 +355,7 @@
 
     <div class="container mx-auto max-w-6xl p-4 md:p-8 min-h-screen flex flex-col items-center justify-center">
         
-        <header class="text-center mb-10 relative z-10 w-full mt-8">
+        <header class="text-center mb-10 relative z-10 w-full mt-12 md:mt-8">
             <!-- کانتینر افقی با استایل یکپارچه برای نام فارسی، انگلیسی و لوگو در جهت چپ‌به‌راست -->
             <div class="flex flex-row items-center justify-center gap-4 md:gap-6 flex-wrap mb-4" dir="ltr">
                 <!-- کلمه انگلیسی در سمت چپ تصویر با استایل و افکت درخشان مشابه فارسی -->
@@ -386,12 +396,12 @@
                 </div>
             </div>
 
-            <!-- پنل تنظیم تاریخ نماز جمعه (منتقل شده به بالای کادر پردازش) -->
-            <div class="w-full max-w-2xl mx-auto mb-8 text-center relative z-20">
+            <!-- پنل تنظیم تاریخ نماز جمعه (حذف کامل z-indexهای محدودکننده از ردیف و کانتینرها جهت حل تداخل لایه‌ای در موبایل) -->
+            <div class="w-full max-w-2xl mx-auto mb-8 text-center relative">
                 <h3 class="text-base font-bold text-sky-400 mb-3">تنظیم تاریخ برگزاری نماز جمعه</h3>
-                <div class="flex justify-center items-center gap-4 relative z-40">
+                <div class="flex justify-center items-center gap-4 relative">
                     <!-- روز (سفارشی بدون بیرون‌زدگی) -->
-                    <div class="flex flex-col relative z-45" id="customDayContainer">
+                    <div class="flex flex-col relative" id="customDayContainer">
                         <span class="text-xs text-gray-400 mb-1">روز</span>
                         <button id="customDayBtn" type="button" class="neon-input p-2.5 rounded-xl bg-slate-900 border border-sky-500/30 text-sky-300 shadow-[0_0_15px_rgba(14,165,233,0.15)] outline-none w-24 text-center font-bold cursor-pointer transition-all duration-300 flex items-center justify-between px-3">
                             <span id="customDayValue" class="flex-1 text-center">۱</span>
@@ -402,7 +412,7 @@
                     </div>
                     
                     <!-- ماه (سفارشی بدون بیرون‌زدگی) -->
-                    <div class="flex flex-col relative z-45" id="customMonthContainer">
+                    <div class="flex flex-col relative" id="customMonthContainer">
                         <span class="text-xs text-gray-400 mb-1">ماه</span>
                         <button id="customMonthBtn" type="button" class="neon-input p-2.5 rounded-xl bg-slate-900 border border-sky-500/30 text-sky-300 shadow-[0_0_15px_rgba(14,165,233,0.15)] outline-none w-36 text-center font-bold cursor-pointer transition-all duration-300 flex items-center justify-between px-3">
                             <span id="customMonthValue" class="flex-1 text-center">فروردین</span>
@@ -426,7 +436,7 @@
                     </div>
 
                     <!-- سال (سفارشی بدون بیرون‌زدگی) -->
-                    <div class="flex flex-col relative z-45" id="customYearContainer">
+                    <div class="flex flex-col relative" id="customYearContainer">
                         <span class="text-xs text-gray-400 mb-1">سال</span>
                         <button id="customYearBtn" type="button" class="neon-input p-2.5 rounded-xl bg-slate-900 border border-sky-500/30 text-sky-300 shadow-[0_0_15px_rgba(14,165,233,0.15)] outline-none w-28 text-center font-bold cursor-pointer transition-all duration-300 flex items-center justify-between px-3">
                             <span id="customYearValue" class="flex-1 text-center">۱۴۰۵</span>
@@ -438,14 +448,14 @@
                 </div>
             </div>
 
-            <!-- پنل شروع فرآیند پردازش و منوی کشویی انتخاب حجم خلاصه (نسخه شیک و نئونی متناسب با تم سایت) -->
-            <div class="flex flex-col md:flex-row items-center justify-center gap-4 mb-6 relative z-10 w-full max-w-2xl mx-auto">
+            <!-- پنل شروع فرآیند پردازش و منوی کشویی انتخاب حجم خلاصه (حذف z-10 از ردیف جهت ایجاد محیط استک مشترک و عدم فرورفتن دراپ‌داون در موبایل) -->
+            <div class="flex flex-col md:flex-row items-center justify-center gap-4 mb-6 relative w-full max-w-2xl mx-auto">
                 <div class="w-full md:w-1/3 relative" id="customSelectContainer">
                     <button id="customSelectBtn" type="button" class="neon-input w-full p-4 rounded-full text-base font-bold outline-none cursor-pointer bg-slate-900 border border-sky-500/30 text-sky-300 transition-all duration-300 flex items-center justify-between px-6 shadow-[0_0_15px_rgba(14,165,233,0.15)]">
                         <span id="customSelectValue">خلاصه متوسط (پیش‌فرض)</span>
                         <svg class="w-5 h-5 text-sky-400 transition-transform duration-300" id="customSelectArrow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                     </button>
-                    <!-- منوی دراپ‌داون نئونی زیبا -->
+                    <!-- منوی دراپ‌داون نئونی زیبا (دارای z-50 که اکنون در محیط لایه مشترک به طور کامل روی بخش تاریخ شناور می‌شود) -->
                     <div id="customSelectDropdown" class="hidden absolute bottom-full mb-2 md:bottom-auto md:top-full md:mt-2 left-0 right-0 bg-slate-950/95 backdrop-blur-md border border-sky-500/30 rounded-2xl overflow-hidden shadow-2xl z-50 transition-all duration-300 scale-95 opacity-0 origin-top">
                         <div class="custom-option py-3.5 px-6 hover:bg-sky-500/20 text-gray-300 hover:text-sky-300 cursor-pointer transition-colors duration-200 font-bold" data-value="short">خلاصه کوتاه</div>
                         <div class="custom-option py-3.5 px-6 hover:bg-sky-500/20 text-sky-300 bg-sky-500/10 cursor-pointer transition-colors duration-200 font-bold" data-value="medium">خلاصه متوسط (پیش‌فرض)</div>
@@ -506,7 +516,7 @@
 
                 <!-- ماژول فعال‌سازی و ساخت خطبه‌نگاشت -->
                 <div id="negashtModule" class="mt-12 border-t border-gray-700/50 pt-8 flex flex-col items-center animate-fade-in">
-                    <!-- حذف فرم تکراری تنظیم تاریخ از پائین و تخصیص مستقیم فرآیند ساخت به دکمه مذهبی و سیاسی -->
+                    <!-- دکمه مذهبی و سیاسی خطبه‌نگاشت -->
                     <button id="negashtTriggerBtn" class="cyber-btn flex items-center justify-center text-white font-black text-lg py-4 px-10 rounded-2xl shadow-lg w-full max-w-md transition-all duration-300">
                         🎨 ایجاد خطبه‌نگاشت (مذهبی و سیاسی)
                     </button>
@@ -1003,6 +1013,25 @@
                     } else {
                         // روی دسکتاپ به صورت مستقیم تب جدید نسخه وب جی‌میل باز می‌شود
                         window.open(gmailWebUrl, '_blank');
+                    }
+                });
+            }
+
+            // منطق کپی آدرس ایمیل در کلیپ‌بورد برای سهولت بیشتر کاربر
+            const copyEmailBtn = document.getElementById('copyEmailBtn');
+            const copyEmailText = document.getElementById('copyEmailText');
+            if (copyEmailBtn && copyEmailText) {
+                copyEmailBtn.addEventListener('click', async () => {
+                    try {
+                        await navigator.clipboard.writeText("info.jomehyar.ir@gmail.com");
+                        copyEmailText.innerText = "کپی شد!";
+                        copyEmailBtn.classList.add('bg-emerald-600/20', 'border-emerald-500', 'text-emerald-300');
+                        setTimeout(() => {
+                            copyEmailText.innerText = "کپی آدرس ایمیل";
+                            copyEmailBtn.classList.remove('bg-emerald-600/20', 'border-emerald-500', 'text-emerald-300');
+                        }, 3000);
+                    } catch (err) {
+                        alert("خطایی در کپی کردن ایمیل رخ داد.");
                     }
                 });
             }
