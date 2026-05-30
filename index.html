@@ -128,7 +128,7 @@
 
     <canvas id="particle-canvas"></canvas>
 
-    <!-- دکمه شناور راهنما و معرفی سایت -->
+    <!-- دکمه شناور راهنما و درباره ما -->
     <button id="infoBtn" class="fixed top-6 right-6 z-50 bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 text-white px-5 h-12 rounded-full flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(14,165,233,0.4)] transition-all duration-300 hover:scale-105 border border-sky-400 font-bold text-sm">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
         <span>راهنما و درباره ما</span>
@@ -217,7 +217,7 @@
                 <h3 class="font-bold text-sky-400 text-lg">شرایط و قوانین استفاده از سامانه «جمعه‌یار»</h3>
                 <p class="text-gray-400 italic">استفاده از خدمات سامانه جمعه‌یار به منزله پذیرش کامل قوانین و مقررات زیر است:</p>
                 <div class="space-y-3">
-                    <p><strong>۱. مالکیت فکری و حقوق مادی:</strong> تمامی اجزای این وب‌سایت، اعم از کدهای برنامه‌نویسی، طراحی رابط کاربری، الگوریتم‌های هوش مصنوعی و محتوای استخراج‌شده، تحت مالکیت معنوی امیرحسین گندمکار قرار دارد. هرگونه کپی‌برداری، بازنشر، مهندسی معکوس و یا بهره‌برداری تجاری از این سامانه بدون کسب اجازه کتبی، ممنوع بوده و نقض صریح قوانین کپی‌رایت محسوب می‌شود.</p>
+                    <p><strong>۱. مالکیت فکری و حقوق مادی:</strong> تمامی اجزای این وب‌سایت، اعم از کدهای برنامه‌نویسی، طراحی رابط کاربری, الگوریتم‌های هوش مصنوعی و محتوای استخراج‌شده، تحت مالکیت معنوی امیرحسین گندمکار قرار دارد. هرگونه کپی‌برداری، بازنشر، مهندسی معکوس و یا بهره‌برداری تجاری از این سامانه بدون کسب اجازه کتبی، ممنوع بوده و نقض صریح قوانین کپی‌رایت محسوب می‌شود.</p>
                     <p><strong>۲. مسئولیت محتوا:</strong> این سامانه صرفاً ابزاری جهت تسهیل پردازش و خلاصه‌سازی خطبه‌ها است. مسئولیت نهایی صحت و بازتاب رسانه‌ای مطالب استخراج‌شده، بر عهده کاربر است. کاربر متعهد می‌شود از خروجی‌های این سامانه به نحوی استفاده نکند که موجب تحریف محتوا یا مغایرت با قوانین جاری کشور گردد.</p>
                     <p><strong>۳. پیگرد قانونی:</strong> در صورت مشاهده هرگونه تخلف، سرقت محتوا یا سوءاستفاده از زیرساخت‌های فنی سامانه، مدیریت «جمعه‌یار» حق دارد از طریق مراجع قضایی و پلیس فتا علیه متخلفین اقدام قانونی نماید. تمامی حقوق برای مالک سامانه محفوظ است و هرگونه اقدام غیرمجاز، عواقب قانونی برای فرد یا مجموعه خاطی در پی خواهد داشت.</p>
                 </div>
@@ -329,6 +329,19 @@
             </div>
         </div>
     </div>
+
+    <!-- عنصر گرافیکی چشمی هوش مصنوعی پس‌زمینه (کاملاً بازیابی شده) -->
+    <svg id="ai-core" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="50" cy="50" r="45" fill="none" stroke="#0ea5e9" stroke-width="0.5" stroke-dasharray="2 4" />
+        <circle cx="50" cy="50" r="35" fill="none" stroke="#8b5cf6" stroke-width="1" stroke-dasharray="10 5">
+            <animateTransform attributeName="transform" type="rotate" from="0 50 50" to="360 50 50" dur="20s" repeatCount="indefinite"/>
+        </circle>
+        <circle cx="50" cy="50" r="20" fill="none" stroke="#0ea5e9" stroke-width="2" />
+        <circle id="pupil" cx="50" cy="50" r="8" fill="#0ea5e9" opacity="0.8">
+            <animate attributeName="r" values="8;10;8" dur="3s" repeatCount="indefinite" />
+        </circle>
+        <path d="M50 20 L50 10 M50 80 L50 90 M20 50 L10 50 M80 50 L90 50" stroke="#8b5cf6" stroke-width="2" opacity="0.5"/>
+    </svg>
 
     <div class="container mx-auto max-w-6xl p-4 md:p-8 min-h-screen flex flex-col items-center justify-center">
         
