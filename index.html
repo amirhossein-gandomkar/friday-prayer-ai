@@ -10,7 +10,7 @@
     <link rel="icon" type="image/svg+xml" href="/logo/favicon.svg" />
     <link rel="shortcut icon" href="/logo/favicon.ico" />
     <link rel="apple-touch-icon" sizes="180x180" href="/logo/apple-touch-icon.png" />
-    <link rel="manifest" href="/logo/site.webmanifest" />
+    <link class="hidden-manifest" rel="manifest" href="/logo/site.webmanifest" />
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;700;900&display=swap" rel="stylesheet">
@@ -1110,11 +1110,11 @@
                     const logoNaturalHeight = adLogo.naturalHeight || adLogo.height || 120;
                     const logoAspectRatio = logoNaturalWidth / logoNaturalHeight;
 
-                    // کاهش ابعاد لوگو (به پهنای ۷.۵ درصد ارتفاع بوم اصلی) تا روی فریم کادر متن آبی بالا نیاید
-                    const logoHeight = Math.round(h * 0.075);
+                    // افزایش ملایم سایز لوگو به اندازه یک‌چهارم (حدود ۹ درصد ارتفاع کل بوم به جای ۷.۵ درصد قبل) جهت خوانا بودن و پرهیز از تداخل با کادر آبی متن
+                    const logoHeight = Math.round(h * 0.09);
                     const logoWidth = Math.round(logoHeight * logoAspectRatio);
 
-                    // کاهش فاصله مارجین به ۱.۵ درصد ابعاد بوم جهت قرارگیری کاملاً مماس و تمیز در منتهی الیه گوشه راست پایینی
+                    // تنظیم فواصل ظریف و مماس جهت قرارگیری تمیز در گوشه پایینی راست
                     const marginX = Math.round(w * 0.015);
                     const marginY = Math.round(h * 0.015);
 
@@ -1172,7 +1172,7 @@
         async function exportToWord() {
             if (!currentReportData) return;
 
-            // دریافت تصویر لوگو adwp.png و تبدیل امن آن به Base64 برای جاسازی مستقیم و بدون نقص در برنامه MS Word
+            // دریافت تصویر لوگو adwp.png و تبدیل امن آن به Base64
             let logoBase64 = '';
             try {
                 logoBase64 = await getBase64Image('/logo/adwp.png');
@@ -1185,6 +1185,15 @@
             const m = document.getElementById('selMonth').value;
             const y = toPersianDigits(document.getElementById('selYear').value);
             const fileName = `خلاصه_خطبه_نماز_جمعه_${d}_${m}-${y}_جمعه_یار.doc`;
+
+            let logoHtml = '';
+            if (logoBase64) {
+                // ارجاع به منبع لوکال تعریف شده در ساختار MHTML (با عرض ۵۵ پوینت دقیقا هم‌اندازه ۵۵ پیکسل در PDF)
+                logoHtml = `
+                <div style="text-align: center; margin-top: 30pt; padding-top: 20pt; border-top: 1px solid #e2e8f0;">
+                    <img src="logo.png" alt="جمعه یار" width="55" style="width: 55pt; height: auto; display: inline-block;" />
+                </div>`;
+            }
 
             let wordHTML = `
             <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
@@ -1226,17 +1235,40 @@
             wordHTML += `
                 <p class="section-title">📌 ${currentReportData.overallSummary.title}</p>
                 <p>${currentReportData.overallSummary.text}</p>
-                
-                <!-- درج لوگوی تبدیل شده بیس۶۴ به عنوان ایمیج بومی در انتهای خروجی مستند ورد -->
-                <div style="text-align: center; margin-top: 30pt; padding-top: 20pt; border-top: 1px solid #e2e8f0;">
-                    ${logoBase64 ? `<img src="${logoBase64}" alt="جمعه یار" width="150" style="width: 150pt; height: auto; display: inline-block;" />` : ''}
-                </div>
+                ${logoHtml}
             </body>
             </html>`;
 
             wordHTML = toPersianDigits(wordHTML);
 
-            const blob = new Blob(['\ufeff', wordHTML], { type: 'application/msword' });
+            let blob;
+            if (logoBase64) {
+                // استخراج بخش اصلی هدر بیس۶۴
+                const logoBase64DataOnly = logoBase64.split(',')[1];
+                
+                // بسته‌بندی نهایی در قالب استاندارد MHTML (تنها روش مطمئن برای نمایش قطعی آفلاین تصاویر لوکال در مایکروسافت ورد)
+                const mhtml = `MIME-Version: 1.0
+Content-Type: multipart/related; boundary="NEXT_PART_BOUNDARY"
+
+--NEXT_PART_BOUNDARY
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+
+${wordHTML}
+
+--NEXT_PART_BOUNDARY
+Content-Location: logo.png
+Content-Type: image/png
+Content-Transfer-Encoding: base64
+
+${logoBase64DataOnly}
+--NEXT_PART_BOUNDARY--`;
+
+                blob = new Blob([mhtml], { type: 'application/msword' });
+            } else {
+                blob = new Blob(['\ufeff', wordHTML], { type: 'application/msword' });
+            }
+
             const url = URL.createObjectURL(blob);
             const link = document.createElement('a');
             
@@ -1270,7 +1302,7 @@
             cleanPDFContainer.style.direction = 'rtl';
             cleanPDFContainer.style.fontFamily = "'Vazirmatn', Arial, sans-serif";
 
-            // تخصیص اندازه ۵۵ پیکسل به تصویر لوگو (۳ برابر کوچک‌تر از اندازه قبلی جهت زیبایی و حفظ تناسب کادرها)
+            // تخصیص اندازه ۵۵ پیکسل به تصویر لوگو (اندازه همسان با لوگوی سند ورد)
             let logoHtml = '';
             if (loadedLogo) {
                 logoHtml = `
