@@ -128,37 +128,205 @@
 
     <canvas id="particle-canvas"></canvas>
 
-    <!-- دکمه شناور راهنما و معرفی سایت -->
-    <button id="infoBtn" class="fixed top-6 right-6 z-50 bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 text-white w-12 h-12 rounded-full flex items-center justify-center shadow-[0_0_15px_rgba(14,165,233,0.4)] transition-all duration-300 hover:scale-110 border border-sky-400">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+    <!-- دکمه شناور راهنما و معرفی سایت (بروزرسانی شده با طراحی زیباتر و همنام با دستورالعمل جدید) -->
+    <button id="infoBtn" class="fixed top-6 right-6 z-50 bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 text-white px-5 h-12 rounded-full flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(14,165,233,0.4)] transition-all duration-300 hover:scale-105 border border-sky-400 font-bold text-sm">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        <span>راهنما و درباره ما</span>
     </button>
 
-    <!-- مدال معرفی سامانه -->
+    <!-- مدال راهنما و معرفی سامانه (بروزرسانی شده با تب‌های داینامیک درباره ما و راهنمای استفاده) -->
     <div id="infoModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4">
-        <div class="glass-panel w-full max-w-2xl rounded-3xl p-6 md:p-8 relative border border-sky-500/30">
+        <div class="glass-panel w-full max-w-2xl rounded-3xl p-6 md:p-8 relative border border-sky-500/30 flex flex-col max-h-[85vh]">
             <button id="closeInfoBtn" class="absolute top-4 left-4 text-gray-400 hover:text-white transition-colors">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
             </button>
             <div class="text-center mb-6">
-                <h2 class="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-purple-500">معرفی سامانه جمعه یار</h2>
-                <p class="text-gray-400 mt-2">دستیار هوشمند استخراج و خلاصه‌سازی خطبه‌های نماز جمعه</p>
+                <h2 class="text-2xl md:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-purple-500">راهنما و درباره ما</h2>
             </div>
-            <div class="space-y-4 text-sm md:text-base text-gray-300 leading-relaxed">
+            <!-- دکمه‌های کنترل تب‌ها -->
+            <div class="flex border-b border-gray-700/50 mb-4 text-sm md:text-base">
+                <button id="tabAbout" class="flex-1 py-2 font-bold border-b-2 border-sky-400 text-sky-400 transition-all">درباره ما</button>
+                <button id="tabGuide" class="flex-1 py-2 font-bold border-b-2 border-transparent text-gray-400 hover:text-sky-300 transition-all">راهنمای استفاده</button>
+            </div>
+            <!-- محتوای تب درباره ما -->
+            <div id="contentAbout" class="space-y-4 overflow-y-auto pr-2 text-sm md:text-base text-gray-300 leading-relaxed flex-1">
+                <h3 class="font-bold text-sky-400 text-lg">درباره ما:</h3>
                 <p>
-                    <strong>جمعه یار</strong> سامانه‌ای پیشرفته و مجهز به هوش مصنوعی است که جهت تسهیل فرایند گزارش‌نویسی، پردازش و بازتاب رسانه‌ای خطبه‌های نماز جمعه توسعه یافته است.
+                    <strong>سامانه جمعه‌یار</strong> با هدف بهره‌گیری از فناوری‌های نوین هوش مصنوعی در مسیر تسهیل و ارتقای کیفیت گزارش‌نویسی و بازتاب رسانه‌ای خطبه‌های نماز جمعه طراحی و توسعه یافته است.
                 </p>
-                <div class="border-t border-gray-700/50 pt-4">
-                    <h4 class="font-bold text-sky-400 mb-2">💡 ویژگی‌ها و قابلیت‌های کلیدی:</h4>
-                    <ul class="list-disc list-inside space-y-2 pr-4 text-right">
-                        <li><strong>خلاصه‌سازی سفارشی:</strong> امکان تعیین اندازه خلاصه‌ها (کوتاه، متوسط یا بلند) به صورت اختصاصی از منوی کشویی قبل از شروع پردازش.</li>
-                        <li><strong>تولید دلخواه خطبه‌نگاشت:</strong> استخراج دقیق‌ترین و تاثیرگذارترین بخش‌های خطبه‌های مذهبی و سیاسی و نشاندن بر روی پوسترها تنها با مشخص کردن تاریخ شمسی دلخواه.</li>
-                        <li><strong>خروجی‌های چندگانه:</strong> کپی ساده متن، دریافت فایل تمیز Word یا فایل PDF بدون خطا و به‌هم‌ریختگی ظاهری.</li>
-                        <li><strong>بدون نیاز به فیلترشکن:</strong> متصل به پروکسی ابری هوشمند جهت ارتباط مستقیم و پرسرعت.</li>
+                <h4 class="font-bold text-purple-400">مأموریت و چشم‌انداز</h4>
+                <p>
+                    در دنیای پرشتاب امروز، دسترسی سریع و دقیق به محتوای غنی خطبه‌ها نیازمند ابزاری هوشمند بود. جمعه‌یار به عنوان دستیاری تخصصی، با پردازش دقیق محتوا و ارائه خروجی‌های استاندارد (متن، Word و PDF)، به خبرنگاران، مدیران فرهنگی و علاقه‌مندان کمک می‌کند تا در کمترین زمان ممکن، بیشترین بهره‌برداری محتوایی را داشته باشند.
+                </p>
+                <h4 class="font-bold text-sky-400">هویت و توسعه</h4>
+                <p>
+                    این سامانه با تلاش و دانش فنی <strong>امیرحسین گندمکار</strong> از سال ۱۴۰۴ آغاز به کار کرده است. تمامی فرآیندهای طراحی، توسعه زیرساخت‌های هوش مصنوعی و پیاده‌سازی رابط کاربری این وب‌سایت، با تکیه بر دانش بومی و رویکردی خلاقانه جهت ساده‌سازی پیچیدگی‌های رسانه‌ای انجام شده است.
+                </p>
+                <p>
+                    ما در جمعه‌یار باور داریم که ترکیب فناوری روز با محتوای ارزشمند، می‌تواند بستری پویا برای انتقال پیام‌ها و آموزه‌های نماز جمعه فراهم آورد. ما همواره در تلاشیم تا با به‌روزرسانی‌های مستمر، کیفیتی درخور و شایسته را به کاربران ارائه دهیم.
+                </p>
+            </div>
+            <!-- محتوای تب راهنمای استفاده -->
+            <div id="contentGuide" class="hidden space-y-4 overflow-y-auto pr-2 text-sm md:text-base text-gray-300 leading-relaxed flex-1">
+                <h3 class="font-bold text-sky-400 text-lg">راهنمای استفاده از سامانه جمعه‌یار</h3>
+                <p>با این راهنمای کوتاه، می‌توانید در کمتر از یک دقیقه، خطبه‌های نماز جمعه را به خلاصه‌ای دقیق و حرفه‌ای تبدیل کنید:</p>
+                <div class="space-y-3">
+                    <p><strong>گام ۱: انتخاب محتوا</strong><br>ابتدا متن کامل خطبه را آماده کنید. سپس متن مورد نظر را در کادر مشخص شده در صفحه اصلی کپی کنید.</p>
+                    <p><strong>گام ۲: تنظیمات سفارشی</strong><br>از منوی کشویی «اندازه خلاصه»، سطح مورد نظر خود را انتخاب کنید:</p>
+                    <ul class="list-disc list-inside pr-4 space-y-1">
+                        <li><strong>خلاصه کوتاه:</strong> برای دسترسی سریع به نکات کلیدی (مناسب پیام‌رسان‌ها).</li>
+                        <li><strong>خلاصه متوسط:</strong> برای گزارش‌های وبلاگی و خبری.</li>
+                        <li><strong>خلاصه بلند:</strong> برای تحلیل‌های جامع و مقالات تحلیلی.</li>
                     </ul>
+                    <p><strong>گام ۳: پردازش و هوشمندسازی</strong><br>بر روی دکمه «آغاز پردازش هوش مصنوعی» کلیک کنید. هوش مصنوعی جمعه‌یار در عرض چند ثانیه، متن را تحلیل کرده و نکات مهم سیاسی و مذهبی را استخراج می‌کند.</p>
+                    <p><strong>گام ۴: دریافت خروجی</strong><br>پس از نمایش خلاصه در کادر خروجی، می‌توانید از گزینه‌های زیر استفاده کنید:</p>
+                    <ul class="list-disc list-inside pr-4 space-y-1">
+                        <li><strong>کپی متن:</strong> جهت استفاده سریع در سایر برنامه‌ها.</li>
+                        <li><strong>دریافت Word:</strong> جهت ویرایش‌های بعدی.</li>
+                        <li><strong>دریافت PDF:</strong> جهت انتشار رسمی و ارائه گزارش‌های چاپی.</li>
+                        <li><strong>خطبه‌نگاشت:</strong> با وارد کردن تاریخ شمسی، خطبه نگاشت را خروجی بگیرید.</li>
+                    </ul>
+                    <p class="font-bold text-purple-400 mt-4">نکات طلایی برای نتیجه بهتر:</p>
+                    <p><strong>دقت تاریخ:</strong> برای تولید دقیق «خطبه‌نگاشت»، حتماً تاریخ دقیق جمعه مورد نظر را به فرمت شمسی وارد کنید.</p>
+                    <p><strong>پشتیبانی:</strong> اگر در هر مرحله با خطایی مواجه شدید، می‌توانید از طریق ایمیل پشتیبانی با ما در تماس باشید.</p>
                 </div>
             </div>
-            <div class="mt-8 text-center">
+            <div class="mt-6 text-center border-t border-gray-700/50 pt-4">
                 <button id="closeInfoBtnOk" class="cyber-btn text-white font-bold py-2.5 px-8 rounded-full">متوجه شدم</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- مدال مرکز قوانین و پشتیبانی -->
+    <div id="rulesSupportModal" class="hidden fixed inset-0 z-[60] flex items-center justify-center bg-black/80 backdrop-blur-md p-4">
+        <div class="glass-panel w-full max-w-2xl rounded-3xl p-6 md:p-8 relative border border-sky-500/30 flex flex-col max-h-[85vh]">
+            <button id="closeRulesBtn" class="absolute top-4 left-4 text-gray-400 hover:text-white transition-colors">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+            <div class="text-center mb-6">
+                <h2 class="text-2xl md:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-purple-500">مرکز قوانین و پشتیبانی</h2>
+            </div>
+            <!-- تب‌ها -->
+            <div class="flex border-b border-gray-700/50 mb-4 text-xs md:text-sm">
+                <button id="tabRules" class="flex-1 py-2 font-bold border-b-2 border-sky-400 text-sky-400 transition-all">قوانین و حریم خصوصی</button>
+                <button id="tabFAQ" class="flex-1 py-2 font-bold border-b-2 border-transparent text-gray-400 hover:text-sky-300 transition-all">سوالات متداول (FAQ)</button>
+                <button id="tabSupport" class="flex-1 py-2 font-bold border-b-2 border-transparent text-gray-400 hover:text-sky-300 transition-all">پشتیبانی و ارتباط</button>
+            </div>
+            <!-- محتوا تب ۱: قوانین و حریم خصوصی -->
+            <div id="contentRules" class="space-y-4 overflow-y-auto pr-2 text-sm md:text-base text-gray-300 leading-relaxed flex-1">
+                <h3 class="font-bold text-sky-400 text-lg">شرایط و قوانین استفاده از سامانه «جمعه‌یار»</h3>
+                <p class="text-gray-400 italic">استفاده از خدمات سامانه جمعه‌یار به منزله پذیرش کامل قوانین و مقررات زیر است:</p>
+                <div class="space-y-3">
+                    <p><strong>۱. مالکیت فکری و حقوق مادی:</strong> تمامی اجزای این وب‌سایت، اعم از کدهای برنامه‌نویسی، طراحی رابط کاربری، الگوریتم‌های هوش مصنوعی و محتوای استخراج‌شده، تحت مالکیت معنوی امیرحسین گندمکار قرار دارد. هرگونه کپی‌برداری، بازنشر، مهندسی معکوس و یا بهره‌برداری تجاری از این سامانه بدون کسب اجازه کتبی، ممنوع بوده و نقض صریح قوانین کپی‌رایت محسوب می‌شود.</p>
+                    <p><strong>۲. مسئولیت محتوا:</strong> این سامانه صرفاً ابزاری جهت تسهیل پردازش و خلاصه‌سازی خطبه‌ها است. مسئولیت نهایی صحت و بازتاب رسانه‌ای مطالب استخراج‌شده، بر عهده کاربر است. کاربر متعهد می‌شود از خروجی‌های این سامانه به نحوی استفاده نکند که موجب تحریف محتوا یا مغایرت با قوانین جاری کشور گردد.</p>
+                    <p><strong>۳. پیگرد قانونی:</strong> در صورت مشاهده هرگونه تخلف، سرقت محتوا یا سوءاستفاده از زیرساخت‌های فنی سامانه، مدیریت «جمعه‌یار» حق دارد از طریق مراجع قضایی و پلیس فتا علیه متخلفین اقدام قانونی نماید. تمامی حقوق برای مالک سامانه محفوظ است و هرگونه اقدام غیرمجاز، عواقب قانونی برای فرد یا مجموعه خاطی در پی خواهد داشت.</p>
+                </div>
+                
+                <h3 class="font-bold text-sky-400 text-lg mt-6 pt-4 border-t border-gray-700/30">سیاست حفظ حریم خصوصی (Privacy Policy)</h3>
+                <p class="text-gray-400 italic">در سامانه جمعه‌یار، امنیت و حریم خصوصی کاربران اولویت ماست. ما متعهد به حفاظت از اطلاعات شما طبق اصول زیر هستیم:</p>
+                <div class="space-y-3">
+                    <p><strong>۴. حفاظت از داده‌های کاربران:</strong> تمامی متن‌ها، فایل‌ها و داده‌هایی که توسط شما جهت خلاصه‌سازی در سامانه بارگذاری می‌شود، کاملاً محرمانه تلقی می‌گردد. سامانه «جمعه‌یار» متعهد می‌شود که هیچ‌گونه اطلاعات شخصی یا محتوای پردازش‌شده را بدون اجازه کاربر در اختیار اشخاص ثالث قرار ندهد.</p>
+                    <p><strong>۵. پردازش هوشمند و امنیت هوش مصنوعی:</strong> سامانه صرفاً جهت پردازش متن طراحی شده است. سیستم‌های ما به گونه‌ای بهینه‌سازی شده‌اند که پس از انجام فرآیند خلاصه‌سازی، داده‌های موقت کاربر در حداقل زمان ممکن از سرورهای پردازشی پاک‌سازی گردند تا امنیت داده‌ها تضمین شود.</p>
+                    <p><strong>۶. تعهد به امنیت اطلاعات:</strong> ما از پروتکل‌های امنیتی استاندارد برای محافظت از زیرساخت‌های سایت استفاده می‌کنیم. با این حال، حفظ امنیت حساب کاربری بر عهده کاربر است و توصیه می‌شود جهت حفظ حریم خصوصی، مراقب باشید.</p>
+                </div>
+                <p class="mt-4 text-xs text-gray-400 border-t border-gray-700/30 pt-2 font-bold">پیوست به قوانین: این سیاست‌ها بخشی جدایی‌ناپذیر از «شرایط و قوانین استفاده» است و هرگونه تغییر احتمالی در آینده، از طریق همین صفحه به اطلاع کاربران خواهد رسید.</p>
+            </div>
+            <!-- محتوا تب ۲: سوالات متداول -->
+            <div id="contentFAQ" class="hidden space-y-4 overflow-y-auto pr-2 text-sm md:text-base text-gray-300 leading-relaxed flex-1">
+                <h3 class="font-bold text-sky-400 text-lg">سوالات متداول (FAQ)</h3>
+                
+                <div class="space-y-4">
+                    <h4 class="font-bold text-purple-400 border-b border-gray-800 pb-1">الف) پرسش‌های مربوط به کیفیت و خروجی:</h4>
+                    <div class="space-y-2">
+                        <p class="font-bold text-gray-200">آیا خلاصه‌های تولید شده نیاز به بازبینی دارند؟</p>
+                        <p class="text-gray-400">بله، با وجود دقت بالای هوش مصنوعی، پیشنهاد می‌شود برای اطمینان از صحت کامل نقل‌قول‌ها و نکات حساس، خروجی نهایی پیش از انتشار توسط کاربر بازبینی شود.</p>
+                    </div>
+                    <div class="space-y-2">
+                        <p class="font-bold text-gray-200">آیا می‌توانم خروجی را ویرایش کنم؟</p>
+                        <p class="text-gray-400">بله، تمامی خروجی‌ها (Word، PDF و متن کپی شده) کاملاً قابل ویرایش هستند تا شما بتوانید لحن یا نکات مورد نظر خود را به گزارش اضافه کنید.</p>
+                    </div>
+                    <div class="space-y-2">
+                        <p class="font-bold text-gray-200">آیا حجم خلاصه‌ها قابل تغییر است؟</p>
+                        <p class="text-gray-400">بله، شما می‌توانید از منوی تنظیمات قبل از پردازش، اندازه خلاصه را بین سه حالت (کوتاه، متوسط و بلند) انتخاب کنید.</p>
+                    </div>
+
+                    <h4 class="font-bold text-purple-400 border-b border-gray-800 pb-1 mt-6">ب) پرسش‌های مربوط به امنیت و حریم خصوصی:</h4>
+                    <div class="space-y-2">
+                        <p class="font-bold text-gray-200">اطلاعات بارگذاری شده تا چه زمانی در سرور باقی می‌مانند؟</p>
+                        <p class="text-gray-400">در سامانه «جمعه‌ یار»، حفظ حریم خصوصی اولویت ماست. تمامی داده‌های متنی شما بلافاصله پس از پایان جلسه کاری و تولید خروجی، به صورت خودکار از حافظه موقت سرور پاک می‌شوند.</p>
+                    </div>
+                    <div class="space-y-2">
+                        <p class="font-bold text-gray-200">آیا خطبه‌های من در جای دیگری منتشر می‌شود؟</p>
+                        <p class="text-gray-400">خیر، هیچ‌گونه دسترسی عمومی یا خصوصی برای شخص ثالث به متن خطبه‌های شما وجود ندارد و سامانه صرفاً به عنوان یک پردازشگر عمل می‌کند.</p>
+                    </div>
+
+                    <h4 class="font-bold text-purple-400 border-b border-gray-800 pb-1 mt-6">ج) پرسش‌های مربوط به عملکرد فنی:</h4>
+                    <div class="space-y-2">
+                        <p class="font-bold text-gray-200">اگر سایت در زمان پردازش خطا داد، چه کنم؟</p>
+                        <p class="text-gray-400">ابتدا از اتصال اینترنت خود اطمینان حاصل کنید. اگر مشکل ادامه داشت، صفحه را رفرش کرده و مجدداً تلاش کنید. اگر همچنان خطا باقی بود، متن خطا را به ایمیل پشتیبانی ارسال کنید.</p>
+                    </div>
+                    <div class="space-y-2">
+                        <p class="font-bold text-gray-200">آیا برای استفاده از سامانه حتماً باید اینترنت پرسرعت داشته باشم؟</p>
+                        <p class="text-gray-400">خیر، سامانه «جمعه‌ یار» به گونه‌ای بهینه‌سازی شده که حتی با سرعت‌های پایین نیز به درستی کار کند. همچنین سیستم پروکسی ابری ما سرعت ارتباط شما را بهینه می‌کند.</p>
+                    </div>
+                    <div class="space-y-2">
+                        <p class="font-bold text-gray-200">فرمت‌های پیشنهادی برای بارگذاری فایل چیست؟</p>
+                        <p class="text-gray-400">بهترین عملکرد سامانه با فایل‌های متنی (txt، docx) است. برای فایلهای PDF، پیشنهاد می‌شود متن را کپی و در کادر قرار دهید تا دقت استخراج بالاتر برود.</p>
+                    </div>
+
+                    <h4 class="font-bold text-purple-400 border-b border-gray-800 pb-1 mt-6">د) پرسش‌های مربوط به حقوق و مسئولیت‌ها:</h4>
+                    <div class="space-y-2">
+                        <p class="font-bold text-gray-200">مالکیت معنوی خلاصه‌ها متعلق به کیست؟</p>
+                        <p class="text-gray-400">تمامی حقوق خروجی‌هایی که با استفاده از این سامانه تولید می‌کنید متعلق به خودتان است، اما استفاده از نام «جمعه‌ یار» به عنوان ابزار پردازشگر، نشان‌دهنده حرفه‌ای بودن گزارش شماست.</p>
+                    </div>
+                    <div class="space-y-2">
+                        <p class="font-bold text-gray-200">آیا استفاده تجاری از سامانه مجاز است؟</p>
+                        <p class="text-gray-400">استفاده شخصی و سازمانی برای تهیه گزارش‌های فرهنگی و خبری بلامانع است؛ برای هرگونه استفاده تجاری در مقیاس وسیع، نیاز به هماهنگی و دریافت اجازه کتبی دارید.</p>
+                    </div>
+                </div>
+            </div>
+            <!-- محتوا تب ۳: پشتیبانی و ارتباط -->
+            <div id="contentSupport" class="hidden space-y-4 overflow-y-auto pr-2 text-sm md:text-base text-gray-300 leading-relaxed flex-1 flex flex-col justify-center text-center">
+                <h3 class="font-bold text-sky-400 text-xl mb-4">پشتیبانی و ارتباط با ما</h3>
+                <p class="max-w-md mx-auto">کاربران گرامی، سامانه «جمعه‌یار» متعهد به ارائه بهترین تجربه کاربری است. در صورت بروز هرگونه مشکل فنی، پرسش درباره عملکرد سامانه و یا ارائه پیشنهادات، می‌توانید از طریق ایمیل اختصاصی با ما در ارتباط باشید. تمامی پیام‌های شما در کوتاه‌ترین زمان ممکن بررسی و پاسخ داده خواهد شد.</p>
+                
+                <div class="mt-8">
+                    <p class="text-gray-400 mb-2">📩 ایمیل پشتیبانی:</p>
+                    <!-- اتصال ایمیل با لینک mailto برای هدایت خودکار کاربر به برنامه میل در هر پلتفرمی -->
+                    <a href="mailto:info.jomehyar.ir@gmail.com" class="text-xl font-bold text-sky-300 hover:text-sky-400 transition-colors border-b border-dashed border-sky-300 hover:border-sky-400 pb-1">info.jomehyar.ir@gmail.com</a>
+                </div>
+                <p class="text-xs text-gray-500 mt-6 max-w-sm mx-auto">نکته: جهت تسریع در رسیدگی، لطفاً در عنوان ایمیل خود موضوع دقیق مشکل یا پیشنهاد را ذکر نمایید.</p>
+            </div>
+            <div class="mt-6 text-center border-t border-gray-700/50 pt-4">
+                <button id="closeRulesBtnOk" class="cyber-btn text-white font-bold py-2.5 px-8 rounded-full">بستن پنجره</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- مدال تایید قوانین و شرایط استفاده از سامانه (نمایش فقط در اولین بار قبل از پردازش هوش مصنوعی) -->
+    <div id="agreementModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4">
+        <div class="glass-panel w-full max-w-xl rounded-3xl p-6 md:p-8 relative border border-sky-500/30 flex flex-col text-center shadow-[0_0_50px_rgba(14,165,233,0.2)]">
+            <h2 class="text-xl md:text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-purple-500 mb-6">تایید قوانین و شرایط استفاده از سامانه</h2>
+            
+            <p class="text-sm md:text-base text-gray-300 leading-relaxed mb-6 text-justify">
+                کاربر گرامی، پیش از آغاز استفاده از «جمعه‌یار»، خواهشمند است قوانین و سیاست‌های حریم خصوصی ما را مطالعه فرمایید. با کلیک بر روی دکمه «موافقت و ادامه»، شما تأیید می‌کنید که:<br>
+                ۱. شرایط استفاده از سامانه را مطالعه کرده و می‌پذیرید.<br>
+                ۲. مسئولیت محتوای خروجی و نحوه انتشار آن بر عهده شماست.<br>
+                ۳. موافقت خود را با سیاست‌های حفظ حریم خصوصی سامانه اعلام می‌دارید.
+            </p>
+            
+            <button id="viewFullRulesBtn" class="bg-slate-900 border border-purple-500/30 text-purple-300 hover:text-white px-5 py-2.5 rounded-full hover:bg-purple-500/20 transition-all duration-300 text-sm font-bold mx-auto mb-6">
+                مشاهده متن کامل قوانین و حریم خصوصی
+            </button>
+            
+            <div class="flex items-center justify-center gap-3 mb-8">
+                <input type="checkbox" id="agreeCheckbox" class="w-5 h-5 rounded border-gray-700 bg-slate-900 text-sky-500 focus:ring-sky-500 cursor-pointer" />
+                <label for="agreeCheckbox" class="text-sm text-gray-300 font-bold cursor-pointer select-none">اینجانب قوانین و مقررات را خوانده و تمامی مفاد آن را می‌پذیریم.</label>
+            </div>
+            
+            <div class="flex gap-4 justify-center">
+                <button id="agreeSubmitBtn" disabled class="bg-slate-800 text-gray-500 font-bold py-2.5 px-8 rounded-full cursor-not-allowed transition-all" type="button">موافقت و ادامه</button>
+                <button id="agreeCancelBtn" class="bg-slate-850 hover:bg-slate-750 text-gray-300 font-bold py-2.5 px-8 rounded-full transition-all" type="button">انصراف</button>
             </div>
         </div>
     </div>
@@ -239,6 +407,7 @@
                     </select>
                 </div>
                 
+                <!-- اتصال دکمه آغاز پردازش به رویداد مدیریت حریم خصوصی و ذخیره‌سازی -->
                 <button id="generateBtn" class="cyber-btn flex items-center justify-center text-white font-black text-lg md:text-xl py-4 px-8 md:px-12 rounded-full cursor-pointer shadow-lg w-full md:w-2/3">
                     <svg class="w-6 h-6 md:w-7 md:h-7 ml-3 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                     آغاز پردازش هوش مصنوعی
@@ -408,6 +577,19 @@
                 <span class="block mt-2 font-medium text-red-200" id="errorMessage"></span>
             </div>
         </main>
+
+        <!-- فوتر سایت مجهز به کپی‌رایت داینامیک و دکمه مرکز قوانین -->
+        <footer class="w-full max-w-6xl mx-auto px-4 py-8 mt-12 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center gap-6 relative z-10 text-xs md:text-sm text-gray-400">
+            <!-- سمت راست: کپی‌رایت داینامیک با قابلیت ارتقای سال خودکار -->
+            <div class="text-center md:text-right max-w-xl leading-relaxed">
+                طراحی و توسعه توسط امیرحسین گندمکار © ۱۴۰۴ - <span id="copyrightCurrentYear">۱۴۰۵</span>. تمامی حقوق مادی و معنوی این سامانه محفوظ است؛ هرگونه کپی‌برداری از محتوا، ساختار و کدهای این وب‌سایت بدون کسب اجازه کتبی، نقض قوانین کپی‌رایت محسوب شده و پیگرد قانونی خواهد داشت.
+            </div>
+            <!-- سمت چپ: دکمه مرکز قوانین و پشتیبانی -->
+            <button id="rulesSupportBtn" class="flex items-center gap-2 bg-slate-900 border border-sky-500/30 text-sky-300 hover:text-white px-5 py-3 rounded-full hover:bg-sky-500/20 shadow-[0_0_15px_rgba(14,165,233,0.1)] hover:shadow-[0_0_20px_rgba(14,165,233,0.3)] transition-all duration-300 font-bold">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                مرکز قوانین و پشتیبانی
+            </button>
+        </footer>
     </div>
 
     <textarea id="copyHelper" class="hidden absolute -left-full -top-full"></textarea>
@@ -491,6 +673,26 @@
         const closeInfoBtn = document.getElementById('closeInfoBtn');
         const closeInfoBtnOk = document.getElementById('closeInfoBtnOk');
 
+        // تعریف ساختار تب‌بندی در دراپ‌داون معرفی و راهنما
+        const tabAbout = document.getElementById('tabAbout');
+        const tabGuide = document.getElementById('tabGuide');
+        const contentAbout = document.getElementById('contentAbout');
+        const contentGuide = document.getElementById('contentGuide');
+
+        tabAbout.addEventListener('click', () => {
+            tabAbout.className = "flex-1 py-2 font-bold border-b-2 border-sky-400 text-sky-400 transition-all";
+            tabGuide.className = "flex-1 py-2 font-bold border-b-2 border-transparent text-gray-400 hover:text-sky-300 transition-all";
+            contentAbout.classList.remove('hidden');
+            contentGuide.classList.add('hidden');
+        });
+
+        tabGuide.addEventListener('click', () => {
+            tabGuide.className = "flex-1 py-2 font-bold border-b-2 border-sky-400 text-sky-400 transition-all";
+            tabAbout.className = "flex-1 py-2 font-bold border-b-2 border-transparent text-gray-400 hover:text-sky-300 transition-all";
+            contentGuide.classList.remove('hidden');
+            contentAbout.classList.add('hidden');
+        });
+
         infoBtn.addEventListener('click', () => {
             infoModal.classList.remove('hidden');
         });
@@ -501,6 +703,62 @@
         closeInfoBtnOk.addEventListener('click', closeModal);
         infoModal.addEventListener('click', (e) => {
             if (e.target === infoModal) closeModal();
+        });
+
+        // تعریف رویدادها و کلیدهای مرکز قوانین و پشتیبانی
+        const rulesSupportBtn = document.getElementById('rulesSupportBtn');
+        const rulesSupportModal = document.getElementById('rulesSupportModal');
+        const closeRulesBtn = document.getElementById('closeRulesBtn');
+        const closeRulesBtnOk = document.getElementById('closeRulesBtnOk');
+
+        const tabRules = document.getElementById('tabRules');
+        const tabFAQ = document.getElementById('tabFAQ');
+        const tabSupport = document.getElementById('tabSupport');
+        const contentRules = document.getElementById('contentRules');
+        const contentFAQ = document.getElementById('contentFAQ');
+        const contentSupport = document.getElementById('contentSupport');
+
+        function selectRulesTab() {
+            tabRules.className = "flex-1 py-2 font-bold border-b-2 border-sky-400 text-sky-400 transition-all";
+            tabFAQ.className = "flex-1 py-2 font-bold border-b-2 border-transparent text-gray-400 hover:text-sky-300 transition-all";
+            tabSupport.className = "flex-1 py-2 font-bold border-b-2 border-transparent text-gray-400 hover:text-sky-300 transition-all";
+            contentRules.classList.remove('hidden');
+            contentFAQ.classList.add('hidden');
+            contentSupport.classList.add('hidden');
+        }
+
+        tabRules.addEventListener('click', selectRulesTab);
+
+        tabFAQ.addEventListener('click', () => {
+            tabFAQ.className = "flex-1 py-2 font-bold border-b-2 border-sky-400 text-sky-400 transition-all";
+            tabRules.className = "flex-1 py-2 font-bold border-b-2 border-transparent text-gray-400 hover:text-sky-300 transition-all";
+            tabSupport.className = "flex-1 py-2 font-bold border-b-2 border-transparent text-gray-400 hover:text-sky-300 transition-all";
+            contentFAQ.classList.remove('hidden');
+            contentRules.classList.add('hidden');
+            contentSupport.classList.add('hidden');
+        });
+
+        tabSupport.addEventListener('click', () => {
+            tabSupport.className = "flex-1 py-2 font-bold border-b-2 border-sky-400 text-sky-400 transition-all";
+            tabRules.className = "flex-1 py-2 font-bold border-b-2 border-transparent text-gray-400 hover:text-sky-300 transition-all";
+            tabFAQ.className = "flex-1 py-2 font-bold border-b-2 border-transparent text-gray-400 hover:text-sky-300 transition-all";
+            contentSupport.classList.remove('hidden');
+            contentRules.classList.add('hidden');
+            contentFAQ.classList.add('hidden');
+        });
+
+        rulesSupportBtn.addEventListener('click', () => {
+            rulesSupportModal.classList.remove('hidden');
+            selectRulesTab();
+        });
+
+        const closeRulesModal = () => {
+            rulesSupportModal.classList.add('hidden');
+        };
+        closeRulesBtn.addEventListener('click', closeRulesModal);
+        closeRulesBtnOk.addEventListener('click', closeRulesModal);
+        rulesSupportModal.addEventListener('click', (e) => {
+            if (e.target === rulesSupportModal) closeRulesModal();
         });
 
         // تابع مبدل برای تبدیل تصاویر محلی به بیس۶۴ جهت نمایش بدون باگ در فایل ورد
@@ -636,6 +894,9 @@
             ];
             const currentMonthName = shamsiMonths[shamsiMonthNum - 1];
 
+            // قرار دادن پویای سال منتهی در فوتر کپی‌رایت براساس سال جاری شمسی
+            document.getElementById('copyrightCurrentYear').textContent = toPersianDigits(shamsiYear);
+
             // مقداردهی پویای روزها بر اساس تاریخ امروز
             const selDay = document.getElementById('selDay');
             for (let i = 1; i <= 31; i++) {
@@ -747,6 +1008,13 @@
         const renderNegashtBtn = document.getElementById('renderNegashtBtn');
         const negashtShowroom = document.getElementById('negashtShowroom');
 
+        // ماژول تایید شرایط استفاده و حریم خصوصی
+        const agreementModal = document.getElementById('agreementModal');
+        const agreeCheckbox = document.getElementById('agreeCheckbox');
+        const agreeSubmitBtn = document.getElementById('agreeSubmitBtn');
+        const agreeCancelBtn = document.getElementById('agreeCancelBtn');
+        const viewFullRulesBtn = document.getElementById('viewFullRulesBtn');
+
         let currentReportData = null; 
         const introText = "به گزارش معاونت ارتباطات و رسانه دفتر امام جمعه دهستان میانکاله (زاغمرز)، حجت الاسلام والمسلمین حاج حسین انزائی در خطبه‌های این هفته از نماز جمعه، ضمن سفارش به تقوا اظهار کرد:";
 
@@ -761,7 +1029,50 @@
         ];
 
         let loadingInterval;
-        generateBtn.addEventListener('click', handleGeneration);
+
+        // شنونده رویداد آغاز پردازش مجهز به بررسی شرایط تایید قوانین (LocalStorage)
+        generateBtn.addEventListener('click', () => {
+            const hasAgreed = localStorage.getItem('jomehyar_agree_terms') === 'true';
+            if (!hasAgreed) {
+                // نمایش پاپ‌آپ شرایط قوانین
+                agreementModal.classList.remove('hidden');
+                agreeCheckbox.checked = false;
+                agreeSubmitBtn.disabled = true;
+                agreeSubmitBtn.className = "bg-slate-800 text-gray-500 font-bold py-2.5 px-8 rounded-full cursor-not-allowed transition-all";
+            } else {
+                handleGeneration();
+            }
+        });
+
+        // رویدادهای مربوط به چک‌باکس قوانین
+        agreeCheckbox.addEventListener('change', () => {
+            if (agreeCheckbox.checked) {
+                agreeSubmitBtn.disabled = false;
+                agreeSubmitBtn.className = "cyber-btn text-white font-bold py-2.5 px-8 rounded-full cursor-pointer transition-all";
+            } else {
+                agreeSubmitBtn.disabled = true;
+                agreeSubmitBtn.className = "bg-slate-800 text-gray-500 font-bold py-2.5 px-8 rounded-full cursor-not-allowed transition-all";
+            }
+        });
+
+        // کلیک موافقت و ادامه
+        agreeSubmitBtn.addEventListener('click', () => {
+            localStorage.setItem('jomehyar_agree_terms', 'true');
+            agreementModal.classList.add('hidden');
+            handleGeneration(); // شروع پردازش بلافاصله بدون نیاز به کلیک مجدد
+        });
+
+        // کلیک انصراف
+        agreeCancelBtn.addEventListener('click', () => {
+            agreementModal.classList.add('hidden');
+        });
+
+        // دکمه مشاهده قوانین کامل در کادر تایید شرایط اولیه
+        viewFullRulesBtn.addEventListener('click', () => {
+            rulesSupportModal.classList.remove('hidden');
+            selectRulesTab();
+        });
+
         copyBtn.addEventListener('click', copyOutputToClipboard);
         wordBtn.addEventListener('click', exportToWord);
         pdfBtn.addEventListener('click', exportToPDF);
@@ -945,7 +1256,7 @@
                 </div>
                 <div class="output-card output-khutbah1">
                     <h4 class="text-lg md:text-xl font-bold text-blue-400 mb-4 flex items-center">
-                        <span class="bg-blue-500/20 p-2 rounded-lg ml-3"><svg class="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z"></path></svg></span>
+                        <span class="bg-blue-500/20 p-2 rounded-lg ml-3"><svg class="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29-3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z"></path></svg></span>
                         خطبه اول: ${toPersianDigits(data.khutbah1.title)}
                     </h4>
                     <div class="space-y-4 pr-2">
