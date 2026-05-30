@@ -212,7 +212,7 @@
                 <button id="tabFAQ" class="flex-1 py-2 font-bold border-b-2 border-transparent text-gray-400 hover:text-sky-300 transition-all">سوالات متداول (FAQ)</button>
                 <button id="tabSupport" class="flex-1 py-2 font-bold border-b-2 border-transparent text-gray-400 hover:text-sky-300 transition-all">پشتیبانی و ارتباط</button>
             </div>
-            <!-- محتوا تب ۱: قوانین و حریم خصوصی (آپدیت شده با بند ۶ جدید ارسالی شما) -->
+            <!-- محتوا تب ۱: قوانین و حریم خصوصی -->
             <div id="contentRules" class="space-y-4 overflow-y-auto pr-2 text-sm md:text-base text-gray-300 leading-relaxed flex-1">
                 <h3 class="font-bold text-sky-400 text-lg">شرایط و قوانین استفاده از سامانه «جمعه‌یار»</h3>
                 <p class="text-gray-400 italic">استفاده از خدمات سامانه جمعه‌یار به منزله پذیرش کامل قوانین و مقررات زیر است:</p>
@@ -247,7 +247,7 @@
                     </div>
                     <div class="space-y-2">
                         <p class="font-bold text-gray-200">آیا حجم خلاصه‌ها قابل تغییر است؟</p>
-                        <p class="text-gray-400">بله، شما می‌توانید از منوی تنظیمات قبل از پردازش، اندازه خلاصه را بین سه حالت (کوتاه، متوسط و بلند) انتخاب کنید.</p>
+                        <p class="text-gray-400">بله، شما می‌توانید از منوی تنظیمات قبل از پردازش, اندازه خلاصه را بین سه حالت (کوتاه، متوسط و بلند) انتخاب کنید.</p>
                     </div>
 
                     <h4 class="font-bold text-purple-400 border-b border-gray-800 pb-1 mt-6">ب) پرسش‌های مربوط به امنیت و حریم خصوصی:</h4>
@@ -285,14 +285,14 @@
                     </div>
                 </div>
             </div>
-            <!-- محتوا تب ۳: پشتیبانی و ارتباط (اصلاح لایوت با justify-start و pt-6 برای ممانعت از هم‌پوشانی خط اول) -->
+            <!-- محتوا تب ۳: پشتیبانی و ارتباط -->
             <div id="contentSupport" class="hidden space-y-4 overflow-y-auto pr-2 text-sm md:text-base text-gray-300 leading-relaxed flex-1 flex flex-col justify-start text-center pt-6">
                 <h3 class="font-bold text-sky-400 text-xl mb-4">پشتیبانی و ارتباط با ما</h3>
                 <p class="max-w-md mx-auto">کاربران گرامی، سامانه «جمعه‌یار» متعهد به ارائه بهترین تجربه کاربری است. در صورت بروز هرگونه مشکل فنی، پرسش درباره عملکرد سامانه و یا ارائه پیشنهادات، می‌توانید از طریق ایمیل اختصاصی با ما در ارتباط باشید. تمامی پیام‌های شما در کوتاه‌ترین زمان ممکن بررسی و پاسخ داده خواهد شد.</p>
                 
                 <div class="mt-8">
                     <p class="text-gray-400 mb-2">📩 ایمیل پشتیبانی:</p>
-                    <!-- اتصال ایمیل به هندلر جی‌میل هوشمند در پائین جهت بازشدن پیش‌فرض در جی‌میل -->
+                    <!-- لینک ایمیل جی‌میل بدون موضوع پیش‌فرض جهت نوشتن دستی موضوع توسط کاربر -->
                     <a href="#" id="supportEmailLink" class="text-xl font-bold text-sky-300 hover:text-sky-400 transition-colors border-b border-dashed border-sky-300 hover:border-sky-400 pb-1">info.jomehyar.ir@gmail.com</a>
                 </div>
                 <p class="text-xs text-gray-500 mt-6 max-w-sm mx-auto">نکته: جهت تسریع در رسیدگی، لطفاً در عنوان ایمیل خود موضوع دقیق مشکل یا پیشنهاد را ذکر نمایید.</p>
@@ -327,6 +327,76 @@
             <div class="flex gap-4 justify-center">
                 <button id="agreeSubmitBtn" disabled class="bg-slate-800 text-gray-500 font-bold py-2.5 px-8 rounded-full cursor-not-allowed transition-all" type="button">موافقت و ادامه</button>
                 <button id="agreeCancelBtn" class="bg-slate-850 hover:bg-slate-750 text-gray-300 font-bold py-2.5 px-8 rounded-full transition-all" type="button">انصراف</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- مدال انتخاب تاریخ نماز جمعه (انتقال‌یافته از بخش خطبه‌نگاشت پایینی به مروارید آغازین پردازش هوش مصنوعی) -->
+    <div id="dateModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4">
+        <div class="glass-panel w-full max-w-md rounded-3xl p-6 md:p-8 relative border border-sky-500/30 flex flex-col text-center shadow-[0_0_50px_rgba(14,165,233,0.2)]">
+            <h2 class="text-xl md:text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-purple-500 mb-6">تنظیم تاریخ برگزاری نماز جمعه</h2>
+            
+            <p class="text-sm text-gray-300 leading-relaxed mb-6">
+                خواهشمند است تاریخ برگزاری خطبه‌های این هفته را جهت ثبت روی تصاویر خطبه‌نگاشت و نام گزارش‌های خروجی مشخص فرمایید:
+            </p>
+
+            <div class="flex justify-center items-center gap-4 mb-8 relative z-40">
+                <!-- روز (سفارشی بدون بیرون‌زدگی) -->
+                <div class="flex flex-col relative z-40" id="customDayContainer">
+                    <span class="text-xs text-gray-400 mb-1">روز</span>
+                    <button id="customDayBtn" type="button" class="neon-input p-2.5 rounded-xl bg-slate-900 border border-sky-500/30 text-sky-300 shadow-[0_0_15px_rgba(14,165,233,0.15)] outline-none w-24 text-center font-bold cursor-pointer transition-all duration-300 flex items-center justify-between px-3">
+                        <span id="customDayValue" class="flex-1 text-center">۱</span>
+                        <svg class="w-4 h-4 text-sky-400 transition-transform duration-300" id="customDayArrow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div id="customDayDropdown" class="hidden absolute top-full mt-2 left-0 right-0 bg-slate-950/95 backdrop-blur-md border border-sky-500/30 rounded-2xl overflow-hidden shadow-2xl z-50 transition-all duration-300 scale-95 opacity-0 origin-top max-h-48 overflow-y-auto">
+                        <!-- گزینه‌ها به صورت پویا با جاوااسکریپت مقداردهی می‌شوند -->
+                    </div>
+                    <select id="selDay" class="hidden"></select>
+                </div>
+                
+                <!-- ماه (سفارشی بدون بیرون‌زدگی) -->
+                <div class="flex flex-col relative z-40" id="customMonthContainer">
+                    <span class="text-xs text-gray-400 mb-1">ماه</span>
+                    <button id="customMonthBtn" type="button" class="neon-input p-2.5 rounded-xl bg-slate-900 border border-sky-500/30 text-sky-300 shadow-[0_0_15px_rgba(14,165,233,0.15)] outline-none w-32 text-center font-bold cursor-pointer transition-all duration-300 flex items-center justify-between px-3">
+                        <span id="customMonthValue" class="flex-1 text-center">فروردین</span>
+                        <svg class="w-4 h-4 text-sky-400 transition-transform duration-300" id="customMonthArrow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div id="customMonthDropdown" class="hidden absolute top-full mt-2 left-0 right-0 bg-slate-950/95 backdrop-blur-md border border-sky-500/30 rounded-2xl overflow-hidden shadow-2xl z-50 transition-all duration-300 scale-95 opacity-0 origin-top max-h-48 overflow-y-auto">
+                        <!-- گزینه‌ها به صورت پویا با جاوااسکریپت مقداردهی می‌شوند -->
+                    </div>
+                    <select id="selMonth" class="hidden">
+                        <option value="فروردین">فروردین</option>
+                        <option value="اردیبهشت">اردیبهشت</option>
+                        <option value="خرداد">خرداد</option>
+                        <option value="تیر">تیر</option>
+                        <option value="مرداد">مرداد</option>
+                        <option value="شهریور">شهریور</option>
+                        <option value="مهر">مهر</option>
+                        <option value="آبان">آبان</option>
+                        <option value="آذر">آذر</option>
+                        <option value="دی">دی</option>
+                        <option value="بهمن">بهمن</option>
+                        <option value="اسفند">اسفند</option>
+                    </select>
+                </div>
+
+                <!-- سال (سفارشی بدون بیرون‌زدگی) -->
+                <div class="flex flex-col relative z-40" id="customYearContainer">
+                    <span class="text-xs text-gray-400 mb-1">سال</span>
+                    <button id="customYearBtn" type="button" class="neon-input p-2.5 rounded-xl bg-slate-900 border border-sky-500/30 text-sky-300 shadow-[0_0_15px_rgba(14,165,233,0.15)] outline-none w-28 text-center font-bold cursor-pointer transition-all duration-300 flex items-center justify-between px-3">
+                        <span id="customYearValue" class="flex-1 text-center">۱۴۰۵</span>
+                        <svg class="w-4 h-4 text-sky-400 transition-transform duration-300" id="customYearArrow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div id="customYearDropdown" class="hidden absolute top-full mt-2 left-0 right-0 bg-slate-950/95 backdrop-blur-md border border-sky-500/30 rounded-2xl overflow-hidden shadow-2xl z-50 transition-all duration-300 scale-95 opacity-0 origin-top max-h-48 overflow-y-auto">
+                        <!-- گزینه‌ها به صورت پویا با جاوااسکریپت مقداردهی می‌شوند -->
+                    </div>
+                    <select id="selYear" class="hidden"></select>
+                </div>
+            </div>
+
+            <div class="flex gap-4 justify-center">
+                <button id="dateSubmitBtn" class="cyber-btn text-white font-bold py-2.5 px-10 rounded-full cursor-pointer transition-all" type="button">ادامه پردازش</button>
+                <button id="dateCancelBtn" class="bg-slate-850 hover:bg-slate-750 text-gray-300 font-bold py-2.5 px-8 rounded-full transition-all" type="button">انصراف</button>
             </div>
         </div>
     </div>
@@ -454,71 +524,10 @@
 
                 <!-- ماژول فعال‌سازی و ساخت خطبه‌نگاشت -->
                 <div id="negashtModule" class="mt-12 border-t border-gray-700/50 pt-8 flex flex-col items-center animate-fade-in">
+                    <!-- کلیک بر روی این دکمه مستقیما بوم‌ها را بر اساس تاریخ اول سایت ترسیم کرده و شو‌روم را اسکرول می‌کند -->
                     <button id="negashtTriggerBtn" class="cyber-btn flex items-center justify-center text-white font-black text-lg py-4 px-10 rounded-2xl shadow-lg w-full max-w-md transition-all duration-300">
                         🎨 ایجاد خطبه‌نگاشت (مذهبی و سیاسی)
                     </button>
-                    
-                    <!-- منوی انتخاب تاریخ نماز جمعه به صورت کشویی (شیک و همسان با تم سایت) -->
-                    <div id="negashtSetupForm" class="hidden w-full max-w-xl mt-6 p-6 glass-panel rounded-2xl border border-sky-500/20 text-center transition-all duration-500">
-                        <h3 class="text-lg font-bold text-sky-400 mb-4">تنظیم تاریخ برگزاری نماز جمعه</h3>
-                        <!-- قرار دادن z-40 برای رفع همیشگی مشکل رفتن دراپ داون‌ها زیر دکمه و بقیه کادرها -->
-                        <div class="flex justify-center items-center gap-4 mb-6 relative z-40">
-                            <!-- روز (سفارشی بدون بیرون‌زدگی) -->
-                            <div class="flex flex-col relative z-40" id="customDayContainer">
-                                <span class="text-xs text-gray-400 mb-1">روز</span>
-                                <button id="customDayBtn" type="button" class="neon-input p-2.5 rounded-xl bg-slate-900 border border-sky-500/30 text-sky-300 shadow-[0_0_15px_rgba(14,165,233,0.15)] outline-none w-24 text-center font-bold cursor-pointer transition-all duration-300 flex items-center justify-between px-3">
-                                    <span id="customDayValue" class="flex-1 text-center">۱</span>
-                                    <svg class="w-4 h-4 text-sky-400 transition-transform duration-300" id="customDayArrow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                                </button>
-                                <div id="customDayDropdown" class="hidden absolute top-full mt-2 left-0 right-0 bg-slate-950/95 backdrop-blur-md border border-sky-500/30 rounded-2xl overflow-hidden shadow-2xl z-50 transition-all duration-300 scale-95 opacity-0 origin-top max-h-48 overflow-y-auto">
-                                    <!-- گزینه‌ها به صورت پویا با جاوااسکریپت مقداردهی می‌شوند -->
-                                </div>
-                                <select id="selDay" class="hidden"></select>
-                            </div>
-                            
-                            <!-- ماه (سفارشی بدون بیرون‌زدگی) -->
-                            <div class="flex flex-col relative z-40" id="customMonthContainer">
-                                <span class="text-xs text-gray-400 mb-1">ماه</span>
-                                <button id="customMonthBtn" type="button" class="neon-input p-2.5 rounded-xl bg-slate-900 border border-sky-500/30 text-sky-300 shadow-[0_0_15px_rgba(14,165,233,0.15)] outline-none w-36 text-center font-bold cursor-pointer transition-all duration-300 flex items-center justify-between px-3">
-                                    <span id="customMonthValue" class="flex-1 text-center">فروردین</span>
-                                    <svg class="w-4 h-4 text-sky-400 transition-transform duration-300" id="customMonthArrow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                                </button>
-                                <div id="customMonthDropdown" class="hidden absolute top-full mt-2 left-0 right-0 bg-slate-950/95 backdrop-blur-md border border-sky-500/30 rounded-2xl overflow-hidden shadow-2xl z-50 transition-all duration-300 scale-95 opacity-0 origin-top max-h-48 overflow-y-auto">
-                                    <!-- گزینه‌ها به صورت پویا با جاوااسکریپت مقداردهی می‌شوند -->
-                                </div>
-                                <select id="selMonth" class="hidden">
-                                    <option value="فروردین">فروردین</option>
-                                    <option value="اردیبهشت">اردیبهشت</option>
-                                    <option value="خرداد">خرداد</option>
-                                    <option value="تیر">تیر</option>
-                                    <option value="مرداد">مرداد</option>
-                                    <option value="شهریور">شهریور</option>
-                                    <option value="مهر">مهر</option>
-                                    <option value="آبان">آبان</option>
-                                    <option value="آذر">آذر</option>
-                                    <option value="دی">دی</option>
-                                    <option value="بهمن">بهمن</option>
-                                    <option value="اسفند">اسفند</option>
-                                </select>
-                            </div>
-
-                            <!-- سال (سفارشی بدون بیرون‌زدگی) -->
-                            <div class="flex flex-col relative z-40" id="customYearContainer">
-                                <span class="text-xs text-gray-400 mb-1">سال</span>
-                                <button id="customYearBtn" type="button" class="neon-input p-2.5 rounded-xl bg-slate-900 border border-sky-500/30 text-sky-300 shadow-[0_0_15px_rgba(14,165,233,0.15)] outline-none w-28 text-center font-bold cursor-pointer transition-all duration-300 flex items-center justify-between px-3">
-                                    <span id="customYearValue" class="flex-1 text-center">۱۴۰۵</span>
-                                    <svg class="w-4 h-4 text-sky-400 transition-transform duration-300" id="customYearArrow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                                </button>
-                                <div id="customYearDropdown" class="hidden absolute top-full mt-2 left-0 right-0 bg-slate-950/95 backdrop-blur-md border border-sky-500/30 rounded-2xl overflow-hidden shadow-2xl z-50 transition-all duration-300 scale-95 opacity-0 origin-top max-h-48 overflow-y-auto">
-                                    <!-- گزینه‌ها به صورت پویا با جاوااسکریپت مقداردهی می‌شوند -->
-                                </div>
-                                <select id="selYear" class="hidden"></select>
-                            </div>
-                        </div>
-                        <button id="renderNegashtBtn" class="bg-emerald-600 hover:bg-emerald-500 text-white font-black py-2.5 px-8 rounded-xl transition duration-300">
-                            🚀 ساخت تصاویر خطبه‌نگاشت
-                        </button>
-                    </div>
                     
                     <!-- ویترین نمایش خطبه‌نگاشت‌های آماده شده -->
                     <div id="negashtShowroom" class="hidden w-full mt-8">
@@ -987,17 +996,16 @@
                 });
             });
 
-            // مدیریت سیستم هوشمند بازگشایی ایمیل در اپلیکیشن رسمی جی‌میل یا نسخه وب جی‌میل (جلوگیری از اوت‌لوک)
+            // مدیریت سیستم هوشمند بازگشایی ایمیل در اپلیکیشن رسمی جی‌میل یا نسخه وب جی‌میل با موضوع خالی
             const supportEmailLink = document.getElementById('supportEmailLink');
             if (supportEmailLink) {
                 supportEmailLink.addEventListener('click', (e) => {
                     e.preventDefault();
                     const email = "info.jomehyar.ir@gmail.com";
-                    const subject = encodeURIComponent("پشتیبانی جمعه یار");
                     
-                    // قالب deep link جی‌میل برای پلتفرم‌های مختلف موبایل و آدرس اختصاصی نسخه وب جی‌میل
-                    const gmailAppUrl = `googlegmail:///co?to=${email}&subject=${subject}`;
-                    const gmailWebUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${email}&su=${subject}`;
+                    // پیوندهای ایمیل بدون موضوع پیش‌فرض جهت پرکردن دلخواه توسط کاربر
+                    const gmailAppUrl = `googlegmail:///co?to=${email}`;
+                    const gmailWebUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${email}`;
                     
                     const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
                     
@@ -1034,8 +1042,6 @@
 
         // اجزای ماژول خطبه‌نگاشت
         const negashtTriggerBtn = document.getElementById('negashtTriggerBtn');
-        const negashtSetupForm = document.getElementById('negashtSetupForm');
-        const renderNegashtBtn = document.getElementById('renderNegashtBtn');
         const negashtShowroom = document.getElementById('negashtShowroom');
 
         // ماژول تایید شرایط استفاده و حریم خصوصی
@@ -1044,6 +1050,11 @@
         const agreeSubmitBtn = document.getElementById('agreeSubmitBtn');
         const agreeCancelBtn = document.getElementById('agreeCancelBtn');
         const viewFullRulesBtn = document.getElementById('viewFullRulesBtn');
+
+        // ماژول تاریخ نماز جمعه در ابتدای سایت
+        const dateModal = document.getElementById('dateModal');
+        const dateSubmitBtn = document.getElementById('dateSubmitBtn');
+        const dateCancelBtn = document.getElementById('dateCancelBtn');
 
         let currentReportData = null; 
         const introText = "به گزارش معاونت ارتباطات و رسانه دفتر امام جمعه دهستان میانکاله (زاغمرز)، حجت الاسلام والمسلمین حاج حسین انزائی در خطبه‌های این هفته از نماز جمعه، ضمن سفارش به تقوا اظهار کرد:";
@@ -1060,21 +1071,20 @@
 
         let loadingInterval;
 
-        // شنونده رویداد آغاز پردازش مجهز به بررسی شرایط تایید قوانین (LocalStorage)
+        // دکمه پردازش اولیه مجهز به بررسی شرایط حریم خصوصی و به دنبال آن بازشدن مدال تاریخ
         generateBtn.addEventListener('click', () => {
             const hasAgreed = localStorage.getItem('jomehyar_agree_terms') === 'true';
             if (!hasAgreed) {
-                // نمایش پاپ‌آپ شرایط قوانین
                 agreementModal.classList.remove('hidden');
                 agreeCheckbox.checked = false;
                 agreeSubmitBtn.disabled = true;
                 agreeSubmitBtn.className = "bg-slate-800 text-gray-500 font-bold py-2.5 px-8 rounded-full cursor-not-allowed transition-all";
             } else {
-                handleGeneration();
+                openDateModal();
             }
         });
 
-        // رویدادهای مربوط به چک‌باکس قوانین
+        // رویدادهای مربوط به چک‌باکس قوانین در اولین اجرا
         agreeCheckbox.addEventListener('change', () => {
             if (agreeCheckbox.checked) {
                 agreeSubmitBtn.disabled = false;
@@ -1085,36 +1095,42 @@
             }
         });
 
-        // کلیک موافقت و ادامه
+        // تایید قوانین و رفتن به مدال ثبت تاریخ خطبه‌ها
         agreeSubmitBtn.addEventListener('click', () => {
             localStorage.setItem('jomehyar_agree_terms', 'true');
             agreementModal.classList.add('hidden');
-            handleGeneration(); // شروع پردازش بلافاصله بدون نیاز به کلیک مجدد
+            openDateModal();
         });
 
-        // کلیک انصراف
         agreeCancelBtn.addEventListener('click', () => {
             agreementModal.classList.add('hidden');
         });
 
-        // دکمه مشاهده قوانین کامل در کادر تایید شرایط اولیه
         viewFullRulesBtn.addEventListener('click', () => {
             rulesSupportModal.classList.remove('hidden');
             selectRulesTab();
+        });
+
+        // توابع مدال تاریخ و مدیریت تاییدیه نهایی شروع پردازش
+        function openDateModal() {
+            dateModal.classList.remove('hidden');
+        }
+
+        dateCancelBtn.addEventListener('click', () => {
+            dateModal.classList.add('hidden');
+        });
+
+        dateSubmitBtn.addEventListener('click', () => {
+            dateModal.classList.add('hidden');
+            handleGeneration(); // اجرای واقعی پردازش هوش مصنوعی
         });
 
         copyBtn.addEventListener('click', copyOutputToClipboard);
         wordBtn.addEventListener('click', exportToWord);
         pdfBtn.addEventListener('click', exportToPDF);
 
-        // مدیریت تعامل دکمه‌های بازشدنی خطبه‌نگاشت
+        // مدیریت تعامل دکمه خطبه‌نگاشت - ساخت مستقیم و آنی تصاویر بر اساس تاریخ از‌پیش‌تعیین‌شده
         negashtTriggerBtn.addEventListener('click', () => {
-            negashtSetupForm.classList.toggle('hidden');
-            const y = negashtSetupForm.getBoundingClientRect().top + window.scrollY - 30;
-            window.scrollTo({top: y, behavior: 'smooth'});
-        });
-
-        renderNegashtBtn.addEventListener('click', () => {
             if (!currentReportData) return;
             
             // نمایش کانتینر اصلی شو روم خطبه‌نگاشت
@@ -1130,7 +1146,7 @@
             document.getElementById('loaderReligious').classList.remove('hidden');
             document.getElementById('loaderPolitical').classList.remove('hidden');
 
-            // قالب‌بندی تاریخ نهایی بر اساس انتخاب کشویی
+            // قالب‌بندی تاریخ نهایی بر اساس مقادیری که در ابتدای سایت وارد شدند
             const d = document.getElementById('selDay').value;
             const m = document.getElementById('selMonth').value;
             const y = document.getElementById('selYear').value;
@@ -1164,7 +1180,6 @@
             resultContainer.classList.add('opacity-0', 'translate-y-10');
             setTimeout(() => {
                 resultContainer.classList.add('hidden');
-                negashtSetupForm.classList.add('hidden');
                 negashtShowroom.classList.add('hidden');
             }, 500);
             errorDiv.classList.add('hidden');
