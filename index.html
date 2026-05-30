@@ -1172,10 +1172,30 @@
         async function exportToWord() {
             if (!currentReportData) return;
 
-            // دریافت تصویر لوگو adwp.png و تبدیل امن آن به Base64
+            // دریافت تصویر لوگو adwp.png، تبدیل امن به Base64 و محاسبه ابعاد دقیق با حفظ نسبت تصویر اصلی (برای جلوگیری از هرگونه کشیدگی در ورد)
             let logoBase64 = '';
+            let logoWidth = 55;
+            let logoHeight = 55;
             try {
                 logoBase64 = await getBase64Image('/logo/adwp.png');
+                if (logoBase64) {
+                    const imgPromise = new Promise((resolve) => {
+                        const img = new Image();
+                        img.src = logoBase64;
+                        img.onload = () => resolve(img);
+                        img.onerror = () => resolve(null);
+                    });
+                    const img = await imgPromise;
+                    if (img) {
+                        const naturalW = img.naturalWidth || img.width || 1;
+                        const naturalH = img.naturalHeight || img.height || 1;
+                        const aspectRatio = naturalW / naturalH;
+                        
+                        // تنظیم پهنا روی ۵۵ پوینت و محاسبه دقیق ارتفاع بر اساس نسبت ابعاد تصویر واقعی لوگو
+                        logoWidth = 55;
+                        logoHeight = Math.round(logoWidth / aspectRatio);
+                    }
+                }
             } catch (err) {
                 console.error("لود لوگو برای سند Word ناموفق بود:", err);
             }
@@ -1188,10 +1208,10 @@
 
             let logoHtml = '';
             if (logoBase64) {
-                // ارجاع به منبع لوکال تعریف شده در ساختار MHTML (با عرض ۵۵ پوینت دقیقا هم‌اندازه ۵۵ پیکسل در PDF)
+                // ارجاع به منبع لوکال تعریف شده در ساختار MHTML با طول و عرض صریح ریاضی (جلوگیری قطعی از دفرمه شدن و کشیدگی لوگو در ورد)
                 logoHtml = `
                 <div style="text-align: center; margin-top: 30pt; padding-top: 20pt; border-top: 1px solid #e2e8f0;">
-                    <img src="logo.png" alt="جمعه یار" width="55" style="width: 55pt; height: auto; display: inline-block;" />
+                    <img src="logo.png" alt="جمعه یار" width="${logoWidth}" height="${logoHeight}" style="width: ${logoWidth}pt; height: ${logoHeight}pt; display: inline-block;" />
                 </div>`;
             }
 
