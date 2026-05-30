@@ -110,11 +110,18 @@
         .cursor-blink::after { content: '|'; animation: blink 1s step-end infinite; color: var(--primary); }
         @keyframes blink { 50% { opacity: 0; } }
 
-        /* استایل سفارشی برای هماهنگی بیشتر گزینه‌های دراپ‌داون با تم تاریک */
+        /* رفع باگ بزرگتر بودن و بیرون‌زدگی منوی کشویی انتخاب تاریخ */
+        select {
+            max-width: 100%;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
         select option {
             background-color: #090d16 !important;
             color: #38bdf8 !important;
+            font-size: 14px !important;
             font-weight: bold;
+            padding: 8px !important;
         }
 
         @media (max-width: 768px) {
@@ -289,19 +296,19 @@
                         🎨 ایجاد خطبه‌نگاشت (مذهبی و سیاسی)
                     </button>
                     
-                    <!-- منوی انتخاب تاریخ نماز جمعه به صورت کشویی (شیک و همسان با تم سایت) -->
+                    <!-- منوی انتخاب تاریخ نماز جمعه به صورت کشویی اصلاح شده برای رفع باگ بیرون‌زدگی کادر -->
                     <div id="negashtSetupForm" class="hidden w-full max-w-xl mt-6 p-6 glass-panel rounded-2xl border border-sky-500/20 text-center transition-all duration-500">
                         <h3 class="text-lg font-bold text-sky-400 mb-4">تنظیم تاریخ برگزاری نماز جمعه</h3>
                         <div class="flex justify-center items-center gap-4 mb-6">
                             <!-- روز -->
-                            <div class="flex flex-col">
-                                <span class="text-xs text-gray-400 mb-1">روز</span>
-                                <select id="selDay" class="neon-input p-2.5 rounded-xl bg-slate-900 border border-sky-500/30 text-sky-300 shadow-[0_0_15px_rgba(14,165,233,0.15)] outline-none w-20 text-center font-bold cursor-pointer transition-all duration-300"></select>
+                            <div class="flex flex-col w-20">
+                                <span class="text-xs text-gray-400 mb-1 text-center">روز</span>
+                                <select id="selDay" class="neon-input p-2.5 rounded-xl bg-slate-900 border border-sky-500/30 text-sky-300 shadow-[0_0_15px_rgba(14,165,233,0.15)] outline-none w-full text-center font-bold cursor-pointer transition-all duration-300"></select>
                             </div>
                             <!-- ماه -->
-                            <div class="flex flex-col">
-                                <span class="text-xs text-gray-400 mb-1">ماه</span>
-                                <select id="selMonth" class="neon-input p-2.5 rounded-xl bg-slate-900 border border-sky-500/30 text-sky-300 shadow-[0_0_15px_rgba(14,165,233,0.15)] outline-none w-32 text-center font-bold cursor-pointer transition-all duration-300">
+                            <div class="flex flex-col w-32">
+                                <span class="text-xs text-gray-400 mb-1 text-center">ماه</span>
+                                <select id="selMonth" class="neon-input p-2.5 rounded-xl bg-slate-900 border border-sky-500/30 text-sky-300 shadow-[0_0_15px_rgba(14,165,233,0.15)] outline-none w-full text-center font-bold cursor-pointer transition-all duration-300">
                                     <option value="فروردین">فروردین</option>
                                     <option value="اردیبهشت">اردیبهشت</option>
                                     <option value="خرداد">خرداد</option>
@@ -317,9 +324,9 @@
                                 </select>
                             </div>
                             <!-- سال -->
-                            <div class="flex flex-col">
-                                <span class="text-xs text-gray-400 mb-1">سال</span>
-                                <select id="selYear" class="neon-input p-2.5 rounded-xl bg-slate-900 border border-sky-500/30 text-sky-300 shadow-[0_0_15px_rgba(14,165,233,0.15)] outline-none w-24 text-center font-bold cursor-pointer transition-all duration-300"></select>
+                            <div class="flex flex-col w-24">
+                                <span class="text-xs text-gray-400 mb-1 text-center">سال</span>
+                                <select id="selYear" class="neon-input p-2.5 rounded-xl bg-slate-900 border border-sky-500/30 text-sky-300 shadow-[0_0_15px_rgba(14,165,233,0.15)] outline-none w-full text-center font-bold cursor-pointer transition-all duration-300"></select>
                             </div>
                         </div>
                         <button id="renderNegashtBtn" class="bg-emerald-600 hover:bg-emerald-500 text-white font-black py-2.5 px-8 rounded-xl transition duration-300">
@@ -790,6 +797,9 @@
             rawText += `---\n🔹 خطبه دوم: ${data.khutbah2.title}\n`;
             data.khutbah2.summary.forEach((i, idx) => rawText += `${idx + 1}. ${i.heading}\n   ${i.explanation}\n\n`);
             rawText += `---\n📌 ${data.overallSummary.title}\n${data.overallSummary.text}`;
+            
+            // اضافه کردن امضای جمعه یار به انتهای متنی که کپی می‌شود
+            rawText += `\n\nجمعه یار - JOMEH YAR`;
             copyHelper.value = toPersianDigits(rawText.trim());
 
             let htmlContent = `
@@ -822,6 +832,11 @@
                         ${toPersianDigits(data.overallSummary.title)}
                     </h4>
                     <p class="text-gray-300 pr-2 leading-relaxed text-sm md:text-base">${toPersianDigits(data.overallSummary.text)}</p>
+                </div>
+                
+                <!-- امضا و تبلیغات متنی انتهای گزارش پس از آغاز هوش مصنوعی -->
+                <div class="text-center mt-6 pt-4 border-t border-gray-700/30 text-gray-400 text-sm font-bold tracking-widest">
+                    جمعه یار - JOMEH YAR
                 </div>
             `;
 
@@ -856,7 +871,7 @@
             }
         }
 
-        // رندرگیری زنده خطبه‌نگاشت بر روی بوم ۲ بعدی (کادر آبی پایینی تصویر)
+        // رندرگیری زنده خطبه‌نگاشت بر روی بوم ۲ بعدی (کادر آبی پایینی تصویر) همراه با درج لوگوی adkh.png در گوشه راست پایین
         async function renderKhutbahNegasht(quote, canvasId, previewId, loaderId, downloadBtnId, dateText) {
             const canvas = document.getElementById(canvasId);
             const ctx = canvas.getContext('2d');
@@ -952,19 +967,45 @@
                 const formattedQuote = `« ${quote} »`;
                 drawTextWithOutline(formattedQuote, centerX, currentY, quoteFont, '#FFDF00', w * 0.82, 1.18);
 
-                try {
-                    previewImg.src = canvas.toDataURL('image/png');
+                // ۴. بارگیری و ترسیم لوگوی تبلیغاتی خطبه‌نگاشت (adkh.png) در پایین سمت راست تصویر خطبه نگاشت
+                const adLogo = new Image();
+                adLogo.src = '/logo/adkh.png';
+                adLogo.onload = function() {
+                    const adWidth = 140; // عرض استاندارد لوگوی تبلیغاتی داخل کادر
+                    const aspectRatio = adLogo.naturalHeight / adLogo.naturalWidth;
+                    const adHeight = adWidth * aspectRatio;
                     
-                    // پنهان کردن لودرها پس از تکمیل موفق فرآیند رندر
-                    loader.classList.add('hidden');
+                    // حاشیه تراز فاصله از لبه‌های پایینی و سمت راست تصویر
+                    const marginX = 40;
+                    const marginY = 40;
                     
-                    // نمایان کردن فریم نهایی پوستر خطبه‌نگاشت و دکمه دانلود متناظر با آن
-                    previewImg.classList.remove('hidden');
-                    downloadBtn.classList.remove('hidden');
+                    const adX = w - adWidth - marginX;
+                    const adY = h - adHeight - marginY;
+                    
+                    ctx.drawImage(adLogo, adX, adY, adWidth, adHeight);
+                    finishRendering();
+                };
+                
+                adLogo.onerror = function() {
+                    // در صورت خطای لود تصویر تبلیغاتی، رندر کادر بدون ایراد تمام شود
+                    finishRendering();
+                };
 
-                } catch (err) {
-                    console.error("خطای بارگذاری بوم:", err);
-                    loader.classList.add('hidden');
+                function finishRendering() {
+                    try {
+                        previewImg.src = canvas.toDataURL('image/png');
+                        
+                        // پنهان کردن لودرها پس از تکمیل موفق فرآیند رندر
+                        loader.classList.add('hidden');
+                        
+                        // نمایان کردن فریم نهایی پوستر خطبه‌نگاشت و دکمه دانلود متناظر با آن
+                        previewImg.classList.remove('hidden');
+                        downloadBtn.classList.remove('hidden');
+
+                    } catch (err) {
+                        console.error("خطای بارگذاری بوم:", err);
+                        loader.classList.add('hidden');
+                    }
                 }
 
                 URL.revokeObjectURL(objectURL); // پاکسازی برای بهینه‌سازی حافظه مرورگر
@@ -1002,6 +1043,7 @@
             const m = document.getElementById('selMonth').value;
             const y = toPersianDigits(document.getElementById('selYear').value);
             const fileName = `خلاصه_خطبه_نماز_جمعه_${d}_${m}-${y}_جمعه_یار.doc`;
+            const adLogoUrl = window.location.origin + '/logo/adwp.png';
 
             let wordHTML = `
             <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
@@ -1020,6 +1062,7 @@
                     .main-title { font-size: 16pt; font-weight: bold; text-align: center; margin-bottom: 15pt; color: #1e3a8a; }
                     .section-title { font-weight: bold; margin-top: 15pt; font-size: 14pt; color: #0284c7; }
                     .list-item { margin-bottom: 8pt; }
+                    .ad-container { text-align: center; margin-top: 35pt; }
                 </style>
             </head>
             <body>
@@ -1043,6 +1086,11 @@
             wordHTML += `
                 <p class="section-title">📌 ${currentReportData.overallSummary.title}</p>
                 <p>${currentReportData.overallSummary.text}</p>
+                
+                <!-- لوگوی تبلیغاتی در انتهای کادر سند ورد به صورت کاملاً وسط‌چین -->
+                <div class="ad-container">
+                    <img src="${adLogoUrl}" alt="جمعه یار" width="160" height="auto" />
+                </div>
             </body>
             </html>`;
 
@@ -1062,6 +1110,17 @@
 
         async function exportToPDF() {
             if (!currentReportData) return;
+
+            // پرولود تصویر adwp.png قبل از تبدیل به تصویر با html2canvas جهت پیشگیری از باگ عدم رندر تصویر خالی
+            const adImg = new Image();
+            adImg.src = '/logo/adwp.png';
+            await new Promise((resolve) => {
+                if (adImg.complete) resolve();
+                else {
+                    adImg.onload = () => resolve();
+                    adImg.onerror = () => resolve(); // در صورت بروز هرگونه خطا جهت جلوگیری از فریز شدن ادامه یابد
+                }
+            });
 
             const cleanPDFContainer = document.createElement('div');
             cleanPDFContainer.style.position = 'absolute';
@@ -1100,9 +1159,14 @@
                     `).join('')}
                 </div>
                 
-                <div style="background-color: #fffbeb; border-right: 4px solid #d97706; padding: 20px; border-radius: 12px;">
+                <div style="background-color: #fffbeb; border-right: 4px solid #d97706; padding: 20px; border-radius: 12px; margin-bottom: 25px;">
                     <h2 style="font-size: 18px; font-weight: bold; color: #b45309; margin: 0 0 10px 0;">📌 ${toPersianDigits(currentReportData.overallSummary.title)}</h2>
                     <p style="font-size: 14px; color: #334155; margin: 0; line-height: 1.65;">${toPersianDigits(currentReportData.overallSummary.text)}</p>
+                </div>
+
+                <!-- لوگوی تبلیغاتی در انتهای فایل پی‌دی‌اف به صورت وسط چین -->
+                <div style="text-align: center; margin-top: 30px;">
+                    <img src="/logo/adwp.png" style="max-width: 160px; height: auto;" alt="جمعه یار" />
                 </div>
             `;
 
