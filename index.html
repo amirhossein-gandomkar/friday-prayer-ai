@@ -4,154 +4,152 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>جمعه یار - سامانه هوشمند خلاصه سازی خطبه ها</title>
-    <!-- تنظیمات فاوآیکون از پوشه logo واقع در ریشه سایت -->
-    <link rel="icon" type="image/png" href="/logo/favicon-96x96.png" sizes="96x96" />
-    <link class="shortcut icon" href="/logo/favicon.ico" />
-    <link class="hidden-manifest" rel="manifest" href="/logo/site.webmanifest" />
+<!-- تنظیمات فاوآیکون از پوشه logo واقع در ریشه سایت -->
+<link rel="icon" type="image/png" href="/logo/favicon-96x96.png" sizes="96x96" />
+<link class="shortcut icon" href="/logo/favicon.ico" />
+<link class="hidden-manifest" rel="manifest" href="/logo/site.webmanifest" />
 
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;700;900&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;700;900&display=swap" rel="stylesheet">
 
-    <!-- پکیج‌های مورد نیاز برای دانلود PDF و Canvas و مبدل استاندارد DOCX بدون خطا -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/html-docx-js@0.3.1/dist/html-docx.min.js"></script>
+<!-- پکیج‌های مورد نیاز برای دانلود PDF و Canvas و مبدل استاندارد DOCX بدون خطا -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/html-docx-js@0.3.1/dist/html-docx.min.js"></script>
 
-    <!-- کتابخانه‌های جدید برای استخراج متن از اسناد متنی، ورد و پی‌دی‌اف در سمت مرورگر -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+<!-- کتابخانه‌های جدید برای استخراج متن از اسناد متنی، ورد و پی‌دی‌اف در سمت مرورگر -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
 
-    <style>
-        :root {
-            --primary: #0ea5e9;
-            --secondary: #8b5cf6;
-            --dark-glass: rgba(15, 23, 42, 0.7);
-        }
+<style>
+    :root {
+        --primary: #0ea5e9;
+        --secondary: #8b5cf6;
+        --dark-glass: rgba(15, 23, 42, 0.7);
+    }
 
-        body {
-            font-family: 'Vazirmatn', sans-serif;
-            margin: 0;
-            overflow-x: hidden;
-            background-color: #020617;
-            color: #e2e8f0;
-        }
+    body {
+        font-family: 'Vazirmatn', sans-serif;
+        margin: 0;
+        overflow-x: hidden;
+        background-color: #020617;
+        color: #e2e8f0;
+    }
 
-        #particle-canvas {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -2; pointer-events: none;
-        }
+    #particle-canvas {
+        position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -2; pointer-events: none;
+    }
 
-        #ai-core {
-            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            width: 90vw; max-width: 400px; height: 90vw; max-height: 400px; 
-            z-index: -1; pointer-events: none; opacity: 0.15;
-            transition: transform 0.1s ease-out; filter: drop-shadow(0 0 30px var(--primary));
-            animation: float 6s ease-in-out infinite;
-        }
-        @keyframes float { 0% { top: 50%; } 50% { top: 48%; } 100% { top: 50%; } }
+    #ai-core {
+        position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+        width: 90vw; max-width: 400px; height: 90vw; max-height: 400px; 
+        z-index: -1; pointer-events: none; opacity: 0.15;
+        transition: transform 0.1s ease-out; filter: drop-shadow(0 0 30px var(--primary));
+        animation: float 6s ease-in-out infinite;
+    }
+    @keyframes float { 0% { top: 50%; } 50% { top: 48%; } 100% { top: 50%; } }
 
-        .glass-panel {
-            background: var(--dark-glass); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7), inset 0 0 0 1px rgba(255, 255, 255, 0.05);
-        }
-        .glass-panel::before {
-            content: ""; position: absolute; top: var(--mouse-y, 0); left: var(--mouse-x, 0);
-            transform: translate(-50%, -50%); 
-            width: 100vw; height: 100vw; max-width: 500px; max-height: 500px;
-            background: radial-gradient(circle, rgba(14, 165, 233, 0.1) 0%, transparent 70%);
-            pointer-events: none; z-index: 0; transition: opacity 0.3s;
-        }
-        .glass-panel > * { position: relative; z-index: 1; }
+    .glass-panel {
+        background: var(--dark-glass); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7), inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+    }
+    .glass-panel::before {
+        content: ""; position: absolute; top: var(--mouse-y, 0); left: var(--mouse-x, 0);
+        transform: translate(-50%, -50%); 
+        width: 100vw; height: 100vw; max-width: 500px; max-height: 500px;
+        background: radial-gradient(circle, rgba(14, 165, 233, 0.1) 0%, transparent 70%);
+        pointer-events: none; z-index: 0; transition: opacity 0.3s;
+    }
+    .glass-panel > * { position: relative; z-index: 1; }
 
-        .neon-input {
-            background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.1); color: #f8fafc; transition: all 0.4s;
-        }
-        .neon-input:focus {
-            background: rgba(0, 0, 0, 0.5); border-color: var(--primary);
-            box-shadow: 0 0 20px rgba(14, 165, 233, 0.2), inset 0 0 10px rgba(14, 165, 233, 0.1); transform: translateY(-2px);
-        }
-        
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #020617; }
-        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--primary); box-shadow: 0 0 10px var(--primary); }
+    .neon-input {
+        background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.1); color: #f8fafc; transition: all 0.4s;
+    }
+    .neon-input:focus {
+        background: rgba(0, 0, 0, 0.5); border-color: var(--primary);
+        box-shadow: 0 0 20px rgba(14, 165, 233, 0.2), inset 0 0 10px rgba(14, 165, 233, 0.1); transform: translateY(-2px);
+    }
+    
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #020617; }
+    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--primary); box-shadow: 0 0 10px var(--primary); }
 
-        .cyber-btn {
-            position: relative; background: linear-gradient(135deg, var(--primary), var(--secondary));
-            overflow: hidden; z-index: 1; transition: all 0.3s ease;
-            touch-action: manipulation;
-        }
-        .cyber-btn::before {
-            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent); transition: left 0.5s ease; z-index: -1;
-        }
-        .cyber-btn:hover::before { left: 100%; }
-        .cyber-btn:hover { box-shadow: 0 0 25px rgba(139, 92, 246, 0.5); transform: scale(1.02); }
+    .cyber-btn {
+        position: relative; background: linear-gradient(135deg, var(--primary), var(--secondary));
+        overflow: hidden; z-index: 1; transition: all 0.3s ease;
+        touch-action: manipulation;
+    }
+    .cyber-btn::before {
+        content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent); transition: left 0.5s ease; z-index: -1;
+    }
+    .cyber-btn:hover::before { left: 100%; }
+    .cyber-btn:hover { box-shadow: 0 0 25px rgba(139, 92, 246, 0.5); transform: scale(1.02); }
 
-        .radar-loader {
-            width: 80px; height: 80px; border-radius: 50%; border: 2px solid rgba(14, 165, 233, 0.2);
-            position: relative; overflow: hidden; box-shadow: 0 0 20px rgba(14, 165, 233, 0.3);
-            margin: 0 auto;
-        }
-        .radar-loader::before {
-            content: ""; position: absolute; top: 50%; left: 50%; width: 50%; height: 50%;
-            background: linear-gradient(45deg, transparent, rgba(14, 165, 233, 0.8));
-            transform-origin: 0 0; animation: radar 2s linear infinite;
-        }
-        @keyframes radar { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    .radar-loader {
+        width: 80px; height: 80px; border-radius: 50%; border: 2px solid rgba(14, 165, 233, 0.2);
+        position: relative; overflow: hidden; box-shadow: 0 0 20px rgba(14, 165, 233, 0.3);
+        margin: 0 auto;
+    }
+    .radar-loader::before {
+        content: ""; position: absolute; top: 50%; left: 50%; width: 50%; height: 50%;
+        background: linear-gradient(45deg, transparent, rgba(14, 165, 233, 0.8));
+        transform-origin: 0 0; animation: radar 2s linear infinite;
+    }
+    @keyframes radar { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        .output-card {
-            background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05);
-            border-radius: 1rem; padding: 1.5rem; margin-bottom: 1rem; position: relative; overflow: hidden;
-            word-wrap: break-word;
-        }
-        .output-card::before { content: ""; position: absolute; top: 0; right: 0; width: 4px; height: 100%; }
-        .output-khutbah1::before { background: #3b82f6; }
-        .output-khutbah2::before { background: #10b981; }
-        .output-overall::before { background: #f59e0b; }
+    .output-card {
+        background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05);
+        border-radius: 1rem; padding: 1.5rem; margin-bottom: 1rem; position: relative; overflow: hidden;
+        word-wrap: break-word;
+    }
+    .output-card::before { content: ""; position: absolute; top: 0; right: 0; width: 4px; height: 100%; }
+    .output-khutbah1::before { background: #3b82f6; }
+    .output-khutbah2::before { background: #10b981; }
+    .output-overall::before { background: #f59e0b; }
 
-        .cursor-blink::after { content: '|'; animation: blink 1s step-end infinite; color: var(--primary); }
-        @keyframes blink { 50% { opacity: 0; } }
+    .cursor-blink::after { content: '|'; animation: blink 1s step-end infinite; color: var(--primary); }
+    @keyframes blink { 50% { opacity: 0; } }
 
-        select option {
-            background-color: #090d16 !important;
-            color: #38bdf8 !important;
-            font-weight: bold;
-        }
+    select option {
+        background-color: #090d16 !important;
+        color: #38bdf8 !important;
+        font-weight: bold;
+    }
 
-        /* استایل‌های اختصاصی دکمه‌های ناوبری بارگذاری جدید */
-        .tab-btn {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            color: #94a3b8;
-            transition: all 0.3s ease;
-        }
-        .tab-btn.active {
-            background: linear-gradient(135deg, rgba(14, 165, 233, 0.25), rgba(139, 92, 246, 0.25));
-            border-color: var(--primary);
-            color: #f8fafc;
-            box-shadow: 0 0 15px rgba(14, 165, 233, 0.15);
-        }
-        .subtab-btn {
-            background: rgba(0, 0, 0, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            color: #94a3b8;
-            transition: all 0.2s ease;
-        }
-        .subtab-btn.active {
-            background: rgba(14, 165, 233, 0.15);
-            border-color: var(--primary);
-            color: #38bdf8;
-        }
+    /* استایل‌های اختصاصی دکمه‌های ناوبری بارگذاری جدید */
+    .tab-btn {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        color: #94a3b8;
+        transition: all 0.3s ease;
+    }
+    .tab-btn.active {
+        background: linear-gradient(135deg, rgba(14, 165, 233, 0.25), rgba(139, 92, 246, 0.25));
+        border-color: var(--primary);
+        color: #f8fafc;
+        box-shadow: 0 0 15px rgba(14, 165, 233, 0.15);
+    }
+    .subtab-btn {
+        background: rgba(0, 0, 0, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        color: #94a3b8;
+        transition: all 0.2s ease;
+    }
+    .subtab-btn.active {
+        background: rgba(14, 165, 233, 0.15);
+        border-color: var(--primary);
+        color: #38bdf8;
+    }
 
-        @media (max-width: 768px) {
-            #particle-canvas { display: none !important; }
-            #ai-core { display: none !important; }
-            .glass-panel::before { display: none !important; }
-        }
-    </style>
-</head>
-<body>
+    @media (max-width: 768px) {
+        #particle-canvas { display: none !important; }
+        #ai-core { display: none !important; }
+        .glass-panel::before { display: none !important; }
+    }
+</style>
 
 <canvas id="particle-canvas"></canvas>
 
@@ -196,43 +194,36 @@
         
         <!-- محتوای کامل تب راهنمای استفاده -->
         <div id="contentGuide" class="hidden space-y-4 overflow-y-auto pr-2 text-sm md:text-base text-gray-300 leading-relaxed flex-1 text-justify">
-            <h3 class="font-bold text-sky-400 text-lg">راهنمای استفاده از سامانه جمعه‌یار</h3>
-            <p>سامانه جمعه‌یار برای سادگی و سرعت در خلاصه‌سازی طراحی شده است. برای دریافت بهترین نتیجه، کافی است مراحل زیر را دنبال کنید:</p>
+            <h3 class="font-bold text-sky-400 text-lg">راهنمای جامع استفاده از سامانه جمعه‌یار</h3>
+            <p>این سامانه برای سهولت در استخراج محتوا و پردازش داده‌ها طراحی شده است. شما می‌توانید به دو روش محتوای خطبه‌ها را به سامانه ارائه دهید:</p>
             
-            <p><strong>گام ۱: ورود محتوا</strong><br>متن کامل خطبه را در کادر اصلی کپی کنید یا فایل متنی خود را در سامانه بارگذاری نمایید.</p>
-            
-            <p><strong>گام ۲: تنظیمات هوشمند و تاریخ</strong></p>
-            <ul class="list-disc list-inside pr-4 space-y-2">
-                <li><strong>اندازه خلاصه:</strong> از منوی کشویی «اندازه خلاصه»، سطح مورد نظر خود را انتخاب کنید:
-                    <ul class="list-circle list-inside pr-6 space-y-1 text-gray-400 text-xs md:text-sm">
-                        <li>• <strong>خلاصه کوتاه:</strong> برای دسترسی سریع به نکات کلیدی (مناسب پیام‌رسان‌ها).</li>
-                        <li>• <strong>خلاصه متوسط:</strong> برای گزارش‌های وبلاگی و خبری.</li>
-                        <li>• <strong>خلاصه بلند:</strong> برای تحلیل‌های جامع و مقالات تحلیلی.</li>
-                    </ul>
-                </li>
-                <li><strong>تعیین تاریخ:</strong> تاریخ شمسی مربوط به خطبه را در کادر تاریخ وارد کنید. این تنظیم برای درج دقیق زمان در خروجی‌های نهایی (مانند خطبه‌نگاشت و نام فایل ها) الزامی است.</li>
+            <p class="font-bold text-sky-300 border-r-2 border-sky-400 pr-2">روش ۱: بارگذاری خطبه اول و دوم به صورت جداگانه (دقت بیشتر)</p>
+            <p class="text-xs text-gray-400">این حالت برای تفکیک حداکثری و پردازش کاملاً دقیق مفاهیم مذهبی (خطبه اول) و سیاسی (خطبه دوم) پیشنهاد می‌شود.</p>
+            <ul class="list-disc list-inside pr-4 space-y-1 text-gray-300 text-xs md:text-sm">
+                <li><strong>تایپ یا Paste:</strong> با باز کردن این حالت، دو کادر متنی مجزا برای پیست یا تایپ مستقیم خطبه‌ها در اختیارتان قرار می‌گیرد.</li>
+                <li><strong>بارگذاری فایل (TXT، Word و PDF):</strong> دو کادر آپلود مستقل برای شما نمایش داده می‌شود. شما باید فایل مربوط به خطبه اول و خطبه دوم را در فیلدهای مخصوص خود بارگذاری کنید.</li>
+                <li class="text-amber-400 font-bold">نکته امنیتی/اعتبارسنجی: در حالت بارگذاری جداگانه، حتماً باید داده‌های مربوط به هر دو خطبه را وارد کنید. در صورت ناقص بودن یکی از بخش‌ها، سامانه خطای هدایت‌کننده صادر خواهد کرد.</li>
             </ul>
 
-            <p><strong>گام ۳: پردازش</strong><br>پس از تکمیل تنظیمات، روی دکمه «آغاز پردازش هوش مصنوعی» کلیک کنید. سامانه در چند ثانیه محتوا را تحلیل و نکات کلیدی را استخراج می‌کند.</p>
-
-            <p><strong>گام ۴: دریافت خروجی</strong><br>پس از نمایش خلاصه، می‌توانید از گزینه‌های پایین کادر خروجی استفاده کنید:</p>
-            <ul class="list-disc list-inside pr-4 space-y-2">
-                <li><strong>کپی متن (هوشمند):</strong> با زدن دکمه کپی متن، منویی با چهار گزینه باز می‌شود:
-                    <ul class="list-circle list-inside pr-6 space-y-1 text-gray-400 text-xs">
-                        <li>• <strong>کپی همه ی خلاصه ها:</strong> کل خلاصه خطبه اول، خطبه دوم و خلاصه کلی را یکجا کپی می‌کند.</li>
-                        <li>• <strong>کپی خلاصه خطبه اول:</strong> خلاصه خطبه اول را همراه با بسم‌الله، تیتر و متن مقدمه کپی می‌کند.</li>
-                        <li>• <strong>کپی خلاصه خطبه دوم:</strong> منحصراً متن خلاصه خطبه دوم را بدون بسم‌الله یا تیتر کپی می‌نماید.</li>
-                        <li>• <strong>کپی خلاصه کلی خطبه ها:</strong> فقط متن خلاصه کلی را همراه با تیتر مربوطه کپی می‌کند.</li>
-                    </ul>
-                </li>
-                <li><strong>دریافت Word یا PDF:</strong> جهت دریافت فایل خروجی استاندارد و بدون به‌هم‌ریختگی با کیفیت فوق‌العاده بالا.</li>
-                <li><strong>خطبه‌نگاشت و ابزار ویرایش لایو:</strong> خروجی خطبه‌ها را در قالب پوستر گرافیکی دریافت کنید. همچنین با زدن دکمه <strong>«ویرایش خطبه نگاشت»</strong>، پنلی باز می‌شود که ابزارهای تغییر اندازه قلم، فاصله خطوط، موقعیت عمودی متن و ویرایش متن اصلی را در اختیارتان می‌گذارد تا تغییرات را زنده دیده و نسخه ویرایش شده را با کیفیت کامل دانلود کنید.</li>
+            <p class="font-bold text-purple-300 border-r-2 border-purple-400 pr-2 mt-4">روش ۲: بارگذاری خطبه اول و دوم به صورت یکجا (دقت متوسط)</p>
+            <p class="text-xs text-gray-400">در صورتی که متن خطبه اول و دوم را به صورت پشت سر هم در قالب یک سند در اختیار دارید، از این حالت استفاده کنید.</p>
+            <ul class="list-disc list-inside pr-4 space-y-1 text-gray-300 text-xs md:text-sm">
+                <li><strong>یک کادر متنی یا فایل واحد:</strong> تنها کافیست متن یا سند کامل را در قالب فایل متنی، ورد (.doc و .docx) و یا پی‌دی‌اف (PDF) در کادر واحد قرار دهید.</li>
+                <li class="text-sky-300 font-bold">نکته هوشمند: هوش مصنوعی سامانه به صورت خودکار، کل سند ارسالی را تحلیل کرده، مرز جداکننده خطبه اول و دوم را تشخیص می‌دهد و آنها را برای فرآیند خلاصه‌سازی تفکیک می‌نماید.</li>
             </ul>
 
-            <p class="font-bold text-purple-400 mt-4">💡 نکات کلیدی برای نتیجه بهتر:</p>
-            <p><strong>دقت در تاریخ:</strong> حتماً قبل از فشردن دکمه پردازش، از صحت تاریخ شمسی وارد شده اطمینان حاصل کنید تا در خروجی‌ها (به‌ویژه خطبه‌نگاشت) دچار خطا نشوید.</p>
-            <p><strong>بازبینی نهایی:</strong> اگرچه هوش مصنوعی دقت بسیار بالایی دارد، توصیه می‌کنیم پیش از انتشار رسمی، خروجی نهایی را یک‌بار مرور کنید.</p>
-            <p><strong>امنیت داده‌ها:</strong> سامانه به‌صورت خودکار پس از پایان جلسه کاری، داده‌های شما را پاک‌سازی می‌کند تا حریم خصوصی شما حفظ شود.</p>
+            <p class="font-bold text-sky-400 mt-4">تنظیمات هوشمند و تاریخ</p>
+            <ul class="list-disc list-inside pr-4 space-y-2 text-xs md:text-sm">
+                <li><strong>اندازه خلاصه:</strong> خلاصه خود را در سه حجم کوتاه (مناسب شبکه‌های اجتماعی)، متوسط (استاندارد خبری) و یا بلند (تحلیلی) تنظیم کنید.</li>
+                <li><strong>تعیین دقیق تاریخ:</strong> تاریخ برگزاری را بر اساس تقویم شمسی تنظیم کنید تا در خروجی‌های خطبه‌نگاشت و اسناد نهایی درج گردد.</li>
+            </ul>
+
+            <p class="font-bold text-purple-400 mt-4">دریافت خروجی‌ها</p>
+            <ul class="list-disc list-inside pr-4 space-y-1 text-xs md:text-sm">
+                <li><strong>کپی متن هوشمند:</strong> کپی تفکیک شده یا کامل خلاصه‌ها با یک کلیک.</li>
+                <li><strong>اسناد Word و PDF:</strong> دریافت خودکار اسناد با فرمت استاندارد بدون به هم ریختگی چیدمان به همراه لوگوی اختصاصی.</li>
+                <li><strong>خطبه‌نگاشت زنده:</strong> تولید خودکار پوسترهای باکیفیت و گرافیکی به همراه پنل لایو ویرایش متن، اندازه قلم و موقعیت عمودی نوشته‌ها.</li>
+            </ul>
         </div>
         
         <div class="mt-6 text-center border-t border-gray-700/50 pt-4">
@@ -281,7 +272,7 @@
             <h3 class="font-bold text-sky-400 text-lg">سوالات متداول (FAQ)</h3>
             
             <div class="space-y-4">
-                <h4 class="font-bold text-purple-400 border-b border-gray-800 pb-1">الف) پرسش‌های مربوط به کیفیت و خروجی:</h4>
+                <h4 class="font-bold text-purple-400 border-b border-gray-800 pb-1 flex">الف) پرسش‌های مربوط به کیفیت و خروجی:</h4>
                 <div class="space-y-2">
                     <p class="font-bold text-gray-200">آیا خلاصه‌های تولید شده نیاز به بازبینی دارند?</p>
                     <p class="text-gray-400">بله، با وجود دقت بالای هوش مصنوعی، پیشنهاد می‌شود برای اطمینان از صحت کامل نقل‌قول‌ها و نکات حساس، خروجی نهایی پیش از انتشار توسط کاربر بازبینی شود.</p>
@@ -397,7 +388,7 @@
                 JOMEH YAR
             </span>
             <img src="/logo/logo.png" alt="جمعه یار" class="h-16 md:h-24 w-auto object-contain transition-transform duration-300 hover:scale-105" />
-            <span class="text-3xl md:text-5xl lg:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-purple-500 drop-shadow-lg leading-none m-0">
+            <span class="text-3xl md:text-5xl lg:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-purple-500 drop-shadow-lg m-0 leading-tight">
                 جمعه یار
             </span>
         </h1>
@@ -898,7 +889,6 @@
         }
     }
 
-    // بهبود هسته دراپ‌داون‌ها جهت بازیابی پویای عناصر نمایشی پس از فرآیند کلون کردن دکمه‌ها
     function setupCustomDropdown(containerId, btnId, dropdownId, arrowId, valueId, hiddenSelectId) {
         const container = document.getElementById(containerId);
         const oldBtn = document.getElementById(btnId);
@@ -907,11 +897,9 @@
 
         if (!container || !oldBtn || !dropdown || !hiddenSelect) return;
 
-        // کلون کردن دکمه جهت حذف رویدادهای کلیک قبلی و پیشگیری قطعی از تکرار چندباره رویدادها
         const btn = oldBtn.cloneNode(true);
         oldBtn.parentNode.replaceChild(btn, oldBtn);
 
-        // یافتن عناصر نمایشی و فلش جهت‌ها از داخل نمونه دکمه جایگزین شده جدید در DOM
         const valueSpan = btn.querySelector('#' + valueId);
         const arrow = btn.querySelector('#' + arrowId);
 
@@ -1001,7 +989,6 @@
         }
     }
 
-    // توابع محاسباتی روزها و سال‌های کبیسه تقویم شمسی جلالی بومی
     function getDaysInShamsiMonth(year, monthName) {
         const shamsiMonths = [
             "فروردین", "اردیبهشت", "خرداد", "تیر", "مرداد", "شهریور",
@@ -1009,10 +996,9 @@
         ];
         const index = shamsiMonths.indexOf(monthName);
         if (index < 0) return 31;
-        if (index < 6) return 31; // نیمه اول سال ۳۱ روزه
-        if (index < 11) return 30; // نیمه دوم سال ۳۰ روزه (مهر تا بهمن)
+        if (index < 6) return 31; 
+        if (index < 11) return 30; 
         
-        // محاسبات دقیق سال کبیسه شمسی (دوره ۳۳ ساله)
         const isLeap = (((year + 38) * 31) % 128) < 31;
         return isLeap ? 30 : 29;
     }
@@ -1033,16 +1019,14 @@
             if (i === prevSelectedDay) {
                 opt.selected = true;
             } else if (i === daysInMonth && prevSelectedDay > daysInMonth) {
-                opt.selected = true; // اگر روز انتخابی قبلی از حد روزهای ماه جدید بیشتر بود، روز آخر ماه جدید ست شود
+                opt.selected = true; 
             }
             selDay.appendChild(opt);
         }
         
-        // بازسازی مجدد ظاهر منوی روز بدون تداخل Listenerها
         setupCustomDropdown('customDayContainer', 'customDayBtn', 'customDayDropdown', 'customDayArrow', 'customDayValue', 'selDay');
     }
 
-    // به روز رسانی پویای سال پایانی کپی‌رایت با اعداد فارسی متناسب با تاریخ روز سیستم
     document.addEventListener('DOMContentLoaded', () => {
         const today = new Date();
         const formatter = new Intl.DateTimeFormat('en-US-u-ca-persian', {
@@ -1080,7 +1064,6 @@
         const selMonth = document.getElementById('selMonth');
         selMonth.value = currentMonthName;
 
-        // مقداردهی اولیه روزها بر اساس ماه جاری و قوانین ماه‌های جلالی
         const selDay = document.getElementById('selDay');
         const daysInMonth = getDaysInShamsiMonth(shamsiYear, currentMonthName);
         for (let i = 1; i <= daysInMonth; i++) {
@@ -1095,7 +1078,6 @@
         setupCustomDropdown('customMonthContainer', 'customMonthBtn', 'customMonthDropdown', 'customMonthArrow', 'customMonthValue', 'selMonth');
         setupCustomDropdown('customYearContainer', 'customYearBtn', 'customYearDropdown', 'customYearArrow', 'customYearValue', 'selYear');
 
-        // ثبت رویدادهای تغییر تاریخ برای مدیریت روزهای ۳۰، ۳۱ و ۲۹ روزه
         selMonth.addEventListener('change', updateDayOptions);
         selYear.addEventListener('change', updateDayOptions);
 
@@ -1220,15 +1202,12 @@
             });
         }
 
-        // مقداردهی اولیه به ساختار سیستم آپلود متن خطبه‌ها
         initWorkspaceUI();
     });
 
-    // متغیرهای ذخیره وضعیت ورودی‌های کاربر
-    let currentMethod = 'separate'; // separate | unified
-    let currentInputType = 'text'; // text | txt | word | pdf
+    let currentMethod = 'separate'; 
+    let currentInputType = 'text'; 
 
-    // اطلاعات متنی خام استخراج شده از فایل‌ها
     let khutbahDataStore = {
         separate: {
             text1: '', text2: '',
@@ -1243,7 +1222,6 @@
         }
     };
 
-    // عناصر ناوبری جدید
     const btnMethodSeparate = document.getElementById('btnMethodSeparate');
     const btnMethodUnified = document.getElementById('btnMethodUnified');
     const btnInputText = document.getElementById('btnInputText');
@@ -1252,7 +1230,6 @@
     const btnInputPdf = document.getElementById('btnInputPdf');
     const inputWorkspace = document.getElementById('inputWorkspace');
 
-    // مدیریت رویدادهای تغییر متد
     btnMethodSeparate.addEventListener('click', () => {
         currentMethod = 'separate';
         btnMethodSeparate.classList.add('active');
@@ -1267,7 +1244,6 @@
         initWorkspaceUI();
     });
 
-    // مدیریت رویدادهای تغییر فرمت ورودی
     const subtabs = [btnInputText, btnInputTxt, btnInputWord, btnInputPdf];
     const inputTypes = ['text', 'txt', 'word', 'pdf'];
 
@@ -1280,7 +1256,6 @@
         });
     });
 
-    // تابع اصلی تولید رابط کاربری ناحیه کار متناسب با گزینه‌های انتخابی به صورت داینامیک
     function initWorkspaceUI() {
         inputWorkspace.innerHTML = '';
         errorDiv.classList.add('hidden');
@@ -1303,12 +1278,10 @@
                         </div>
                     </div>
                 `;
-                // شنود دائم تغییرات جهت ذخیره موقت داده‌ها در زمان تغییر تب‌ها
                 document.getElementById('khutbah1').addEventListener('input', (e) => khutbahDataStore.separate.text1 = e.target.value);
                 document.getElementById('khutbah2').addEventListener('input', (e) => khutbahDataStore.separate.text2 = e.target.value);
 
             } else {
-                // آپلود مجزا فایل‌ها (TXT, Word, PDF)
                 let acceptType = currentInputType === 'txt' ? '.txt' : (currentInputType === 'word' ? '.docx,.doc' : '.pdf');
                 let displayType = currentInputType.toUpperCase();
 
@@ -1354,7 +1327,6 @@
                 document.getElementById('khutbahUnified').addEventListener('input', (e) => khutbahDataStore.unified.text = e.target.value);
 
             } else {
-                // آپلود یکجای فایل‌ها
                 let acceptType = currentInputType === 'txt' ? '.txt' : (currentInputType === 'word' ? '.docx,.doc' : '.pdf');
                 let displayType = currentInputType.toUpperCase();
 
@@ -1376,7 +1348,6 @@
         }
     }
 
-    // فرآیند خواندن و استخراج محلی متن بر اساس نوع فایل بارگذاری شده
     async function handleFileProcessing(event, method, suffix) {
         const file = event.target.files[0];
         if (!file) return;
@@ -1401,7 +1372,6 @@
                 throw new Error("فایل خالی است یا متنی درون آن یافت نشد.");
             }
 
-            // ذخیره‌سازی داده‌های متنی استخراج شده
             if (method === 'separate') {
                 khutbahDataStore.separate[currentInputType + suffix] = extractedText;
                 khutbahDataStore.separate.filenames[currentInputType + suffix] = file.name;
@@ -1421,7 +1391,6 @@
         }
     }
 
-    // خواندن فایل متنی ساده (TXT)
     function readTxtFile(file) {
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
@@ -1431,7 +1400,6 @@
         });
     }
 
-    // خواندن فایل Word با فرمت (DOCX) با کمک Mammoth.js به صورت کاملاً لوکال
     function readDocxFile(file) {
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
@@ -1446,14 +1414,12 @@
         });
     }
 
-    // خواندن فایل PDF به روش بهینه‌سازی شده غیرمستقیم و مرورگری با کمک pdf.js
     function readPdfFile(file) {
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
             reader.onload = function (e) {
                 const arrayBuffer = e.target.result;
                 
-                // مقداردهی به مسیر پیش‌فرض Worker کتابخانه PDF.js
                 pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
                 
                 pdfjsLib.getDocument({ data: arrayBuffer }).promise
@@ -1501,7 +1467,6 @@
     let currentReportData = null; 
     const introText = "به گزارش معاونت ارتباطات و رسانه دفتر امام جمعه دهستان میانکاله (زاغمرز)، حجت الاسلام والمسلمین حاج حسین انزائی در خطبه‌های این هفته از نماز جمعه، ضمن سفارش به تقوا اظهار کرد:";
 
-    // ساختار وضعیت ویرایش خطبه‌نگاشت‌ها
     let religiousEditState = { quote: '', fontSize: 44, lineSpacing: 1.18, yOffset: 0 };
     let religiousTempState = { quote: '', fontSize: 44, lineSpacing: 1.18, yOffset: 0 };
     let politicalEditState = { quote: '', fontSize: 44, lineSpacing: 1.18, yOffset: 0 };
@@ -1606,7 +1571,6 @@
         });
     }
 
-    // متدهای کنترل پنل ویرایش مذهبی
     const editReligiousBtn = document.getElementById('editReligiousBtn');
     const editPanelReligious = document.getElementById('editPanelReligious');
     const editQuoteReligious = document.getElementById('editQuoteReligious');
@@ -1682,7 +1646,6 @@
         });
     }
 
-    // متدهای کنترل پنل ویرایش سیاسی
     const editPoliticalBtn = document.getElementById('editPoliticalBtn');
     const editPanelPolitical = document.getElementById('editPanelPolitical');
     const editQuotePolitical = document.getElementById('editQuotePolitical');
@@ -1758,9 +1721,7 @@
         });
     }
 
-    // فرآیند نهایی اعتبارسنجی و ارسال درخواست خلاصه سازی به مدل هوش مصنوعی واسطه
     async function handleGeneration() {
-        // بستن کیبوردهای احتمالی در موبایل
         const textareas = document.querySelectorAll('textarea');
         textareas.forEach(el => el.blur());
 
@@ -1776,7 +1737,6 @@
         let khutbah2Text = "";
         let unifiedText = "";
 
-        // اعتبارسنجی دقیق و تفکیک داده بر اساس متد انتخابی کاربر
         if (currentMethod === 'separate') {
             if (currentInputType === 'text') {
                 khutbah1Text = khutbahDataStore.separate.text1.trim();
@@ -1786,7 +1746,6 @@
                 khutbah2Text = khutbahDataStore.separate[currentInputType + '2'].trim();
             }
 
-            // خطا در صورت نبود هر یک از دو خطبه در حالت مجزا
             if (!khutbah1Text && !khutbah2Text) {
                 showError("خطا: محتوای هیچکدام از خطبه‌ها وارد نشده است. لطفا فایل یا متن خطبه اول و دوم را آپلود کنید.");
                 return;
@@ -1836,7 +1795,6 @@
             loadingText.innerText = loadingMessages[msgIndex];
         }, 1500);
 
-        // پرامپت پویا بر اساس نحوه ارسال کاربر (یکجا یا تفکیک شده)
         let prompt = "";
         if (currentMethod === 'separate') {
             prompt = `
@@ -1846,11 +1804,11 @@
                 دستورالعمل‌ها:
                 1. فرمت خلاصه سازی خطبه‌ها: ${lengthInstruction}
                 2. impactfulTitle: تیتر کلی، تاثیرگذار و جذاب (یک جمله کوتاه).
-                3. khutbah1.title: تیتر خطبه اول (۲ تا ۴ کلمه).
+                3. khutbah1.title: تیتر اختصاصی خطبه اول (۲ تا ۴ کلمه).
                 4. khutbah1.summary: خلاصه خطبه اول (مذهبی/اخلاقی) بر اساس ساختار طولی بالا (شامل بخش‌های heading و explanation).
-                5. khutbah2.title: تیتر خطبه دوم (۲ تا ۴ کلمه).
+                5. khutbah2.title: تیتر اختصاصی خطبه دوم (۲ تا ۴ کلمه).
                 6. khutbah2.summary: خلاصه خطبه دوم (سیاسی/اجتماعی) بر اساس ساختار طولی بالا.
-                7. overallSummary.title: تیتر خلاصه نهایی (فقط نام خود تیتر نوشته شود و فاقد کلمات اضافی مثل 'خلاصه خطبه ها' باشد).
+                7. overallSummary.title: تیتر اختصاصی، خلاقانه و جذاب برای بخش خلاصه نهایی این هفته (اکیداً تأکید می‌شود که فقط نام تیتر تولیدشده به صورت پویا نوشته شود و به هیچ وجه نباید از عبارات ثابت و کلیشه‌ای مانند "خلاصه خطبه‌های نماز جمعه" یا "خلاصه خطبه ها" استفاده کنید. تیتری بنویسید که جذابیت رسانه‌ای داشته باشد و تلفیقی خلاقانه از موضوع اصلی دو خطبه باشد).
                 8. overallSummary.text: خلاصه کلی و تلفیقی خطبه‌ها به زبان فارسی با ساختار دقیق زیر که طول کل آن (از کلمه 'به گزارش' تا انتهای نقطه پایان) به هیچ وجه از ۴۹۹ کاراکتر بیشتر نشود (حداکثر ۴۹۹ کاراکتر شامل فواصل، علائم نگارشی و حروف باشد، این یک محدودیت سیستمی بسیار سخت‌گیرانه است):
                 "به گزارش معاونت ارتباطات و رسانه دفتر امام جمعه دهستان میانکاله، حجت‌الاسلام والمسلمین حاج حسین انزائی در خطبه اول [خلاصه بسیار کوتاه خطبه اول] (که حتماً با کلماتی مانند تأکید نمود، دانست، مطرح کرد، بیان داشت به پایان برسد) و در خطبه دوم [خلاصه بسیار کوتاه خطبه دوم] (که حتماً با کلماتی مانند تأکید نمود، دانست، مطرح کرد، بیان داشت، خاطرنشان ساخت به پایان برسد)."
                 9. religiousQuote: یک بخش یا فراز مستقل، طولانی و تأثیرگذار (حدود ۲ الی ۳ جمله کامل) که دقیقا و بدون هیچگونه تغییر در جمله‌بندی یا تغییر در معنی، مستقیماً از خود متن خطبه اولِ واردشده برداشته شده باشد. شما به هیچ وجه مجاز به خلاصه کردن یا بازنویسی این جملات نیستید؛ جملات باید با همان لحن و ساختار اصلی خطبه اول باشند و فقط مجاز هستید غلط‌های املایی، غلط‌های نگارشی و علائم دستوری (ویرگول، نقطه و...) را روی آن اصلاح کنید تا برای درج روی تصویر خطبه‌نگاشت مذهبی کاملاً روان و صحیح باشد.
@@ -1867,11 +1825,11 @@
                 دستورالعمل‌ها:
                 1. فرمت خلاصه سازی خطبه‌ها: ${lengthInstruction}
                 2. impactfulTitle: تیتر کلی، تاثیرگذار و جذاب (یک جمله کوتاه).
-                3. khutbah1.title: تیتر خطبه اول که تفکیک کردید (۲ تا ۴ کلمه).
+                3. khutbah1.title: تیتر اختصاصی خطبه اول که تفکیک کردید (۲ تا ۴ کلمه).
                 4. khutbah1.summary: خلاصه خطبه اول (مذهبی/اخلاقی) بر اساس ساختار طولی بالا (شامل بخش‌های heading و explanation).
-                5. khutbah2.title: تیتر خطبه دوم که تفکیک کردید (۲ تا ۴ کلمه).
+                5. khutbah2.title: تیتر اختصاصی خطبه دوم که تفکیک کردید (۲ تا ۴ کلمه).
                 6. khutbah2.summary: خلاصه خطبه دوم (سیاسی/اجتماعی) بر اساس ساختار طولی بالا.
-                7. overallSummary.title: تیتر خلاصه نهایی (فقط نام خود تیتر نوشته شود و فاقد کلمات اضافی مثل 'خلاصه خطبه ها' باشد).
+                7. overallSummary.title: تیتر اختصاصی، خلاقانه و جذاب برای بخش خلاصه نهایی این هفته (اکیداً تأکید می‌شود که فقط نام تیتر تولیدشده به صورت پویا نوشته شود و به هیچ وجه نباید از عبارات ثابت و کلیشه‌ای مانند "خلاصه خطبه‌های نماز جمعه" یا "خلاصه خطبه ها" استفاده کنید. تیتری بنویسید که جذابیت رسانه‌ای داشته باشد و تلفیقی خلاقانه از موضوع اصلی دو خطبه باشد).
                 8. overallSummary.text: خلاصه کلی و تلفیقی خطبه‌ها به زبان فارسی با ساختار دقیق زیر که طول کل آن (از کلمه 'به گزارش' تا انتهای نقطه پایان) به هیچ وجه از ۴۹۹ کاراکتر بیشتر نشود (حداکثر ۴۹۹ کاراکتر شامل فواصل، علائم نگارشی و حروف باشد، این یک محدودیت سیستمی بسیار سخت‌گیرانه است):
                 "به گزارش معاونت ارتباطات و رسانه دفتر امام جمعه دهستان میانکاله، حجت‌الاسلام والمسلمین حاج حسین انزائی در خطبه اول [خلاصه بسیار کوتاه خطبه اول] (که حتماً با کلماتی مانند تأکید نمود، دانست، مطرح کرد، بیان داشت به پایان برسد) و در خطبه دوم [خلاصه بسیار کوتاه خطبه دوم] (که حتماً با کلماتی مانند تأکید نمود، دانست، مطرح کرد، بیان داشت، خاطرنشان ساخت به پایان برسد)."
                 9. religiousQuote: یک بخش یا فراز مستقل، طولانی و تأثیرگذار (حدود ۲ الی ۳ جمله کامل) که دقیقا و بدون هیچگونه تغییر در جمله‌بندی، مستقیماً از بخش مذهبی (خطبه اول) متن واردشده بالا برداشته شده باشد. شما به هیچ وجه مجاز به خلاصه کردن یا بازنویسی این جملات نیستید؛ جملات باید با همان لحن و ساختار اصلی خطبه باشند و فقط مجاز هستید غلط‌های املایی، غلط‌های نگارشی و علائم دستوری (ویرگول، نقطه و...) را روی آن اصلاح کنید تا برای درج روی تصویر خطبه‌نگاشت مذهبی کاملاً روان و صحیح باشد.
@@ -1967,7 +1925,7 @@
             <div class="output-card output-overall">
                 <h4 class="text-lg md:text-xl font-bold text-amber-400 mb-4 flex items-center">
                     <span class="bg-amber-500/20 p-2 rounded-lg ml-3"><svg class="w-5 h-5 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg></span>
-                    ${toPersianDigits(data.overallSummary.title)}
+                    📌 ${toPersianDigits(data.overallSummary.title)}
                 </h4>
                 <p class="text-gray-300 pr-2 leading-relaxed text-sm md:text-base">${toPersianDigits(data.overallSummary.text)}</p>
             </div>
@@ -2215,10 +2173,8 @@
         const m = document.getElementById('selMonth').value;
         const y = toPersianDigits(document.getElementById('selYear').value);
         
-        // تولید سند DOCX فشرده (ZIP) استاندارد و بدون خطا
         const fileName = `خلاصه_خطبه_نماز_جمعه_${d}_${m}-${y}_جمعه_یار.docx`;
 
-        // ساختاربندی پویای متن خروجی Word با اعداد فارسی شده به صورت محلی بدون خراب کردن تگ‌های HTML و Base64
         let wordHTML = `
         <!DOCTYPE html>
         <html lang="fa" dir="rtl">
