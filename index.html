@@ -259,7 +259,7 @@
                         <p class="text-gray-400">بله، با وجود دقت بالای هوش مصنوعی، پیشنهاد می‌شود برای اطمینان از صحت کامل نقل‌قول‌ها و نکات حساس، خروجی نهایی پیش از انتشار توسط کاربر بازبینی شود.</p>
                     </div>
                     <div class="space-y-2">
-                        <p class="font-bold text-gray-200">آیا می‌توانم خروجی را ویرایش کنم؟</p>
+                        <p class="font-bold text-gray-200">آیا می‌توانم خروجی را ویرایش کنم</p>
                         <p class="text-gray-400">بله، تمامی خروجی‌ها (Word، PDF و متن کپی شده) کاملاً قابل ویرایش هستند تا شما بتوانید لحن یا نکات مورد نظر خود را به گزارش اضافه کنید.</p>
                     </div>
                     <div class="space-y-2">
@@ -487,6 +487,7 @@
                     </h2>
                     
                     <div class="flex flex-wrap gap-3 w-full lg:w-auto justify-center">
+                        <!-- دکمه کپی متن به همراه منوی دراپ‌داون گزینه‌ها -->
                         <div class="relative w-full sm:w-auto inline-block text-right" id="copyDropdownContainer">
                             <button id="copyBtn" class="w-full sm:w-auto group flex items-center justify-center bg-gray-800/80 hover:bg-emerald-600 border border-gray-600 hover:border-emerald-500 text-gray-300 hover:text-white font-bold py-3 px-5 rounded-xl transition-all duration-300 shadow-lg">
                                 <svg id="copyIcon" class="w-5 h-5 ml-2 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -832,25 +833,6 @@
                 });
             } catch (e) {
                 console.error("خطا در تبدیل تصویر لوگو به Base64", e);
-                return null;
-            }
-        }
-
-        // تابع بارگیری بسیار تمیز کدهای Base64 لوگوی آفیس ورد از فایل adwp-base64.txt
-        async function getStaticBase64Logo() {
-            try {
-                const response = await fetch('/logo/adwp-base64.txt');
-                if (!response.ok) throw new Error("فایل adwp-base64.txt در مسیر مربوطه یافت نشد.");
-                let text = await response.text();
-                text = text.trim().replace(/\s/g, ''); // حذف هرگونه فضای خالی، فاصله و خطوط جدید
-                
-                // اضافه کردن خودکار هدر فرمت در صورتی که فایل شما فاقد پیش‌وند دیتا باشد
-                if (!text.startsWith('data:image')) {
-                    text = 'data:image/png;base64,' + text;
-                }
-                return text;
-            } catch (e) {
-                console.error("خطا در خواندن لوگوی Base64 از فایل متنی:", e);
                 return null;
             }
         }
@@ -1631,16 +1613,204 @@
             }, 100);
         }
 
+        let cachedBlob = null;
+        async function fetchTemplateBlob() {
+            if (cachedBlob) return cachedBlob;
+            const url = "kh.png?t=" + new Date().getTime();
+            try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error("قالب تصویر خام روی هاست یافت نشد.");
+                cachedBlob = await response.blob();
+                return cachedBlob;
+            } catch (err) {
+                console.error("ارتباط ناموفق با فایل تصویر روی هاست:", err);
+                return null;
+            }
+        }
+
+        let adLogoCached = null;
+        function getAdLogo() {
+            return new Promise((resolve) => {
+                if (adLogoCached) {
+                    resolve(adLogoCached);
+                    return;
+                }
+                const adLogo = new Image();
+                adLogo.src = "/logo/adkh.png";
+                adLogo.onload = function() {
+                    adLogoCached = adLogo;
+                    resolve(adLogoCached);
+                };
+                adLogo.onerror = function() {
+                    resolve(null);
+                };
+            });
+        }
+
+        async function renderKhutbahNegasht(quote, canvasId, previewId, loaderId, downloadBtnId, dateText, editState = null, editBtnId = null) {
+            const canvas = document.getElementById(canvasId);
+            const ctx = canvas.getContext('2d');
+            const previewImg = document.getElementById(previewId);
+            const loader = document.getElementById(loaderId);
+            const downloadBtn = document.getElementById(downloadBtnId);
+
+            const blob = await fetchTemplateBlob();
+            if (!blob) {
+                loader.classList.add('hidden');
+                alert("خطا در بارگیری مستقیم فایل الگو. لطفاً اتصال اینترنت خود را چک کنید.");
+                return;
+            }
+
+            const objectURL = URL.createObjectURL(blob);
+            const bgImg = new Image();
+            bgImg.src = objectURL;
+
+            bgImg.onload = async function() {
+                canvas.width = bgImg.naturalWidth || 1024;
+                canvas.height = bgImg.naturalHeight || 1024;
+
+                ctx.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
+
+                const w = canvas.width;
+                const h = canvas.height;
+                let currentY = h * 0.575; 
+                const centerX = w / 2;
+
+                function drawTextWithOutline(text, x, y, font, fillColor, maxW = null, lineHeightFactor = 1.2) {
+                    ctx.font = font;
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.lineJoin = 'round';
+                    ctx.miterLimit = 2;
+                    ctx.lineWidth = 6;
+                    ctx.strokeStyle = '#000000';
+                    ctx.fillStyle = fillColor;
+
+                    const fontSizeMatch = font.match(/(\d+)px/);
+                    const fontSize = fontSizeMatch ? parseInt(fontSizeMatch[1]) : 24;
+                    const lineHeight = fontSize * lineHeightFactor;
+
+                    if (maxW) {
+                        const words = text.split(' ');
+                        let line = '';
+                        let lines = [];
+                        for (let n = 0; n < words.length; n++) {
+                            let testLine = line + words[n] + ' ';
+                            let metrics = ctx.measureText(testLine);
+                            if (metrics.width > maxW && n > 0) {
+                                lines.push(line.trim());
+                                line = words[n] + ' ';
+                            } else {
+                                line = testLine;
+                            }
+                        }
+                        lines.push(line.trim());
+
+                        lines.forEach(l => {
+                            ctx.strokeText(l, x, y);
+                            ctx.fillText(l, x, y);
+                            y += lineHeight;
+                        });
+                        return y;
+                    } else {
+                        ctx.strokeText(text, x, y);
+                        ctx.fillText(text, x, y);
+                        return y + lineHeight;
+                    }
+                }
+
+                const dateFont = "bold 28px 'B Nazanin', 'Vazirmatn', sans-serif";
+                currentY = drawTextWithOutline(toPersianDigits(dateText), centerX, currentY, dateFont, '#FFFFFF', null, 1.2);
+
+                currentY += 10;
+
+                const speakerFont = "bold 38px 'B Nazanin', 'Vazirmatn', sans-serif";
+                currentY = drawTextWithOutline("امام جمعه محترم دهستان میانکاله (زاغمرز)", centerX, currentY, speakerFont, '#FFFFFF', null, 1.2);
+                currentY += 6;
+                currentY = drawTextWithOutline("حجت الاسلام والمسلمین حاج حسین انزائی:", centerX, currentY, speakerFont, '#FFFFFF', null, 1.2);
+
+                currentY += 18;
+
+                let fontSize = editState ? editState.fontSize : 44;
+                let lineSpacing = editState ? editState.lineSpacing : 1.18;
+                let yOffset = editState ? editState.yOffset : 0;
+                let activeQuote = editState ? editState.quote : quote;
+
+                const quoteFont = `bold ${fontSize}px 'B Titr', 'Vazirmatn', sans-serif`;
+                const formattedQuote = `« ${activeQuote} »`;
+                
+                let finalQuoteY = currentY + yOffset;
+                drawTextWithOutline(formattedQuote, centerX, finalQuoteY, quoteFont, '#FFDF00', w * 0.82, lineSpacing);
+
+                const adLogo = await getAdLogo();
+                if (adLogo) {
+                    const logoNaturalWidth = adLogo.naturalWidth || adLogo.width || 120;
+                    const logoNaturalHeight = adLogo.naturalHeight || adLogo.height || 120;
+                    const logoAspectRatio = logoNaturalWidth / logoNaturalHeight;
+
+                    const logoHeight = Math.round(h * 0.09);
+                    const logoWidth = Math.round(logoHeight * logoAspectRatio);
+
+                    const marginX = Math.round(w * 0.015);
+                    const marginY = Math.round(h * 0.015);
+
+                    const logoX = w - logoWidth - marginX;
+                    const logoY = h - logoHeight - marginY;
+
+                    ctx.drawImage(adLogo, logoX, logoY, logoWidth, logoHeight);
+                }
+                
+                saveCanvasToPreview();
+
+                function saveCanvasToPreview() {
+                    try {
+                        previewImg.src = canvas.toDataURL('image/png');
+                        loader.classList.add('hidden');
+                        previewImg.classList.remove('hidden');
+                        downloadBtn.classList.remove('hidden');
+                        if (editBtnId) {
+                            document.getElementById(editBtnId).classList.remove('hidden');
+                        }
+                    } catch (err) {
+                        console.error("خطای بارگذاری بوم:", err);
+                        loader.classList.add('hidden');
+                    }
+                }
+
+                URL.revokeObjectURL(objectURL);
+            };
+
+            bgImg.onerror = function() {
+                loader.classList.add('hidden');
+                alert("بارگذاری فایل الگو بر روی مرورگر با خطا روبه‌رو شد.");
+                URL.revokeObjectURL(objectURL);
+            };
+        }
+
+        function downloadImage(canvasId, filename) {
+            try {
+                const canvas = document.getElementById(canvasId);
+                const dataUrl = canvas.toDataURL('image/png');
+                const link = document.createElement('a');
+                link.download = filename;
+                link.href = dataUrl;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            } catch (err) {
+                console.error("عدم دانلود تصویر:", err);
+                alert("امکان دانلود مستقیم فراهم نشد. لطفاً انگشت خود را روی عکس نگه داشته و آن را ذخیره کنید.");
+            }
+        }
+
         async function exportToWord() {
             if (!currentReportData) return;
 
             let logoBase64 = '';
-            let logoWidth = 120; // اندازه عرض پیش‌فرض لوگو در ورد
-            let logoHeight = 40; // اندازه ارتفاع پیش‌فرض لوگو در ورد
-
+            let logoWidth = 55;
+            let logoHeight = 55;
             try {
-                // لود بیس۶۴ لوگو به صورت فوق‌العاده سبک و پرسرعت از فایل متنی adwp-base64.txt شما در پوشه لوگو
-                logoBase64 = await getStaticBase64Logo();
+                logoBase64 = await getBase64Image('/logo/adwp.png');
                 if (logoBase64) {
                     const imgPromise = new Promise((resolve) => {
                         const img = new Image();
@@ -1650,31 +1820,25 @@
                     });
                     const img = await imgPromise;
                     if (img) {
-                        const naturalW = img.naturalWidth || img.width || 120;
-                        const naturalH = img.naturalHeight || img.height || 40;
+                        const naturalW = img.naturalWidth || img.width || 1;
+                        const naturalH = img.naturalHeight || img.height || 1;
                         const aspectRatio = naturalW / naturalH;
-                        logoWidth = 80;
+                        logoWidth = 55;
                         logoHeight = Math.round(logoWidth / aspectRatio);
                     }
                 }
             } catch (err) {
-                console.error("خطا در خواندن لوگوی متنی بیس۶۴:", err);
+                console.error("لود لوگو برای سند Word ناموفق بود:", err);
             }
 
             const d = toPersianDigits(document.getElementById('selDay').value);
             const m = document.getElementById('selMonth').value;
             const y = toPersianDigits(document.getElementById('selYear').value);
+            
+            // تولید سند DOCX فشرده (ZIP) استاندارد و بدون خطا
             const fileName = `خلاصه_خطبه_نماز_جمعه_${d}_${m}-${y}_جمعه_یار.docx`;
 
-            // طراحی دقیق تگ تصویر لوگو به منظور نمایش بدون مشکل و تمیز در ورد
-            let logoHtml = '';
-            if (logoBase64) {
-                logoHtml = `
-                <p style="text-align: center; margin-top: 30pt; border-top: 1px solid #e2e8f0; padding-top: 15px;">
-                    <img src="${logoBase64}" width="${logoWidth}" height="${logoHeight}" alt="جمعه یار" />
-                </p>`;
-            }
-
+            // ساختاربندی پویای متن خروجی Word با اعداد فارسی شده به صورت محلی بدون خراب کردن تگ‌های HTML و Base64
             let wordHTML = `
             <!DOCTYPE html>
             <html lang="fa" dir="rtl">
@@ -1696,33 +1860,38 @@
             </head>
             <body style="direction: rtl; text-align: right; font-family: 'B Nazanin', 'Vazirmatn', sans-serif;">
                 <p class="bismillah" style="text-align: center; font-family: 'B Nazanin', sans-serif; font-size: 14pt;">بِسْمِ اللهِ الرَّحْمنِ الرَّحِیم</p>
-                <p class="main-title" style="text-align: center; font-size: 16pt; font-weight: bold; color: #1e3a8a;">«${currentReportData.impactfulTitle}»</p>
-                <p style="direction: rtl; text-align: right; font-size: 14pt;">${introText}</p>
+                <p class="main-title" style="text-align: center; font-size: 16pt; font-weight: bold; color: #1e3a8a;">«${toPersianDigits(currentReportData.impactfulTitle)}»</p>
+                <p style="direction: rtl; text-align: right; font-size: 14pt;">${toPersianDigits(introText)}</p>
 
-                <p class="section-title" style="color: #0284c7; font-weight: bold; font-size: 14pt; direction: rtl; text-align: right;">🔸 خطبه اول: ${currentReportData.khutbah1.title}</p>
+                <p class="section-title" style="color: #0284c7; font-weight: bold; font-size: 14pt; direction: rtl; text-align: right;">🔸 خطبه اول: ${toPersianDigits(currentReportData.khutbah1.title)}</p>
             `;
 
             currentReportData.khutbah1.summary.forEach((item, index) => {
-                wordHTML += `<p class="list-item" style="direction: rtl; text-align: right; font-size: 14pt;">${index + 1}. <b style="font-weight: bold;">${item.heading}</b><br>${item.explanation}</p>`;
+                wordHTML += `<p class="list-item" style="direction: rtl; text-align: right; font-size: 14pt;">${toPersianDigits(index + 1)}. <b style="font-weight: bold;">${toPersianDigits(item.heading)}</b><br>${toPersianDigits(item.explanation)}</p>`;
             });
 
-            wordHTML += `<p class="section-title" style="color: #0284c7; font-weight: bold; font-size: 14pt; direction: rtl; text-align: right;">🔹 خطبه دوم: ${currentReportData.khutbah2.title}</p>`;
+            wordHTML += `<p class="section-title" style="color: #0284c7; font-weight: bold; font-size: 14pt; direction: rtl; text-align: right;">🔹 خطبه دوم: ${toPersianDigits(currentReportData.khutbah2.title)}</p>`;
 
             currentReportData.khutbah2.summary.forEach((item, index) => {
-                wordHTML += `<p class="list-item" style="direction: rtl; text-align: right; font-size: 14pt;">${index + 1}. <b style="font-weight: bold;">${item.heading}</b><br>${item.explanation}</p>`;
+                wordHTML += `<p class="list-item" style="direction: rtl; text-align: right; font-size: 14pt;">${toPersianDigits(index + 1)}. <b style="font-weight: bold;">${toPersianDigits(item.heading)}</b><br>${toPersianDigits(item.explanation)}</p>`;
             });
 
             wordHTML += `
-                <p class="section-title" style="color: #0284c7; font-weight: bold; font-size: 14pt; direction: rtl; text-align: right;">📌 ${currentReportData.overallSummary.title}</p>
-                <p style="direction: rtl; text-align: right; font-size: 14pt;">${currentReportData.overallSummary.text}</p>
-                ${logoHtml}
-            </body>
-            </html>`;
+                <p class="section-title" style="color: #0284c7; font-weight: bold; font-size: 14pt; direction: rtl; text-align: right;">📌 ${toPersianDigits(currentReportData.overallSummary.title)}</p>
+                <p style="direction: rtl; text-align: right; font-size: 14pt;">${toPersianDigits(currentReportData.overallSummary.text)}</p>
+            `;
 
-            wordHTML = toPersianDigits(wordHTML);
+            if (logoBase64) {
+                wordHTML += `
+                <div style="text-align: center; margin-top: 30pt; padding-top: 20pt; border-top: 1px solid #e2e8f0;">
+                    <img src="${logoBase64}" alt="جمعه یار" width="${logoWidth}" height="${logoHeight}" style="display: inline-block;" />
+                </div>`;
+            }
+
+            wordHTML += `</body></html>`;
 
             try {
-                // تبدیل کدهای HTML به فایل باینری فشرده معتبر .docx با ساختار زیپ استاندارد
+                // تبدیل هوشمند HTML به فایل DOCX باینری استاندارد فشرده برای رفع قطعی تمام هشدارهای مایکروسافت ورد
                 const docxBlob = htmlDocx.asBlob(wordHTML);
                 const url = URL.createObjectURL(docxBlob);
                 const link = document.createElement('a');
@@ -1734,6 +1903,7 @@
                 URL.revokeObjectURL(url);
             } catch (e) {
                 console.error("خطا در ایجاد فایل DOCX واقعی، دانلود در قالب سند DOC کمکی:", e);
+                // راهکار کمکی در صورت بروز نقص فنی در لود کتابخانه
                 const blob = new Blob(['\ufeff', wordHTML], { type: 'application/msword' });
                 const url = URL.createObjectURL(blob);
                 const link = document.createElement('a');
@@ -1868,7 +2038,7 @@
                 currentReportData.khutbah1.summary.forEach((i, idx) => rawText += `${idx + 1}. ${i.heading}\n   ${i.explanation}\n\n`);
                 rawText += `---\n🔹 خطبه دوم: ${currentReportData.khutbah2.title}\n`;
                 currentReportData.khutbah2.summary.forEach((i, idx) => rawText += `${idx + 1}. ${i.heading}\n   ${i.explanation}\n\n`);
-                rawText += `---\n📌 ${data.overallSummary.title}\n${data.overallSummary.text}`;
+                rawText += `---\n📌 ${currentReportData.overallSummary.title}\n${currentReportData.overallSummary.text}`;
                 textToCopy = toPersianDigits(rawText.trim()) + "\n\nجمعه یار - JOMEH YAR";
             } else if (type === 'first') {
                 let firstText = `بِسْمِ اللهِ الرَّحْمنِ الرَّحِیم\n\n«${currentReportData.impactfulTitle}»\n\n${introText}\n\n🔸 خطبه اول: ${currentReportData.khutbah1.title}\n`;
