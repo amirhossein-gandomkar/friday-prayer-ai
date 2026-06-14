@@ -7,7 +7,6 @@
     
     <!-- تنظیمات فاوآیکون از پوشه logo واقع در ریشه سایت -->
     <link rel="icon" type="image/png" href="/logo/favicon-96x96.png" sizes="96x96" />
-    <link rel="icon" type="image/svg+xml" href="/logo/favicon.svg" />
     <link class="shortcut icon" href="/logo/favicon.ico" />
     <link class="hidden-manifest" rel="manifest" href="/logo/site.webmanifest" />
 
@@ -109,7 +108,6 @@
         .cursor-blink::after { content: '|'; animation: blink 1s step-end infinite; color: var(--primary); }
         @keyframes blink { 50% { opacity: 0; } }
 
-        /* استایل سفارشی برای هماهنگی بیشتر گزینه‌های دراپ‌داون با تم تاریک */
         select option {
             background-color: #090d16 !important;
             color: #38bdf8 !important;
@@ -142,12 +140,10 @@
             <div class="text-center mb-6">
                 <h2 class="text-2xl md:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-purple-500">راهنما و درباره ما</h2>
             </div>
-            <!-- دکمه‌های کنترل تب‌ها -->
             <div class="flex border-b border-gray-700/50 mb-4 text-sm md:text-base">
                 <button id="tabAbout" class="flex-1 py-2 font-bold border-b-2 border-sky-400 text-sky-400 transition-all">درباره ما</button>
                 <button id="tabGuide" class="flex-1 py-2 font-bold border-b-2 border-transparent text-gray-400 hover:text-sky-300 transition-all">راهنمای استفاده</button>
             </div>
-            <!-- محتوای تب درباره ما -->
             <div id="contentAbout" class="space-y-4 overflow-y-auto pr-2 text-sm md:text-base text-gray-300 leading-relaxed flex-1">
                 <h3 class="font-bold text-sky-400 text-lg">درباره ما:</h3>
                 <p>
@@ -159,10 +155,9 @@
                 </p>
                 <h4 class="font-bold text-sky-400">هویت و توسعه</h4>
                 <p>
-                    This system was developed by <strong>Amirhossein Gandomkar</strong>.
+                    این سامانه با تلاش و دانش فنی <strong>امیرحسین گندمکار</strong> از سال ۱۴۰۴ آغاز به کار کرده است. تمامی فرآیندهای طراحی، توسعه زیرساخت‌های هوش مصنوعی و پیاده‌سازی رابط کاربری این وب‌سایت، با تکیه بر دانش بومی و رویکردی خلاقانه جهت ساده‌سازی پیچیدگی‌های رسانه‌ای انجام شده است.
                 </p>
             </div>
-            <!-- محتوای تب راهنمای استفاده -->
             <div id="contentGuide" class="hidden space-y-4 overflow-y-auto pr-2 text-sm md:text-base text-gray-300 leading-relaxed flex-1">
                 <h3 class="font-bold text-sky-400 text-lg">راهنمای استفاده از سامانه جمعه‌یار</h3>
                 <p>سامانه جمعه‌یار برای سادگی و سرعت در خلاصه‌سازی طراحی شده است. برای دریافت بهترین نتیجه، کافی است مراحل زیر را دنبال کنید:</p>
@@ -191,23 +186,19 @@
             <div class="text-center mb-6">
                 <h2 class="text-2xl md:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-purple-500">مرکز قوانین و پشتیبانی</h2>
             </div>
-            <!-- تب‌ها -->
             <div class="flex border-b border-gray-700/50 mb-4 text-xs md:text-sm">
                 <button id="tabRules" class="flex-1 py-2 font-bold border-b-2 border-sky-400 text-sky-400 transition-all">قوانین و حریم خصوصی</button>
                 <button id="tabFAQ" class="flex-1 py-2 font-bold border-b-2 border-transparent text-gray-400 hover:text-sky-300 transition-all">سوالات متداول (FAQ)</button>
                 <button id="tabSupport" class="flex-1 py-2 font-bold border-b-2 border-transparent text-gray-400 hover:text-sky-300 transition-all">پشتیبانی و ارتباط</button>
             </div>
-            <!-- محتوا تب ۱ -->
             <div id="contentRules" class="space-y-4 overflow-y-auto pr-2 text-sm md:text-base text-gray-300 leading-relaxed flex-1">
                 <h3 class="font-bold text-sky-400 text-lg">شرایط و قوانین استفاده</h3>
                 <p>استفاده از خدمات سامانه جمعه‌یار به منزله پذیرش کامل قوانین است.</p>
             </div>
-            <!-- محتوا تب ۲ -->
             <div id="contentFAQ" class="hidden space-y-4 overflow-y-auto pr-2 text-sm md:text-base text-gray-300 leading-relaxed flex-1">
                 <h3 class="font-bold text-sky-400 text-lg">سوالات متداول (FAQ)</h3>
                 <p>در این بخش پاسخ به متداول‌ترین ابهامات کاربران قرار داده شده است.</p>
             </div>
-            <!-- محتوا تب ۳ -->
             <div id="contentSupport" class="hidden space-y-4 overflow-y-auto pr-2 text-sm md:text-base text-gray-300 leading-relaxed flex-1 flex flex-col justify-start text-center pt-6">
                 <h3 class="font-bold text-sky-400 text-xl mb-4">پشتیبانی و ارتباط با ما</h3>
                 <div class="mt-8 flex flex-col items-center">
@@ -395,10 +386,10 @@
                                 <svg class="w-4 h-4 mr-2 transition-transform duration-300" id="copyArrow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                             </button>
                             <div id="copyDropdown" class="hidden absolute top-full mt-2 right-0 left-0 sm:left-auto bg-slate-950/95 border border-emerald-500/30 rounded-xl overflow-hidden shadow-2xl z-[100] w-full sm:w-56 transition-all duration-300 scale-95 opacity-0 origin-top">
-                                <button class="copy-opt w-full text-right py-2.5 px-4 hover:bg-emerald-500/20 text-gray-300 hover:text-emerald-300 transition-colors font-bold text-sm" data-type="all">کپی همه</button>
-                                <button class="copy-opt w-full text-right py-2.5 px-4 hover:bg-emerald-500/20 text-gray-300 hover:text-emerald-300 transition-colors font-bold text-sm border-t border-gray-800/30" data-type="first">کپی خطبه اول</button>
-                                <button class="copy-opt w-full text-right py-2.5 px-4 hover:bg-emerald-500/20 text-gray-300 hover:text-emerald-300 transition-colors font-bold text-sm border-t border-gray-800/30" data-type="second">کپی خطبه دوم</button>
-                                <button class="copy-opt w-full text-right py-2.5 px-4 hover:bg-emerald-500/20 text-gray-300 hover:text-emerald-300 transition-colors font-bold text-sm border-t border-gray-800/30" data-type="overall">کپی متن خلاصه کلی</button>
+                                <button class="copy-opt w-full text-right py-2.5 px-4 hover:bg-emerald-500/20 text-gray-300 hover:text-emerald-300 transition-colors font-bold text-sm" data-type="all">کپی همه ی خلاصه ها</button>
+                                <button class="copy-opt w-full text-right py-2.5 px-4 hover:bg-emerald-500/20 text-gray-300 hover:text-emerald-300 transition-colors font-bold text-sm border-t border-gray-800/30" data-type="first">کپی خلاصه خطبه اول</button>
+                                <button class="copy-opt w-full text-right py-2.5 px-4 hover:bg-emerald-500/20 text-gray-300 hover:text-emerald-300 transition-colors font-bold text-sm border-t border-gray-800/30" data-type="second">کپی خلاصه خطبه دوم</button>
+                                <button class="copy-opt w-full text-right py-2.5 px-4 hover:bg-emerald-500/20 text-gray-300 hover:text-emerald-300 transition-colors font-bold text-sm border-t border-gray-800/30" data-type="overall">کپی خلاصه کلی خطبه ها</button>
                             </div>
                         </div>
 
@@ -628,7 +619,6 @@
             window.addEventListener('mouseout', () => { mouse.x = null; mouse.y = null; });
         }
 
-        // منطق مدیریت مدال معرفی سامانه
         const infoBtn = document.getElementById('infoBtn');
         const infoModal = document.getElementById('infoModal');
         const closeInfoBtn = document.getElementById('closeInfoBtn');
@@ -665,7 +655,6 @@
             if (e.target === infoModal) closeModal();
         });
 
-        // تعریف رویدادها و کلیدهای مرکز قوانین و پشتیبانی
         const rulesSupportBtn = document.getElementById('rulesSupportBtn');
         const rulesSupportModal = document.getElementById('rulesSupportModal');
         const closeRulesBtn = document.getElementById('closeRulesBtn');
@@ -1188,7 +1177,7 @@
             const d = document.getElementById('selDay').value;
             const m = document.getElementById('selMonth').value;
             const y = document.getElementById('selYear').value;
-            const fullDateString = `نماز جمعه ${d} ${m} ${y} دهستان میانکاله (زاغمرز)`;
+            const fullDateString = `نماز جمعه ${d} ${m} ${y} دهستان میانکاله (زاغمرz)`;
 
             renderKhutbahNegasht(religiousTempState.quote, 'canvasReligious', 'imgReligiousPreview', 'loaderReligious', 'downloadReligiousBtn', fullDateString, religiousTempState, 'editReligiousBtn');
         }
@@ -1454,7 +1443,6 @@
             }, 100);
         }
 
-        // کش کردن قالب‌های تصویر جهت لود فوق‌سریع و زنده ویرایشگر خطبه‌نگاشت
         let cachedBlob = null;
         async function fetchTemplateBlob() {
             if (cachedBlob) return cachedBlob;
@@ -1489,7 +1477,6 @@
             });
         }
 
-        // رندر خطبه‌نگاشت با پشتیبانی کامل از ویرایشگر لایو و جلوگیری از بیرون‌زدگی متن
         async function renderKhutbahNegasht(quote, canvasId, previewId, loaderId, downloadBtnId, dateText, editState = null, editBtnId = null) {
             const canvas = document.getElementById(canvasId);
             const ctx = canvas.getContext('2d');
@@ -1519,7 +1506,6 @@
                 let currentY = h * 0.575; 
                 const centerX = w / 2;
 
-                // تابع ترسیم متن با بسته‌بندی ایمن کلمات به منظور ممانعت مطلق از بیرون‌زدگی چپ و راست
                 function drawTextWithOutline(text, x, y, font, fillColor, maxW = null, lineHeightFactor = 1.2) {
                     ctx.font = font;
                     ctx.textAlign = 'center';
@@ -1575,7 +1561,6 @@
 
                 currentY += 18;
 
-                // دریافت پارامترهای شخصی‌سازی شده از کنترلرهای ویرایشگر لایو
                 let fontSize = editState ? editState.fontSize : 44;
                 let lineSpacing = editState ? editState.lineSpacing : 1.18;
                 let yOffset = editState ? editState.yOffset : 0;
@@ -1679,8 +1664,9 @@
             const d = toPersianDigits(document.getElementById('selDay').value);
             const m = document.getElementById('selMonth').value;
             const y = toPersianDigits(document.getElementById('selYear').value);
-            // تغییر فرمت دانلود فایل خروجی به .docx
-            const fileName = `خلاصه_خطبه_نماز_جمعه_${d}_${m}-${y}_جمعه_یار.docx`;
+            
+            // بازگشت به فرمت پایدار و بدون خطای .doc به منظور تضمین همیشگی باز شدن فایل در مایکروسافت ورد
+            const fileName = `خلاصه_خطبه_نماز_جمعه_${d}_${m}-${y}_جمعه_یار.doc`;
 
             let logoHtml = '';
             if (logoBase64) {
@@ -1736,7 +1722,7 @@
             wordHTML = toPersianDigits(wordHTML);
 
             let blob;
-            const mimeType = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+            const mimeType = 'application/msword';
             if (logoBase64) {
                 const logoBase64DataOnly = logoBase64.split(',')[1];
                 const mhtml = `MIME-Version: 1.0
@@ -1841,15 +1827,15 @@ ${logoBase64DataOnly}
             document.body.appendChild(cleanPDFContainer);
 
             try {
-                // بهینه‌سازی مقیاس رندر (scale: 1.5) برای کاهش اندازه نهایی سند PDF به کمتر از ۱.۸ مگابایت
+                // تنظیم مقیاس رندر روی ۲ به منظور بازیابی کامل وضوح فونت و کیفیت عالی آن در چاپ
                 const canvas = await html2canvas(cleanPDFContainer, {
-                    scale: 1.5, 
+                    scale: 2, 
                     useCORS: true,
                     backgroundColor: '#ffffff'
                 });
                 
-                // بهینه‌سازی ضریب فشرده‌سازی عکس جهت حفظ کیفیت متن و محدودسازی چشمگیر حجم نهایی فایل زیر ۱.۸ مگابایت
-                const imgData = canvas.toDataURL('image/jpeg', 0.7);
+                // افزایش ظریب فشرده‌سازی روی 0.90 جهت ایجاد تعادل حجم مناسب (بین ۱ الی ۱.۸ مگابایت) همراه با بازگردانی حداکثر شفافیت نوشته‌ها
+                const imgData = canvas.toDataURL('image/jpeg', 0.90);
                 const { jsPDF } = window.jspdf;
                 const pdf = new jsPDF('p', 'mm', 'a4');
                 const imgWidth = 210; 
@@ -1884,7 +1870,6 @@ ${logoBase64DataOnly}
 
         function showError(message) { errorMessageSpan.textContent = message; errorDiv.classList.remove('hidden'); }
         
-        // تابع مدیریت کپی متن با گزینه‌های دراپ‌داون مجزا
         async function handleCopyAction(type) {
             if (!currentReportData) return;
 
@@ -1899,11 +1884,13 @@ ${logoBase64DataOnly}
                 rawText += `---\n📌 ${currentReportData.overallSummary.title}\n${currentReportData.overallSummary.text}`;
                 textToCopy = toPersianDigits(rawText.trim()) + "\n\nجمعه یار - JOMEH YAR";
             } else if (type === 'first') {
-                let firstText = `بِسْمِ اللهِ الرَّحْمنِ الرَّحِیم\n\n🔸 خطبه اول: ${currentReportData.khutbah1.title}\n`;
+                // درج «بسم الله»، «تیتر اصلی»، «جمله به گزارش معاونت...» و خلاصه خطبه اول به صورت هماهنگ
+                let firstText = `بِسْمِ اللهِ الرَّحْمنِ الرَّحِیم\n\n«${currentReportData.impactfulTitle}»\n\n${introText}\n\n🔸 خطبه اول: ${currentReportData.khutbah1.title}\n`;
                 currentReportData.khutbah1.summary.forEach((i, idx) => firstText += `${idx + 1}. ${i.heading}\n   ${i.explanation}\n\n`);
                 textToCopy = toPersianDigits(firstText.trim());
             } else if (type === 'second') {
-                let secondText = `بِسْمِ اللهِ الرَّحْمنِ الرَّحِیم\n\n🔹 خطبه دوم: ${currentReportData.khutbah2.title}\n`;
+                // کپی اختصاصی و خالص خطبه دوم بدون «بسم الله»، «تیتر اصلی» و «جمله مقدمه»
+                let secondText = `🔹 خطبه دوم: ${currentReportData.khutbah2.title}\n`;
                 currentReportData.khutbah2.summary.forEach((i, idx) => secondText += `${idx + 1}. ${i.heading}\n   ${i.explanation}\n\n`);
                 textToCopy = toPersianDigits(secondText.trim());
             } else if (type === 'overall') {
