@@ -144,10 +144,12 @@
                 <button id="tabAbout" class="flex-1 py-2 font-bold border-b-2 border-sky-400 text-sky-400 transition-all">درباره ما</button>
                 <button id="tabGuide" class="flex-1 py-2 font-bold border-b-2 border-transparent text-gray-400 hover:text-sky-300 transition-all">راهنمای استفاده</button>
             </div>
-            <div id="contentAbout" class="space-y-4 overflow-y-auto pr-2 text-sm md:text-base text-gray-300 leading-relaxed flex-1">
+            
+            <!-- محتوای کامل تب درباره ما -->
+            <div id="contentAbout" class="space-y-4 overflow-y-auto pr-2 text-sm md:text-base text-gray-300 leading-relaxed flex-1 text-justify">
                 <h3 class="font-bold text-sky-400 text-lg">درباره ما:</h3>
                 <p>
-                    <strong>سامانه جمعه‌یار</strong> با هدف بهره‌گیری از فناوری‌های نوین هوش مصنوعی در مسیر تسهیل و ارتقای کیفیت گزارش‌نویسی و بازتاب رسانه‌ای خطبه‌های نماز جمعه طراحی و توسعه یافته است.
+                    سامانه جمعه‌یار با هدف بهره‌گیری از فناوری‌های نوین هوش مصنوعی در مسیر تسهیل و ارتقای کیفیت گزارش‌نویسی و بازتاب رسانه‌ای خطبه‌های نماز جمعه طراحی و توسعه یافته است.
                 </p>
                 <h4 class="font-bold text-purple-400">مأموریت و چشم‌انداز</h4>
                 <p>
@@ -155,22 +157,54 @@
                 </p>
                 <h4 class="font-bold text-sky-400">هویت و توسعه</h4>
                 <p>
-                    این سامانه با تلاش و دانش فنی <strong>امیرحسین گندمکار</strong> از سال ۱۴۰۴ آغاز به کار کرده است. تمامی فرآیندهای طراحی، توسعه زیرساخت‌های هوش مصنوعی و پیاده‌سازی رابط کاربری این وب‌سایت، با تکیه بر دانش بومی و رویکردی خلاقانه جهت ساده‌سازی پیچیدگی‌های رسانه‌ای انجام شده است.
+                    این سامانه با تلاش و دانش فنی امیرحسین گندمکار از سال ۱۴۰۴ آغاز به کار کرده است. تمامی فرآیندهای طراحی، توسعه زیرساخت‌های هوش مصنوعی و پیاده‌سازی رابط کاربری این وب‌سایت، با تکیه بر دانش بومی و رویکردی خلاقانه جهت ساده‌سازی پیچیدگی‌های رسانه‌ای انجام شده است.
+                </p>
+                <p>
+                    ما در جمعه‌یار باور داریم که ترکیب فناوری روز با محتوای ارزشمند، می‌تواند بستری پویا برای انتقال پیام‌ها و آموزه‌های نماز جمعه فراهم آورد. ما همواره در تلاشیم تا با به‌روزرسانی‌های مستمر، کیفیتی درخور و شایسته را به کاربران ارائه دهیم.
                 </p>
             </div>
-            <div id="contentGuide" class="hidden space-y-4 overflow-y-auto pr-2 text-sm md:text-base text-gray-300 leading-relaxed flex-1">
+            
+            <!-- محتوای کامل تب راهنمای استفاده -->
+            <div id="contentGuide" class="hidden space-y-4 overflow-y-auto pr-2 text-sm md:text-base text-gray-300 leading-relaxed flex-1 text-justify">
                 <h3 class="font-bold text-sky-400 text-lg">راهنمای استفاده از سامانه جمعه‌یار</h3>
                 <p>سامانه جمعه‌یار برای سادگی و سرعت در خلاصه‌سازی طراحی شده است. برای دریافت بهترین نتیجه، کافی است مراحل زیر را دنبال کنید:</p>
-                <div class="space-y-3">
-                    <p><strong>گام ۱: ورود محتوا</strong><br>متن کامل خطبه را در کادر اصلی کپی کنید یا فایل متنی خود را در سامانه بارگذاری نمایید.</p>
-                    <p><strong>گام ۲: تنظیمات هوشمند و تاریخ</strong></p>
-                    <ul class="list-disc list-inside pr-4 space-y-2">
-                        <li><strong>اندازه خلاصه:</strong> از منوی کشویی «اندازه خلاصه»، سطح مورد نظر خود را انتخاب کنید.</li>
-                        <li><strong>تعیین تاریخ:</strong> تاریخ شمسی مربوط به خطبه را در کادر تاریخ وارد کنید.</li>
-                    </ul>
-                    <p><strong>گام ۳: پردازش</strong><br>پس از تکمیل تنظیمات، روی دکمه «آغاز پردازش هوش مصنوعی» کلیک کنید.</p>
-                </div>
+                
+                <p><strong>گام ۱: ورود محتوا</strong><br>متن کامل خطبه را در کادر اصلی کپی کنید یا فایل متنی خود را در سامانه بارگذاری نمایید.</p>
+                
+                <p><strong>گام ۲: تنظیمات هوشمند و تاریخ</strong></p>
+                <ul class="list-disc list-inside pr-4 space-y-2">
+                    <li><strong>اندازه خلاصه:</strong> از منوی کشویی «اندازه خلاصه»، سطح مورد نظر خود را انتخاب کنید:
+                        <ul class="list-circle list-inside pr-6 space-y-1 text-gray-400 text-xs md:text-sm">
+                            <li>• <strong>خلاصه کوتاه:</strong> برای دسترسی سریع به نکات کلیدی (مناسب پیام‌رسان‌ها).</li>
+                            <li>• <strong>خلاصه متوسط:</strong> برای گزارش‌های وبلاگی و خبری.</li>
+                            <li>• <strong>خلاصه بلند:</strong> برای تحلیل‌های جامع و مقالات تحلیلی.</li>
+                        </ul>
+                    </li>
+                    <li><strong>تعیین تاریخ:</strong> تاریخ شمسی مربوط به خطبه را در کادر تاریخ وارد کنید. این تنظیم برای درج دقیق زمان در خروجی‌های نهایی (مانند خطبه‌نگاشت و نام فایل ها) الزامی است.</li>
+                </ul>
+
+                <p><strong>گام ۳: پردازش</strong><br>پس از تکمیل تنظیمات، روی دکمه «آغاز پردازش هوش مصنوعی» کلیک کنید. سامانه در چند ثانیه محتوا را تحلیل و نکات کلیدی را استخراج می‌کند.</p>
+
+                <p><strong>گام ۴: دریافت خروجی</strong><br>پس از نمایش خلاصه، می‌توانید از گزینه‌های پایین کادر خروجی استفاده کنید:</p>
+                <ul class="list-disc list-inside pr-4 space-y-2">
+                    <li><strong>کپی متن (هوشمند):</strong> با زدن دکمه کپی متن، منویی با چهار گزینه باز می‌شود:
+                        <ul class="list-circle list-inside pr-6 space-y-1 text-gray-400 text-xs">
+                            <li>• <strong>کپی همه ی خلاصه ها:</strong> کل خلاصه خطبه اول، خطبه دوم و خلاصه کلی را یکجا کپی می‌کند.</li>
+                            <li>• <strong>کپی خلاصه خطبه اول:</strong> خلاصه خطبه اول را همراه با بسم‌الله، تیتر و متن مقدمه کپی می‌کند.</li>
+                            <li>• <strong>کپی خلاصه خطبه دوم:</strong> منحصراً متن خلاصه خطبه دوم را بدون بسم‌الله یا تیتر کپی می‌نماید.</li>
+                            <li>• <strong>کپی خلاصه کلی خطبه ها:</strong> فقط متن خلاصه کلی را همراه با تیتر مربوطه کپی می‌کند.</li>
+                        </ul>
+                    </li>
+                    <li><strong>دریافت Word یا PDF:</strong> جهت دریافت فایل خروجی استاندارد و بدون به‌هم‌ریختگی با کیفیت فوق‌العاده بالا.</li>
+                    <li><strong>خطبه‌نگاشت و ابزار ویرایش لایو:</strong> خروجی خطبه‌ها را در قالب پوستر گرافیکی دریافت کنید. همچنین با زدن دکمه <strong>«ویرایش خطبه نگاشت»</strong>، پنلی باز می‌شود که ابزارهای تغییر اندازه قلم، فاصله خطوط، موقعیت عمودی متن و ویرایش متن اصلی را در اختیارتان می‌گذارد تا تغییرات را زنده دیده و نسخه ویرایش شده را با کیفیت کامل دانلود کنید.</li>
+                </ul>
+
+                <p class="font-bold text-purple-400 mt-4">💡 نکات کلیدی برای نتیجه بهتر:</p>
+                <p><strong>دقت در تاریخ:</strong> حتماً قبل از فشردن دکمه پردازش، از صحت تاریخ شمسی وارد شده اطمینان حاصل کنید تا در خروجی‌ها (به‌ویژه خطبه‌نگاشت) دچار خطا نشوید.</p>
+                <p><strong>بازبینی نهایی:</strong> اگرچه هوش مصنوعی دقت بسیار بالایی دارد، توصیه می‌کنیم پیش از انتشار رسمی، خروجی نهایی را یک‌بار مرور کنید.</p>
+                <p><strong>امنیت داده‌ها:</strong> سامانه به‌صورت خودکار پس از پایان جلسه کاری، داده‌های شما را پاک‌سازی می‌کند تا حریم خصوصی شما حفظ شود.</p>
             </div>
+            
             <div class="mt-6 text-center border-t border-gray-700/50 pt-4">
                 <button id="closeInfoBtnOk" class="cyber-btn text-white font-bold py-2.5 px-8 rounded-full">متوجه شدم</button>
             </div>
@@ -191,16 +225,86 @@
                 <button id="tabFAQ" class="flex-1 py-2 font-bold border-b-2 border-transparent text-gray-400 hover:text-sky-300 transition-all">سوالات متداول (FAQ)</button>
                 <button id="tabSupport" class="flex-1 py-2 font-bold border-b-2 border-transparent text-gray-400 hover:text-sky-300 transition-all">پشتیبانی و ارتباط</button>
             </div>
-            <div id="contentRules" class="space-y-4 overflow-y-auto pr-2 text-sm md:text-base text-gray-300 leading-relaxed flex-1">
-                <h3 class="font-bold text-sky-400 text-lg">شرایط و قوانین استفاده</h3>
-                <p>استفاده از خدمات سامانه جمعه‌یار به منزله پذیرش کامل قوانین است.</p>
+            
+            <!-- محتوای تب ۱: قوانین و حریم خصوصی کامل -->
+            <div id="contentRules" class="space-y-4 overflow-y-auto pr-2 text-sm md:text-base text-gray-300 leading-relaxed flex-1 text-justify">
+                <h3 class="font-bold text-sky-400 text-lg">شرایط و قوانین استفاده از سامانه «جمعه‌یار»</h3>
+                <p class="text-gray-400 italic">استفاده از خدمات سامانه جمعه‌یار به منزله پذیرش کامل قوانین و مقررات زیر است:</p>
+                <div class="space-y-3">
+                    <p><strong>۱. مالکیت فکری و حقوق مادی:</strong> تمامی اجزای این وب‌سایت، اعم از کدهای برنامه‌نویسی، طراحی رابط کاربری، الگوریتم‌های هوش مصنوعی و محتوای استخراج‌شده، تحت مالکیت معنوی دفتر امام جمعه دهستان میانکاله - زاغمرز قرار دارد. هرگونه کپی‌برداری، بازنشر، مهندسی معکوس و یا بهره‌برداری تجاری از این سامانه بدون کسب اجازه کتبی، ممنوع بوده و نقض صریح قوانین کپی‌رایت محسوب می‌شود.</p>
+                    <p><strong>۲. مسئولیت محتوا:</strong> این سامانه صرفاً ابزاری جهت تسهیل پردازش و خلاصه‌سازی خطبه‌ها است. مسئولیت نهایی صحت و بازتاب رسانه‌ای مطالب استخراج‌شده، بر عهده کاربر است. کاربر متعهد می‌شود از خروجی‌های این سامانه به نحوی استفاده نکند که موجب تحریف محتوا یا مغایرت با قوانین جاری کشور گردد.</p>
+                    <p><strong>۳. پیگرد قانونی:</strong> در صورت مشاهده هرگونه تخلف، سرقت محتوا یا سوءاستفاده از زیرساخت‌های فنی سامانه، مدیریت «جمعه‌یار» حق دارد از طریق مراجع قضایی و پلیس فتا علیه متخلفین اقدام قانونی نماید. تمامی حقوق برای مالک سامانه محفوظ است و هرگونه اقدام غیرمجاز، عواقب قانونی برای فرد یا مجموعه خاطی در پی خواهد داشت.</p>
+                </div>
+                
+                <h3 class="font-bold text-sky-400 text-lg mt-6 pt-4 border-t border-gray-700/30">سیاست حفظ حریم خصوصی (Privacy Policy)</h3>
+                <p class="text-gray-400 italic">در سامانه جمعه‌یار، امنیت و حریم خصوصی کاربران اولویت ماست. ما متعهد به حفاظت از اطلاعات شما طبق اصول زیر هستیم:</p>
+                <div class="space-y-3">
+                    <p><strong>۴. حفاظت از داده‌های کاربران:</strong> تمامی متن‌ها، فایل‌ها و داده‌هایی که توسط شما جهت خلاصه‌سازی در سامانه بارگذاری می‌شود، کاملاً محرمانه تلقی می‌گردد. سامانه «جمعه‌یار» متعهد می‌شود که هیچ‌گونه اطلاعات شخصی یا محتوای پردازش‌شده را بدون اجازه کاربر در اختیار اشخاص ثالث قرار ندهد.</p>
+                    <p><strong>۵. پردازش هوشمند و امنیت هوش مصنوعی:</strong> سامانه صرفاً جهت پردازش متن طراحی شده است. سیستم‌های ما به گونه‌ای بهینه‌سازی شده‌اند که پس از انجام فرآیند خلاصه‌سازی، داده‌های موقت کاربر در حداقل زمان ممکن از سرورهای پردازشی پاک‌سازی گردند تا امنیت داده‌ها تضمین شود.</p>
+                    <p><strong>۶. تعهد به امنیت اطلاعات و دستگاه کاربران:</strong> ما از پروتکل‌های امنیتی استاندارد و لایه‌های حفاظتی پیشرفته برای محافظت از زیرساخت‌های سایت و داده‌های پردازش‌شده استفاده می‌کنیم. با این حال، امنیت دستگاهی که از طریق آن به این سامانه متصل می‌شوید (مانند گوشی تلفن همراه یا کامپیوتر شخصی) و همچنین حفظ محرمانگی فایل‌های شخصی، بر عهده خود کاربر است. توصیه می‌کنیم برای حفظ حریم خصوصی، همواره از مرورگرهای به‌روز استفاده کرده و از اتصال به شبکه‌های اینترنت عمومی ناامن جهت ارسال اسناد حساس خودداری نمایید.</p>
+                </div>
+                <p class="mt-4 text-xs text-gray-400 border-t border-gray-700/30 pt-2 font-bold">پیوست به قوانین: این سیاست‌ها بخشی جدایی‌ناپذیر از «شرایط و قوانین استفاده» است و هرگونه تغییر احتمالی در آینده، از طریق همین صفحه به اطلاع کاربران خواهد رسید.</p>
             </div>
-            <div id="contentFAQ" class="hidden space-y-4 overflow-y-auto pr-2 text-sm md:text-base text-gray-300 leading-relaxed flex-1">
+            
+            <!-- محتوای تب ۲: سوالات متداول کامل -->
+            <div id="contentFAQ" class="hidden space-y-4 overflow-y-auto pr-2 text-sm md:text-base text-gray-300 leading-relaxed flex-1 text-justify">
                 <h3 class="font-bold text-sky-400 text-lg">سوالات متداول (FAQ)</h3>
-                <p>در این بخش پاسخ به متداول‌ترین ابهامات کاربران قرار داده شده است.</p>
+                
+                <div class="space-y-4">
+                    <h4 class="font-bold text-purple-400 border-b border-gray-800 pb-1">الف) پرسش‌های مربوط به کیفیت و خروجی:</h4>
+                    <div class="space-y-2">
+                        <p class="font-bold text-gray-200">آیا خلاصه‌های تولید شده نیاز به بازبینی دارند؟</p>
+                        <p class="text-gray-400">بله، با وجود دقت بالای هوش مصنوعی، پیشنهاد می‌شود برای اطمینان از صحت کامل نقل‌قول‌ها و نکات حساس، خروجی نهایی پیش از انتشار توسط کاربر بازبینی شود.</p>
+                    </div>
+                    <div class="space-y-2">
+                        <p class="font-bold text-gray-200">آیا می‌توانم خروجی را ویرایش کنم؟</p>
+                        <p class="text-gray-400">بله، تمامی خروجی‌ها (Word، PDF و متن کپی شده) کاملاً قابل ویرایش هستند تا شما بتوانید لحن یا نکات مورد نظر خود را به گزارش اضافه کنید.</p>
+                    </div>
+                    <div class="space-y-2">
+                        <p class="font-bold text-gray-200">آیا حجم خلاصه‌ها قابل تغییر است؟</p>
+                        <p class="text-gray-400">بله، شما می‌توانید از منوی تنظیمات قبل از پردازش، اندازه خلاصه را بین سه حالت (کوتاه، متوسط و بلند) انتخاب کنید.</p>
+                    </div>
+
+                    <h4 class="font-bold text-purple-400 border-b border-gray-800 pb-1 mt-6">ب) پرسش‌های مربوط به امنیت و حریم خصوصی:</h4>
+                    <div class="space-y-2">
+                        <p class="font-bold text-gray-200">اطلاعات بارگذاری شده تا چه زمانی در سرور باقی می‌مانند؟</p>
+                        <p class="text-gray-400">در سامانه «جمعه‌ یار»، حفظ حریم خصوصی اولویت ماست. تمامی داده‌های متنی شما بلافاصله پس از پایان جلسه کاری و تولید خروجی، به صورت خودکار از حافظه موقت سرور پاک می‌شوند.</p>
+                    </div>
+                    <div class="space-y-2">
+                        <p class="font-bold text-gray-200">آیا خطبه‌های من در جای دیگری منتشر می‌شود؟</p>
+                        <p class="text-gray-400">خیر، هیچ‌گونه دسترسی عمومی یا خصوصی برای شخص ثالث به متن خطبه‌های شما وجود ندارد و سامانه صرفاً به عنوان یک پردازشگر عمل می‌کند.</p>
+                    </div>
+
+                    <h4 class="font-bold text-purple-400 border-b border-gray-800 pb-1 mt-6">ج) پرسش‌های مربوط به عملکرد فنی:</h4>
+                    <div class="space-y-2">
+                        <p class="font-bold text-gray-200">اگر سایت در زمان پردازش خطا داد، چه کنم?</p>
+                        <p class="text-gray-400">ابتدا از اتصال اینترنت خود اطمینان حاصل کنید. اگر مشکل ادامه داشت، صفحه را رفرش کرده و مجدداً تلاش کنید. اگر همچنان خطا باقی بود، متن خطا را به ایمیل پشتیبانی ارسال کنید.</p>
+                    </div>
+                    <div class="space-y-2">
+                        <p class="font-bold text-gray-200">آیا برای استفاده از سامانه حتماً باید اینترنت پرسرعت داشته باشم؟</p>
+                        <p class="text-gray-400">خیر، سامانه «جمعه‌ یار» به گونه‌ای بهینه‌سازی شده که حتی با سرعت‌های پایین نیز به درستی کار کند. همچنین سیستم پروکسی ابری ما سرعت ارتباط شما را بهینه می‌کند.</p>
+                    </div>
+                    <div class="space-y-2">
+                        <p class="font-bold text-gray-200">فرمت‌های پیشنهادی برای بارگذاری فایل چیست؟</p>
+                        <p class="text-gray-400">بهترین عملکرد سامانه با فایل‌های متنی (txt، docx) است. برای فایلهای PDF، پیشنهاد می‌شود متن را کپی و در کادر قرار دهید تا دقت استخراج بالاتر برود.</p>
+                    </div>
+
+                    <h4 class="font-bold text-purple-400 border-b border-gray-800 pb-1 mt-6">د) پرسش‌های مربوط به حقوق و مسئولیت‌ها:</h4>
+                    <div class="space-y-2">
+                        <p class="font-bold text-gray-200">مالکیت معنوی خلاصه‌ها متعلق به کیست؟</p>
+                        <p class="text-gray-400">تمامی حقوق خروجی‌هایی که با استفاده از این سامانه تولید می‌کنید متعلق به خودتان است، اما استفاده از نام «جمعه‌ یار» به عنوان ابزار پردازشگر، نشان‌دهنده حرفه‌ای بودن گزارش شماست.</p>
+                    </div>
+                    <div class="space-y-2">
+                        <p class="font-bold text-gray-200">آیا استفاده تجاری از سامانه مجاز است؟</p>
+                        <p class="text-gray-400">استفاده شخصی و سازمانی برای تهیه گزارش‌های فرهنگی و خبری بلامانع است؛ برای هرگونه استفاده تجاری در مقیاس وسیع، نیاز به هماهنگی و دریافت اجازه کتبی دارید.</p>
+                    </div>
+                </div>
             </div>
+            
+            <!-- محتوای تب ۳: پشتیبانی و ارتباط کامل -->
             <div id="contentSupport" class="hidden space-y-4 overflow-y-auto pr-2 text-sm md:text-base text-gray-300 leading-relaxed flex-1 flex flex-col justify-start text-center pt-6">
                 <h3 class="font-bold text-sky-400 text-xl mb-4">پشتیبانی و ارتباط با ما</h3>
+                <p class="max-w-md mx-auto">کاربران گرامی، سامانه «جمعه‌یار» متعهد به ارائه بهترین تجربه کاربری است. در صورت بروز هرگونه مشکل فنی، پرسش درباره عملکرد سامانه و یا ارائه پیشنهادات، می‌توانید از طریق ایمیل اختصاصی با ما در ارتباط باشید. تمامی پیام‌های شما در کوتاه‌ترین زمان ممکن بررسی و پاسخ داده خواهد شد.</p>
                 <div class="mt-8 flex flex-col items-center">
                     <p class="text-gray-400 mb-2">📩 ایمیل پشتیبانی:</p>
                     <a href="#" id="supportEmailLink" class="text-xl font-bold text-sky-300 hover:text-sky-400 transition-colors border-b border-dashed border-sky-300 hover:border-sky-400 pb-1 mb-3">info.jomehyar.ir@gmail.com</a>
@@ -216,13 +320,18 @@
         </div>
     </div>
 
-    <!-- مدال تایید قوانین و شرایط استفاده -->
+    <!-- مدال تایید قوانین و شرایط استفاده در اولین بار ورود -->
     <div id="agreementModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4">
         <div class="glass-panel w-full max-w-xl rounded-3xl p-6 md:p-8 relative border border-sky-500/30 flex flex-col text-center shadow-[0_0_50px_rgba(14,165,233,0.2)]">
             <h2 class="text-xl md:text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-purple-500 mb-6">تایید قوانین و شرایط استفاده از سامانه</h2>
+            
             <p class="text-sm md:text-base text-gray-300 leading-relaxed mb-6 text-justify">
-                کاربر گرامی، پیش از آغاز استفاده از «جمعه‌یار»، خواهشمند است قوانین ما را مطالعه فرمایید.
+                کاربر گرامی، پیش از آغاز استفاده از «جمعه‌یار»، خواهشمند است قوانین و سیاست‌های حریم خصوصی ما را مطالعه فرمایید. با کلیک بر روی دکمه «موافقت و ادامه»، شما تأیید می‌کنید که:<br>
+                ۱. شرایط استفاده از سامانه را مطالعه کرده و می‌پذیرید.<br>
+                ۲. مسئولیت محتوای خروجی و نحوه انتشار آن بر عهده شماست.<br>
+                ۳. موافقت خود را با سیاست‌های حفظ حریم خصوصی سامانه اعلام می‌دارید.
             </p>
+            
             <button id="viewFullRulesBtn" class="bg-slate-900 border border-purple-500/30 text-purple-300 hover:text-white px-5 py-2.5 rounded-full hover:bg-purple-500/20 transition-all duration-300 text-sm font-bold mx-auto mb-6">
                 مشاهده متن کامل قوانین و حریم خصوصی
             </button>
@@ -888,7 +997,6 @@
                 closeAllDropdownsExcept(null);
             });
 
-            // مدیریت منوی کپی
             const copyBtn = document.getElementById('copyBtn');
             const copyDropdown = document.getElementById('copyDropdown');
             const copyArrow = document.getElementById('copyArrow');
@@ -1108,7 +1216,6 @@
             document.getElementById('loaderReligious').classList.remove('hidden');
             document.getElementById('loaderPolitical').classList.remove('hidden');
 
-            // مقداردهی اولیه وضعیت ویرایشگر
             religiousEditState = { quote: currentReportData.religiousQuote, fontSize: 44, lineSpacing: 1.18, yOffset: 0 };
             politicalEditState = { quote: currentReportData.politicalQuote, fontSize: 44, lineSpacing: 1.18, yOffset: 0 };
 
@@ -1177,7 +1284,7 @@
             const d = document.getElementById('selDay').value;
             const m = document.getElementById('selMonth').value;
             const y = document.getElementById('selYear').value;
-            const fullDateString = `نماز جمعه ${d} ${m} ${y} دهستان میانکاله (زاغمرz)`;
+            const fullDateString = `نماز جمعه ${d} ${m} ${y} دهستان میانکاله (زاغمرز)`;
 
             renderKhutbahNegasht(religiousTempState.quote, 'canvasReligious', 'imgReligiousPreview', 'loaderReligious', 'downloadReligiousBtn', fullDateString, religiousTempState, 'editReligiousBtn');
         }
@@ -1665,7 +1772,6 @@
             const m = document.getElementById('selMonth').value;
             const y = toPersianDigits(document.getElementById('selYear').value);
             
-            // بازگشت به فرمت پایدار و بدون خطای .doc به منظور تضمین همیشگی باز شدن فایل در مایکروسافت ورد
             const fileName = `خلاصه_خطبه_نماز_جمعه_${d}_${m}-${y}_جمعه_یار.doc`;
 
             let logoHtml = '';
@@ -1827,14 +1933,12 @@ ${logoBase64DataOnly}
             document.body.appendChild(cleanPDFContainer);
 
             try {
-                // تنظیم مقیاس رندر روی ۲ به منظور بازیابی کامل وضوح فونت و کیفیت عالی آن در چاپ
                 const canvas = await html2canvas(cleanPDFContainer, {
                     scale: 2, 
                     useCORS: true,
                     backgroundColor: '#ffffff'
                 });
                 
-                // افزایش ظریب فشرده‌سازی روی 0.90 جهت ایجاد تعادل حجم مناسب (بین ۱ الی ۱.۸ مگابایت) همراه با بازگردانی حداکثر شفافیت نوشته‌ها
                 const imgData = canvas.toDataURL('image/jpeg', 0.90);
                 const { jsPDF } = window.jspdf;
                 const pdf = new jsPDF('p', 'mm', 'a4');
@@ -1884,12 +1988,10 @@ ${logoBase64DataOnly}
                 rawText += `---\n📌 ${currentReportData.overallSummary.title}\n${currentReportData.overallSummary.text}`;
                 textToCopy = toPersianDigits(rawText.trim()) + "\n\nجمعه یار - JOMEH YAR";
             } else if (type === 'first') {
-                // درج «بسم الله»، «تیتر اصلی»، «جمله به گزارش معاونت...» و خلاصه خطبه اول به صورت هماهنگ
                 let firstText = `بِسْمِ اللهِ الرَّحْمنِ الرَّحِیم\n\n«${currentReportData.impactfulTitle}»\n\n${introText}\n\n🔸 خطبه اول: ${currentReportData.khutbah1.title}\n`;
                 currentReportData.khutbah1.summary.forEach((i, idx) => firstText += `${idx + 1}. ${i.heading}\n   ${i.explanation}\n\n`);
                 textToCopy = toPersianDigits(firstText.trim());
             } else if (type === 'second') {
-                // کپی اختصاصی و خالص خطبه دوم بدون «بسم الله»، «تیتر اصلی» و «جمله مقدمه»
                 let secondText = `🔹 خطبه دوم: ${currentReportData.khutbah2.title}\n`;
                 currentReportData.khutbah2.summary.forEach((i, idx) => secondText += `${idx + 1}. ${i.heading}\n   ${i.explanation}\n\n`);
                 textToCopy = toPersianDigits(secondText.trim());
