@@ -29,7 +29,7 @@ export default async function handler(req) {
     }
 
     // تغییر نام مدل از 2.5 به نسخه معتبر و پرسرعت 1.5 یا 2.0
-    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=${apiKey}`;
 
     const googleResponse = await fetch(apiUrl, {
       method: 'POST',
