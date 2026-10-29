@@ -27,7 +27,7 @@
             margin: 0 auto 16px;
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-       
+        
         @media print { body { display: none !important; } }
     </style>
 </head>
@@ -48,6 +48,7 @@
                 if (e.keyCode === 123 || 
                    (e.ctrlKey && e.keyCode === 85) || 
                    (e.ctrlKey && e.keyCode === 83) || 
+                   (e.ctrlKey && e.keyCode === 80) || 
                    (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) ||
                    (e.metaKey && e.altKey && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 85))) {
                     e.preventDefault();
@@ -56,49 +57,73 @@
             }, true);
 
             
-            setInterval(function() {
-                const start = performance.now();
-                (function() {}['constructor']('debugger')());
-                if (performance.now() - start > 100) {
-                    document.body.innerHTML = '<div style="background:#020617;color:red;height:100vh;display:flex;align-items:center;justify-content:center;font-family:sans-serif;">دسترسی غیرمجاز مسدود است!</div>';
+            let _realAppPayload = "";
+            let _appFrame = null;
+
+            
+            const _decoyPayload = `
+                <!DOCTYPE html>
+                <html lang="fa" dir="rtl">
+                <head><meta charset="utf-8"><title>Access Denied</title></head>
+                <body style="background:#020617;color:#ef4444;font-family:sans-serif;text-align:center;padding-top:20vh;">
+                    <h1>Error 403 - Forbidden</h1>
+                    <p>دسترسی به سورس‌کد این سند در حالت آفلاین مسدود شده است.</p>
+                </body>
+                </html>
+            `;
+
+            
+            window.addEventListener('blur', function() {
+                if (_appFrame && _appFrame.contentDocument) {
+                    try {
+                       
+                        _appFrame.contentDocument.open();
+                        _appFrame.contentDocument.write(_decoyPayload);
+                        _appFrame.contentDocument.close();
+                    } catch (e) {}
                 }
-            }, 200);
+            });
+
+            
+            window.addEventListener('focus', function() {
+                if (_appFrame && _appFrame.contentDocument && _realAppPayload) {
+                    try {
+                        _appFrame.contentDocument.open();
+                        _appFrame.contentDocument.write(_realAppPayload);
+                        _appFrame.contentDocument.close();
+                    } catch (e) {}
+                }
+            });
 
             
             const _0xvault = atob('L3N5c19jb3JlXzlmOGEyYjdjNGQxZS5odG1s');
 
             
-            (async function bootSecureApp() {
+            (async function boot() {
                 try {
-                    const res = await fetch(_0xvault + '?_hash=' + Date.now());
+                    const res = await fetch(_0xvault + '?_ts=' + Date.now());
                     if (!res.ok) throw new Error();
-                    const rawHTML = await res.text();
+                    _realAppPayload = await res.text();
 
+                    _appFrame = document.createElement('iframe');
+                    _appFrame.style.position = 'fixed';
+                    _appFrame.style.top = '0';
+                    _appFrame.style.left = '0';
+                    _appFrame.style.width = '100vw';
+                    _appFrame.style.height = '100vh';
+                    _appFrame.style.border = 'none';
+                    _appFrame.style.zIndex = '999999';
                     
-                    const frame = document.createElement('iframe');
-                    frame.id = 'app-viewport';
-                    frame.style.position = 'fixed';
-                    frame.style.top = '0';
-                    frame.style.left = '0';
-                    frame.style.width = '100vw';
-                    frame.style.height = '100vh';
-                    frame.style.border = 'none';
-                    frame.style.zIndex = '999999';
-                    frame.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-forms allow-downloads allow-modals');
-                    
-                    document.body.appendChild(frame);
+                    document.body.appendChild(_appFrame);
 
-                    
-                    const doc = frame.contentWindow.document;
-                    doc.open();
-                    doc.write(rawHTML);
-                    doc.close();
+                    _appFrame.contentDocument.open();
+                    _appFrame.contentDocument.write(_realAppPayload);
+                    _appFrame.contentDocument.close();
 
-                    
                     document.getElementById('loader').style.display = 'none';
 
                 } catch(err) {
-                    document.body.innerHTML = '<p style="color:#ef4444;text-align:center;margin-top:20vh;">خطا در دریافت هسته سامانه. لطفاً اتصال اینترنت را چک کرده و صفحه را رفرش کنید.</p>';
+                    document.body.innerHTML = '<p style="color:#ef4444;text-align:center;margin-top:20vh;">خطا در دریافت هسته سامانه.</p>';
                 }
             })();
         })();
