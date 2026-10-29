@@ -17,12 +17,9 @@
             height: 100vh;
             overflow: hidden;
         }
-        .loader-box {
-            text-align: center;
-        }
+        .loader-box { text-align: center; }
         .spinner {
-            width: 48px;
-            height: 48px;
+            width: 48px; height: 48px;
             border: 4px solid rgba(56, 189, 248, 0.2);
             border-top-color: #38bdf8;
             border-radius: 50%;
@@ -36,42 +33,50 @@
 
     <div class="loader-box">
         <div class="spinner"></div>
-        <p>در حال بارگذاری سامانه جمعه‌یار...</p>
+        <p>در حال بارگذاری ایمن سامانه جمعه‌یار...</p>
     </div>
 
     <script>
-        
-        document.addEventListener('contextmenu', e => e.preventDefault());
-        document.addEventListener('keydown', e => {
+        (function() {
+            
+            document.addEventListener('contextmenu', e => e.preventDefault(), true);
+
+            
+            document.addEventListener('keydown', e => {
+                if (e.keyCode === 123 || 
+                   (e.ctrlKey && e.keyCode === 85) || 
+                   (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) ||
+                   (e.metaKey && e.altKey && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 85))) {
+                    e.preventDefault();
+                    return false;
+                }
+            }, true);
+
            
-            if (e.keyCode === 123 || 
-               (e.ctrlKey && e.keyCode === 85) || 
-               (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67))) {
-                e.preventDefault();
-                return false;
-            }
-        });
+            setInterval(function() {
+                const start = performance.now();
+                (function() {}['constructor']('debugger')());
+                if (performance.now() - start > 100) {
+                    document.body.innerHTML = '<div style="background:#020617;color:red;height:100vh;display:flex;align-items:center;justify-content:center;font-family:sans-serif;">دسترسی مسدود است!</div>';
+                }
+            }, 200);
 
         
-        (async function bootApp() {
-            try {
-                
-                const response = await fetch('/app-core.html?v=' + Date.now());
-                if (!response.ok) throw new Error('بارگذاری ناموفق');
-                const coreHTML = await response.text();
-                
-                
-                document.open();
-                document.write(coreHTML);
-                document.close();
-            } catch (err) {
-                document.body.innerHTML = `
-                    <div style="text-align:center; color:#f87171;">
-                        <p>خطا در برقراری ارتباط با هسته سامانه.</p>
-                        <button onclick="location.reload()" style="background:#0ea5e9; color:#fff; border:none; padding:8px 20px; border-radius:8px; cursor:pointer;">تلاش مجدد</button>
-                    </div>
-                `;
-            }
+            
+            const _0xsecretPath = atob('L3N5c19jb3JlXzlmOGEyYjdjNGQxZS5odG1s');
+
+            (async function boot() {
+                try {
+                    const res = await fetch(_0xsecretPath + '?_t=' + Date.now());
+                    if (!res.ok) throw new Error();
+                    const html = await res.text();
+                    document.open();
+                    document.write(html);
+                    document.close();
+                } catch(err) {
+                    document.body.innerHTML = '<p style="color:red;text-align:center;">خطا در بارگذاری سامانه. لطفاً صفحه را رفرش کنید.</p>';
+                }
+            })();
         })();
     </script>
 </body>
