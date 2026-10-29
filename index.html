@@ -3,44 +3,58 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>جمعه یار - سامانه هوشمند خلاصه سازی خطبه ها</title>
+<title>جمعه یار - سامانه هوشمند خطبه‌ها</title>
 <link rel="icon" type="image/png" href="/logo/favicon-96x96.png" sizes="96x96" />
 <link class="shortcut icon" href="/logo/favicon.ico" />
 <link class="hidden-manifest" rel="manifest" href="/logo/site.webmanifest" />
 <style>
-  html, body { margin: 0; padding: 0; height: 100%; background: #020617; overflow: hidden; }
-  @media print { html, body { display: none !important; } }
+    body {
+        margin: 0; background-color: #020617; color: #38bdf8;
+        font-family: system-ui, -apple-system, sans-serif;
+        display: flex; align-items: center; justify-content: center;
+        height: 100vh; overflow: hidden;
+    }
+    .loader-box { text-align: center; }
+    .spinner {
+        width: 48px; height: 48px; border: 4px solid rgba(56, 189, 248, 0.2);
+        border-top-color: #38bdf8; border-radius: 50%;
+        animation: spin 1s linear infinite; margin: 0 auto 16px;
+    }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    @media print { html, body { display: none !important; } }
 </style>
 </head>
 <body>
+
+<div class="loader-box" id="loader">
+    <div class="spinner"></div>
+    <p>در حال بارگذاری ایمن سامانه جمعه‌یار...</p>
+</div>
+
 <script>
 (function () {
-    function block(e) { e.preventDefault(); e.stopPropagation(); return false; }
-    document.addEventListener('contextmenu', block, true);
-    document.addEventListener('keydown', function (e) {
-        var k = (e.key || '').toLowerCase();
-        var ctrl = e.ctrlKey || e.metaKey;
-        if (e.keyCode === 123 || k === 'f12') return block(e);
-        if (ctrl && ['u', 's', 'p'].indexOf(k) > -1) return block(e);
-        if (ctrl && e.shiftKey && ['i', 'j', 'c'].indexOf(k) > -1) return block(e);
-        if (e.metaKey && e.altKey && ['i', 'j', 'c', 'u'].indexOf(k) > -1) return block(e);
-    }, true);
+    function blockShortcuts(e) {
+        var k = (e.key || '').toLowerCase(), c = e.ctrlKey || e.metaKey;
+        if (e.keyCode === 123 || k === 'f12' ||
+            (c && (k === 'u' || k === 's' || k === 'p')) ||
+            (c && e.shiftKey && (k === 'i' || k === 'j' || k === 'c')) ||
+            (e.metaKey && e.altKey && (k === 'i' || k === 'j' || k === 'c' || k === 'u'))) {
+            e.preventDefault(); e.stopPropagation(); return false;
+        }
+    }
+    document.addEventListener('contextmenu', function (e) { e.preventDefault(); }, true);
+    document.addEventListener('keydown', blockShortcuts, true);
 
-    var core = atob('L3N5c19jb3JlXzlmOGEyYjdjNGQxZS5odG1s') + '?_ts=' + Date.now();
-    var vault = document.createElement('div');
-    vault.style.cssText = 'position:fixed;inset:0;width:100%;height:100%;';
-    document.body.appendChild(vault);
-    var root = vault.attachShadow({ mode: 'closed' });
-    var frame = document.createElement('iframe');
-    frame.style.cssText = 'border:0;width:100%;height:100%;display:block;background:#020617;';
-    frame.setAttribute('title', 'app');
-    root.appendChild(frame);
+    var vault = atob('L3N5c19jb3JlXzlmOGEyYjdjNGQxZS5odG1s');
+    var frame = null, fDoc = null;
+    var saved = null, decoyEl = null, swapped = false, scrollPos = 0;
 
-
-    var fDoc = null, saved = null, decoyEl = null, swapped = false, scrollPos = 0;
-
+    // ---- جایگزینی غیرمخرب: محتوای واقعی حذف/بازنویسی نمی‌شود ----
+    // هنگام خروج ماوس از لبه بالا (رفتن به منوی کروم)، عنصرهای واقعی فقط موقتاً از سند برداشته و
+    // در حافظه نگه داشته می‌شوند و یک صفحه قلابی جایشان می‌نشیند. با برگشت ماوس همان عنصرها
+    // (با همه رویدادها، متن‌ها و انیمیشن‌ها) عیناً برمی‌گردند. هیچ اسکریپتی دوباره اجرا نمی‌شود.
     function hideReal() {
-        if (swapped || !fDoc || !fDoc.body) return;
+        if (swapped || !fDoc || !fDoc.body || fDoc.readyState !== 'complete') return;
         swapped = true;
         try {
             var se = fDoc.scrollingElement || fDoc.documentElement;
@@ -50,7 +64,7 @@
             while (fDoc.body.firstChild) b.appendChild(fDoc.body.firstChild);
             saved = { h: h, b: b };
             decoyEl = fDoc.createElement('div');
-            decoyEl.style.cssText = 'position:fixed;inset:0;background:#020617;color:#94a3b8;font-family:sans-serif;text-align:center;padding-top:20vh;';
+            decoyEl.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:#020617;color:#94a3b8;font-family:sans-serif;text-align:center;padding-top:20vh;';
             decoyEl.textContent = 'این سند به صورت آفلاین در دسترس نیست.';
             fDoc.body.appendChild(decoyEl);
         } catch (err) { swapped = false; }
@@ -68,32 +82,49 @@
         } catch (err) { swapped = false; }
     }
 
-    function leftTop(e) { return e.clientY <= 2 && (e.relatedTarget === null || e.relatedTarget === undefined); }
+    function onLeave(e) { if (e.clientY <= 0) hideReal(); }
+    function onOut(e) { if (!e.relatedTarget && e.clientY <= 0) hideReal(); }
 
     function bind(doc) {
-        doc.addEventListener('mouseleave', function (e) { if (e.clientY <= 2) hideReal(); });
-        doc.documentElement.addEventListener('mouseleave', function (e) { if (e.clientY <= 2) hideReal(); });
-        doc.addEventListener('mouseout', function (e) { if (leftTop(e)) hideReal(); });
+        doc.addEventListener('mouseleave', onLeave);
+        doc.documentElement.addEventListener('mouseleave', onLeave);
+        doc.addEventListener('mouseout', onOut);
         doc.addEventListener('mouseenter', showReal);
         doc.documentElement.addEventListener('mouseenter', showReal);
         doc.addEventListener('mouseover', showReal);
         doc.addEventListener('mousemove', showReal, true);
     }
+
     bind(document);
 
-    frame.addEventListener('load', function () {
+    (async function boot() {
         try {
-            fDoc = frame.contentDocument;
-            if (fDoc && fDoc.documentElement) bind(fDoc);
-        } catch (err) {}
-    });
+            var res = await fetch(vault + '?_hash=' + Date.now(), { cache: 'no-store' });
+            if (!res.ok) throw new Error();
+            var html = await res.text();
 
-    fetch(core, { cache: 'no-store' })
-        .then(function (r) { if (!r.ok) throw new Error(r.status); return r.text(); })
-        .then(function (html) { frame.srcdoc = html; })
-        .catch(function () {
-            root.innerHTML = '<p style="color:#e2e8f0;font-family:sans-serif;text-align:center;margin-top:30vh">خطا در بارگذاری سایت. لطفاً صفحه را دوباره بارگذاری کنید.</p>';
-        });
+            frame = document.createElement('iframe');
+            frame.id = 'app-viewport';
+            frame.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;border:none;z-index:999999;';
+            document.body.appendChild(frame);
+
+            var doc = frame.contentWindow.document;
+            doc.open();
+            doc.write(html);
+            doc.close();
+            html = null;
+
+            fDoc = frame.contentDocument || frame.contentWindow.document;
+            document.getElementById('loader').style.display = 'none';
+
+            // قفل‌ها و ردیاب ماوس باید بعد از doc.write بسته شوند (open همه شنونده‌ها را پاک می‌کند)
+            fDoc.addEventListener('contextmenu', function (e) { e.preventDefault(); }, true);
+            fDoc.addEventListener('keydown', blockShortcuts, true);
+            bind(fDoc);
+        } catch (err) {
+            document.body.innerHTML = '<p style="color:#ef4444;text-align:center;margin-top:20vh;">خطا در دریافت هسته سامانه. لطفاً صفحه را رفرش کنید.</p>';
+        }
+    })();
 })();
 </script>
 <noscript>برای استفاده از سایت، جاوااسکریپت را فعال کنید.</noscript>
