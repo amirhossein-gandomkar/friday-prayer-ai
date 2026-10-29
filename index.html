@@ -27,6 +27,7 @@
             margin: 0 auto 16px;
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+       
         @media print { body { display: none !important; } }
     </style>
 </head>
@@ -59,71 +60,47 @@
                 const start = performance.now();
                 (function() {}['constructor']('debugger')());
                 if (performance.now() - start > 100) {
-                    document.body.innerHTML = '<div style="background:#020617;color:red;height:100vh;display:flex;align-items:center;justify-content:center;font-family:sans-serif;">دسترسی مسدود است!</div>';
+                    document.body.innerHTML = '<div style="background:#020617;color:red;height:100vh;display:flex;align-items:center;justify-content:center;font-family:sans-serif;">دسترسی غیرمجاز مسدود است!</div>';
                 }
-            }, 250);
+            }, 200);
 
             
             const _0xvault = atob('L3N5c19jb3JlXzlmOGEyYjdjNGQxZS5odG1s');
 
-            let memoryHTML = '';
-            let frame = null;
-
-            async function launchApp() {
+            
+            (async function bootSecureApp() {
                 try {
-                    const res = await fetch(_0xvault + '?_t=' + Date.now());
+                    const res = await fetch(_0xvault + '?_hash=' + Date.now());
                     if (!res.ok) throw new Error();
-                    memoryHTML = await res.text();
+                    const rawHTML = await res.text();
 
                     
-                    frame = document.createElement('iframe');
+                    const frame = document.createElement('iframe');
                     frame.id = 'app-viewport';
-                    frame.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;border:none;z-index:999999;background:#020617;';
+                    frame.style.position = 'fixed';
+                    frame.style.top = '0';
+                    frame.style.left = '0';
+                    frame.style.width = '100vw';
+                    frame.style.height = '100vh';
+                    frame.style.border = 'none';
+                    frame.style.zIndex = '999999';
                     frame.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-forms allow-downloads allow-modals');
+                    
                     document.body.appendChild(frame);
 
-                    renderToMemory(memoryHTML);
+                    
+                    const doc = frame.contentWindow.document;
+                    doc.open();
+                    doc.write(rawHTML);
+                    doc.close();
 
+                    
                     document.getElementById('loader').style.display = 'none';
 
                 } catch(err) {
-                    document.body.innerHTML = '<p style="color:#ef4444;text-align:center;margin-top:20vh;">خطا در دریافت سامانه. لطفا اتصال اینترنت را چک کنید.</p>';
+                    document.body.innerHTML = '<p style="color:#ef4444;text-align:center;margin-top:20vh;">خطا در دریافت هسته سامانه. لطفاً اتصال اینترنت را چک کرده و صفحه را رفرش کنید.</p>';
                 }
-            }
-
-            function renderToMemory(content) {
-                if (!frame) return;
-                const doc = frame.contentWindow.document;
-                doc.open();
-                doc.write(content);
-                doc.close();
-
-                
-                doc.addEventListener('contextmenu', e => e.preventDefault(), true);
-                doc.addEventListener('keydown', e => {
-                    if (e.keyCode === 123 || (e.ctrlKey && (e.keyCode === 85 || e.keyCode === 83))) {
-                        e.preventDefault();
-                        return false;
-                    }
-                }, true);
-            }
-
-            
-            window.addEventListener('blur', function() {
-                if (frame && frame.contentWindow && frame.contentWindow.document) {
-                    
-                    frame.contentWindow.document.body.innerHTML = '<div style="background:#020617;color:#38bdf8;height:100vh;display:flex;align-items:center;justify-content:center;font-family:sans-serif;direction:rtl;">در حال بارگذاری مجدد سامانه...</div>';
-                }
-            });
-
-            
-            window.addEventListener('focus', function() {
-                if (memoryHTML && frame) {
-                    renderToMemory(memoryHTML);
-                }
-            });
-
-            launchApp();
+            })();
         })();
     </script>
 </body>
