@@ -1,6 +1,92 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
+    <!-- ================= شروع کد ضد اینسپکت و قفل سورس ================= -->
+<script>
+    (function () {
+        'use strict';
+
+        // ۱. قفل کردن کامل کلیک راست در سراسر صفحه
+        document.addEventListener('contextmenu', function (e) {
+            e.preventDefault();
+            return false;
+        }, true);
+
+        // ۲. بستن تمام کلیدهای میانبر ورود به سورس و اینسپکت
+        document.addEventListener('keydown', function (e) {
+            // کلید F12
+            if (e.key === 'F12' || e.keyCode === 123) {
+                e.preventDefault();
+                return false;
+            }
+
+            // میانبرهای Ctrl + Shift + I / J / C (مخصوص ویندوز و لینوکس)
+            if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j' || e.key === 'C' || e.key === 'c' || e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) {
+                e.preventDefault();
+                return false;
+            }
+
+            // میانبرهای Cmd + Option + I / J / C / U (مخصوص مک/اپل)
+            if (e.metaKey && e.altKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j' || e.key === 'C' || e.key === 'c' || e.key === 'U' || e.key === 'u')) {
+                e.preventDefault();
+                return false;
+            }
+
+            // کلید میانبر مشاهده سورس: Ctrl + U
+            if (e.ctrlKey && (e.key === 'u' || e.key === 'U' || e.keyCode === 85)) {
+                e.preventDefault();
+                return false;
+            }
+
+            // کلید میانبر ذخیره صفحه: Ctrl + S
+            if (e.ctrlKey && (e.key === 's' || e.key === 'S' || e.keyCode === 83)) {
+                e.preventDefault();
+                return false;
+            }
+        }, true);
+
+        // ۳. تله‌ی دیباگر (اگر از منوی سه‌نقطه مرورگر دور زدند و اینسپکت را باز کردند)
+        function antiDevTools() {
+            setInterval(function () {
+                const startTime = performance.now();
+                // دستور دیباگر اگر اینسپکت باز باشد فورا مرورگر را متوقف می‌کند
+                (function () {}.constructor('debugger')());
+                const endTime = performance.now();
+
+                // اگر بیش از ۱۰۰ میلی‌ثانیه متوقف شد، یعنی اینسپکت باز است
+                if (endTime - startTime > 100) {
+                    document.body.innerHTML = `
+                        <div style="background-color:#020617; color:#f43f5e; height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; font-family:sans-serif; text-align:center; padding:20px; direction:rtl;">
+                            <h2 style="font-size:24px; font-weight:bold; margin-bottom:12px;">⚠️ دسترسی به این ابزار مسدود است!</h2>
+                            <p style="color:#94a3b8; font-size:16px;">مشاهده و بررسی سورس‌کد در این سامانه مجاز نمی‌باشد.</p>
+                            <p style="color:#64748b; font-size:14px; margin-top:20px;">برای بازگشت به سامانه، اینسپکت را ببندید و صفحه را رفرش کنید.</p>
+                        </div>
+                    `;
+                }
+            }, 150);
+        }
+
+        // ۴. تشخیص باز شدن پنل اینسپکت از طریق تغییر ابعاد ناگهانی مرورگر
+        window.addEventListener('resize', function () {
+            const widthThreshold = window.outerWidth - window.innerWidth > 160;
+            const heightThreshold = window.outerHeight - window.innerHeight > 160;
+            if (widthThreshold || heightThreshold) {
+                document.body.innerHTML = `
+                    <div style="background-color:#020617; color:#f43f5e; height:100vh; display:flex; align-items:center; justify-content:center; font-family:sans-serif; text-align:center; direction:rtl;">
+                        <h2>⚠️ استفاده از Developer Tools غیرمجاز است.</h2>
+                    </div>
+                `;
+            }
+        });
+
+        // اجرای سیستم حفاظتی
+        try {
+            antiDevTools();
+        } catch (err) {}
+
+    })();
+</script>
+<!-- ================= پایان کد ضد اینسپکت و قفل سورس ================= -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>جمعه یار - سامانه هوشمند خلاصه سازی خطبه ها</title>
