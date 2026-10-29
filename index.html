@@ -6,45 +6,35 @@
     <title>جمعه یار - سامانه هوشمند خطبه‌ها</title>
     <link rel="icon" type="image/png" href="/logo/favicon-96x96.png" />
     <style>
-        html, body {
-            margin: 0; padding: 0; width: 100%; height: 100%;
-            background-color: #020617; color: #38bdf8;
+        body {
+            margin: 0;
+            background-color: #020617;
+            color: #38bdf8;
             font-family: system-ui, -apple-system, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
             overflow: hidden;
         }
-        .loader-box {
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            height: 100vh; text-align: center;
-        }
+        .loader-box { text-align: center; }
         .spinner {
             width: 48px; height: 48px;
             border: 4px solid rgba(56, 189, 248, 0.2);
             border-top-color: #38bdf8;
             border-radius: 50%;
             animation: spin 1s linear infinite;
-            margin-bottom: 16px;
+            margin: 0 auto 16px;
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        
-        
-        #app-frame {
-            position: fixed; top: 0; left: 0;
-            width: 100vw; height: 100vh;
-            border: none; outline: none;
-            z-index: 99999; display: none;
-        }
     </style>
 </head>
 <body>
 
-    
-    <div id="loader" class="loader-box">
+    <div class="loader-box">
         <div class="spinner"></div>
         <p>در حال بارگذاری ایمن سامانه جمعه‌یار...</p>
     </div>
-
-    
-    <iframe id="app-frame" sandbox="allow-scripts allow-same-origin allow-forms allow-downloads allow-modals"></iframe>
 
     <script>
         (function() {
@@ -54,43 +44,39 @@
             
             document.addEventListener('keydown', e => {
                 if (e.keyCode === 123 || 
-                   (e.ctrlKey && e.keyCode === 83) || 
                    (e.ctrlKey && e.keyCode === 85) || 
                    (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) ||
-                   (e.metaKey && (e.keyCode === 83 || e.keyCode === 85))) {
+                   (e.metaKey && e.altKey && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 85))) {
                     e.preventDefault();
                     return false;
                 }
             }, true);
 
+           
+            setInterval(function() {
+                const start = performance.now();
+                (function() {}['constructor']('debugger')());
+                if (performance.now() - start > 100) {
+                    document.body.innerHTML = '<div style="background:#020617;color:red;height:100vh;display:flex;align-items:center;justify-content:center;font-family:sans-serif;">دسترسی مسدود است!</div>';
+                }
+            }, 200);
+
+        
             
             const _0xsecretPath = atob('L3N5c19jb3JlXzlmOGEyYjdjNGQxZS5odG1s');
 
-            
-            async function bootApp() {
+            (async function boot() {
                 try {
                     const res = await fetch(_0xsecretPath + '?_t=' + Date.now());
                     if (!res.ok) throw new Error();
-                    const coreHTML = await res.text();
-                    
-                    const frame = document.getElementById('app-frame');
-                    const loader = document.getElementById('loader');
-                    
-                    const frameDoc = frame.contentDocument || frame.contentWindow.document;
-                    frameDoc.open();
-                    frameDoc.write(coreHTML);
-                    frameDoc.close();
-
-                    
-                    loader.style.display = 'none';
-                    frame.style.display = 'block';
-
+                    const html = await res.text();
+                    document.open();
+                    document.write(html);
+                    document.close();
                 } catch(err) {
-                    document.getElementById('loader').innerHTML = '<p style="color:#ef4444;">خطا در بارگذاری سامانه. لطفاً صفحه را رفرش فرمایید.</p>';
+                    document.body.innerHTML = '<p style="color:red;text-align:center;">خطا در بارگذاری سامانه. لطفاً صفحه را رفرش کنید.</p>';
                 }
-            }
-
-            bootApp();
+            })();
         })();
     </script>
 </body>
