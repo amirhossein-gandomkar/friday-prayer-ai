@@ -101,11 +101,25 @@
 
     // ---- تشخیص DevTools چسبیده به پنجره (کنار یا پایین صفحه) ----
     // محتوا حذف نمی‌شود؛ فقط تا بسته شدن DevTools پنهان می‌ماند و بعد خودکار برمی‌گردد.
+    // با زوم مرورگر، innerWidth کوچک می‌شود ولی outerWidth ثابت می‌ماند؛ پس اختلاف خام فریبنده است.
+    // برای همین هر بار زوم عوض شود (devicePixelRatio تغییر کند) نسبت پنجره به صفحه دوباره کالیبره می‌شود
+    // و فقط انحراف از این نسبت (یعنی کوچک شدن ناگهانی صفحه توسط DevTools) حساب می‌شود.
+    var baseDpr = 0, baseRX = 1, baseRY = 1;
+    function calibrate() {
+        baseDpr = window.devicePixelRatio || 1;
+        baseRX = window.outerWidth / Math.max(1, window.innerWidth);
+        baseRY = window.outerHeight / Math.max(1, window.innerHeight);
+    }
+    calibrate();
+
     function devtoolsLikelyOpen() {
         var touch = (navigator.maxTouchPoints || 0) > 0 && window.innerWidth <= 1024;
         if (touch) return false;
-        return (window.outerWidth - window.innerWidth > DEV_GAP) ||
-               (window.outerHeight - window.innerHeight > DEV_GAP);
+        var dpr = window.devicePixelRatio || 1;
+        if (Math.abs(dpr - baseDpr) > 0.01 && !devOpen) { calibrate(); return false; }
+        var gapX = window.outerWidth - window.innerWidth * baseRX;
+        var gapY = window.outerHeight - window.innerHeight * baseRY;
+        return gapX > DEV_GAP || gapY > DEV_GAP;
     }
     if (DEVTOOLS_GUARD) {
         setInterval(function () {
