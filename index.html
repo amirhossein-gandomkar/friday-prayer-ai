@@ -27,7 +27,6 @@
             margin: 0 auto 16px;
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-       
         @media print { body { display: none !important; } }
     </style>
 </head>
@@ -41,64 +40,109 @@
     <script>
         (function() {
             
-            document.addEventListener('contextmenu', e => e.preventDefault(), true);
-
-            
-            document.addEventListener('keydown', e => {
+            function blockShortcuts(e) {
                 if (e.keyCode === 123 || 
                    (e.ctrlKey && e.keyCode === 85) || 
                    (e.ctrlKey && e.keyCode === 83) || 
+                   (e.ctrlKey && e.keyCode === 80) || 
                    (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) ||
                    (e.metaKey && e.altKey && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 85))) {
                     e.preventDefault();
+                    e.stopPropagation();
                     return false;
                 }
-            }, true);
+            }
 
-            
-            setInterval(function() {
-                const start = performance.now();
-                (function() {}['constructor']('debugger')());
-                if (performance.now() - start > 100) {
-                    document.body.innerHTML = '<div style="background:#020617;color:red;height:100vh;display:flex;align-items:center;justify-content:center;font-family:sans-serif;">دسترسی غیرمجاز مسدود است!</div>';
-                }
-            }, 200);
+            document.addEventListener('contextmenu', e => e.preventDefault(), true);
+            document.addEventListener('keydown', blockShortcuts, true);
 
             
             const _0xvault = atob('L3N5c19jb3JlXzlmOGEyYjdjNGQxZS5odG1s');
 
+            let _appFrame = null;
+            let _realHTML = "";
+            let _isDecoyActive = false;
+
             
+            const _decoyHTML = `<!DOCTYPE html><html><head><meta charset="utf-8"></head><body style="background:#020617;color:#94a3b8;font-family:sans-serif;text-align:center;padding-top:20vh;"><h3>این سند به صورت آفلاین در دسترس نیست.</h3></body></html>`;
+
+            
+            document.addEventListener('mouseleave', function(e) {
+                
+                if (e.clientY <= 0 && _appFrame && _appFrame.contentDocument && !_isDecoyActive) {
+                    try {
+                        _isDecoyActive = true;
+                        _appFrame.contentDocument.open();
+                        _appFrame.contentDocument.write(_decoyHTML);
+                        _appFrame.contentDocument.close();
+                    } catch(err) {}
+                }
+            });
+
+            
+            document.addEventListener('mouseenter', function() {
+                if (_isDecoyActive && _appFrame && _appFrame.contentDocument && _realHTML) {
+                    try {
+                        _isDecoyActive = false;
+                        _appFrame.contentDocument.open();
+                        _appFrame.contentDocument.write(_realHTML);
+                        _appFrame.contentDocument.close();
+                        attachProtectionsInsideFrame();
+                    } catch(err) {}
+                }
+            });
+
+            
+            function attachProtectionsInsideFrame() {
+                try {
+                    const fDoc = _appFrame.contentDocument || _appFrame.contentWindow.document;
+                    if (!fDoc) return;
+                    fDoc.addEventListener('contextmenu', e => e.preventDefault(), true);
+                    fDoc.addEventListener('keydown', blockShortcuts, true);
+                    
+                    
+                    fDoc.addEventListener('mouseleave', function(e) {
+                        if (e.clientY <= 0 && !_isDecoyActive) {
+                            _isDecoyActive = true;
+                            fDoc.open();
+                            fDoc.write(_decoyHTML);
+                            fDoc.close();
+                        }
+                    });
+                } catch(e) {}
+            }
+
+           
             (async function bootSecureApp() {
                 try {
                     const res = await fetch(_0xvault + '?_hash=' + Date.now());
                     if (!res.ok) throw new Error();
-                    const rawHTML = await res.text();
+                    _realHTML = await res.text();
 
+                    _appFrame = document.createElement('iframe');
+                    _appFrame.id = 'app-viewport';
+                    _appFrame.style.position = 'fixed';
+                    _appFrame.style.top = '0';
+                    _appFrame.style.left = '0';
+                    _appFrame.style.width = '100vw';
+                    _appFrame.style.height = '100vh';
+                    _appFrame.style.border = 'none';
+                    _appFrame.style.zIndex = '999999';
                     
-                    const frame = document.createElement('iframe');
-                    frame.id = 'app-viewport';
-                    frame.style.position = 'fixed';
-                    frame.style.top = '0';
-                    frame.style.left = '0';
-                    frame.style.width = '100vw';
-                    frame.style.height = '100vh';
-                    frame.style.border = 'none';
-                    frame.style.zIndex = '999999';
-                    frame.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-forms allow-downloads allow-modals');
-                    
-                    document.body.appendChild(frame);
+                    document.body.appendChild(_appFrame);
 
-                    
-                    const doc = frame.contentWindow.document;
+                    const doc = _appFrame.contentWindow.document;
                     doc.open();
-                    doc.write(rawHTML);
+                    doc.write(_realHTML);
                     doc.close();
 
-                    
                     document.getElementById('loader').style.display = 'none';
 
+                  
+                    attachProtectionsInsideFrame();
+
                 } catch(err) {
-                    document.body.innerHTML = '<p style="color:#ef4444;text-align:center;margin-top:20vh;">خطا در دریافت هسته سامانه. لطفاً اتصال اینترنت را چک کرده و صفحه را رفرش کنید.</p>';
+                    document.body.innerHTML = '<p style="color:#ef4444;text-align:center;margin-top:20vh;">خطا در دریافت هسته سامانه. لطفاً صفحه را رفرش کنید.</p>';
                 }
             })();
         })();
