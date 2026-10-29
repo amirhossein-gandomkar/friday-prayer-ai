@@ -37,8 +37,8 @@
         var k = (e.key || '').toLowerCase(), c = e.ctrlKey || e.metaKey;
         if (e.keyCode === 123 || k === 'f12' ||
             (c && (k === 'u' || k === 's' || k === 'p')) ||
-            (c && e.shiftKey && (k === 'i' || k === 'j' || k === 'c')) ||
-            (e.metaKey && e.altKey && (k === 'i' || k === 'j' || k === 'c' || k === 'u'))) {
+            (c && e.shiftKey && (k === 'i' || k === 'j' || k === 'c' || k === 'k' || k === 'e')) ||
+            (e.metaKey && e.altKey && (k === 'i' || k === 'j' || k === 'c' || k === 'u' || k === 'k'))) {
             e.preventDefault(); e.stopPropagation(); return false;
         }
     }
@@ -48,6 +48,9 @@
     var vault = atob('L3N5c19jb3JlXzlmOGEyYjdjNGQxZS5odG1s');
     var frame = null, fDoc = null;
     var saved = null, decoyEl = null, swapped = false, scrollPos = 0;
+    var mouseOut = false, devOpen = false;
+    var DEVTOOLS_GUARD = true;   // اگر DevTools کنار صفحه باز شود، محتوا موقتاً پنهان می‌شود (false = خاموش)
+    var DEV_GAP = 200;           // اختلاف اندازه پنجره و صفحه (پیکسل) برای تشخیص DevTools چسبیده
 
     // ---- جایگزینی غیرمخرب: محتوای واقعی حذف/بازنویسی نمی‌شود ----
     // هنگام خروج ماوس از لبه بالا (رفتن به منوی کروم)، عنصرهای واقعی فقط موقتاً از سند برداشته و
@@ -82,17 +85,34 @@
         } catch (err) { swapped = false; }
     }
 
-    function onLeave(e) { if (e.clientY <= 0) hideReal(); }
-    function onOut(e) { if (!e.relatedTarget && e.clientY <= 0) hideReal(); }
+    function onLeave(e) { if (e.clientY <= 0) { mouseOut = true; hideReal(); } }
+    function onOut(e) { if (!e.relatedTarget && e.clientY <= 0) { mouseOut = true; hideReal(); } }
+    function onEnter() { mouseOut = false; if (!devOpen) showReal(); }
 
     function bind(doc) {
         doc.addEventListener('mouseleave', onLeave);
         doc.documentElement.addEventListener('mouseleave', onLeave);
         doc.addEventListener('mouseout', onOut);
-        doc.addEventListener('mouseenter', showReal);
-        doc.documentElement.addEventListener('mouseenter', showReal);
-        doc.addEventListener('mouseover', showReal);
-        doc.addEventListener('mousemove', showReal, true);
+        doc.addEventListener('mouseenter', onEnter);
+        doc.documentElement.addEventListener('mouseenter', onEnter);
+        doc.addEventListener('mouseover', onEnter);
+        doc.addEventListener('mousemove', onEnter, true);
+    }
+
+    // ---- تشخیص DevTools چسبیده به پنجره (کنار یا پایین صفحه) ----
+    // محتوا حذف نمی‌شود؛ فقط تا بسته شدن DevTools پنهان می‌ماند و بعد خودکار برمی‌گردد.
+    function devtoolsLikelyOpen() {
+        var touch = (navigator.maxTouchPoints || 0) > 0 && window.innerWidth <= 1024;
+        if (touch) return false;
+        return (window.outerWidth - window.innerWidth > DEV_GAP) ||
+               (window.outerHeight - window.innerHeight > DEV_GAP);
+    }
+    if (DEVTOOLS_GUARD) {
+        setInterval(function () {
+            devOpen = devtoolsLikelyOpen();
+            if (devOpen) hideReal();
+            else if (!mouseOut) showReal();
+        }, 400);
     }
 
     bind(document);
