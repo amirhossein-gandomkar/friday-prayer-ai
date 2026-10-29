@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>جمعه یار - سامانه هوشمند خطبه‌ها</title>
+    <link rel="icon" type="image/png" href="/logo/favicon-96x96.png" />
+    <style>
+        body {
+            margin: 0;
+            background-color: #020617;
+            color: #38bdf8;
+            font-family: system-ui, -apple-system, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .loader-box {
+            text-align: center;
+        }
+        .spinner {
+            width: 48px;
+            height: 48px;
+            border: 4px solid rgba(56, 189, 248, 0.2);
+            border-top-color: #38bdf8;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 16px;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+
+    <div class="loader-box">
+        <div class="spinner"></div>
+        <p>در حال بارگذاری سامانه جمعه‌یار...</p>
+    </div>
+
+    <script>
+        
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        document.addEventListener('keydown', e => {
+           
+            if (e.keyCode === 123 || 
+               (e.ctrlKey && e.keyCode === 85) || 
+               (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67))) {
+                e.preventDefault();
+                return false;
+            }
+        });
+
+        
+        (async function bootApp() {
+            try {
+                
+                const response = await fetch('/app-core.html?v=' + Date.now());
+                if (!response.ok) throw new Error('بارگذاری ناموفق');
+                const coreHTML = await response.text();
+                
+                
+                document.open();
+                document.write(coreHTML);
+                document.close();
+            } catch (err) {
+                document.body.innerHTML = `
+                    <div style="text-align:center; color:#f87171;">
+                        <p>خطا در برقراری ارتباط با هسته سامانه.</p>
+                        <button onclick="location.reload()" style="background:#0ea5e9; color:#fff; border:none; padding:8px 20px; border-radius:8px; cursor:pointer;">تلاش مجدد</button>
+                    </div>
+                `;
+            }
+        })();
+    </script>
+</body>
+</html>
