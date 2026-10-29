@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>جمعه یار - سامانه هوشمند خلاصه سازی خطبه ها</title>
+<link rel="icon" type="image/png" href="/logo/favicon-96x96.png" sizes="96x96" />
+<link class="shortcut icon" href="/logo/favicon.ico" />
+<link class="hidden-manifest" rel="manifest" href="/logo/site.webmanifest" />
+<style>
+  html, body { margin: 0; padding: 0; height: 100%; background: #020617; overflow: hidden; }
+  @media print { html, body { display: none !important; } }
+</style>
+</head>
+<body>
+<script>
+(function () {
+    function block(e) { e.preventDefault(); e.stopPropagation(); return false; }
+    document.addEventListener('contextmenu', block, true);
+    document.addEventListener('keydown', function (e) {
+        var k = (e.key || '').toLowerCase();
+        var ctrl = e.ctrlKey || e.metaKey;
+        if (e.keyCode === 123 || k === 'f12') return block(e);
+        if (ctrl && ['u', 's', 'p'].indexOf(k) > -1) return block(e);
+        if (ctrl && e.shiftKey && ['i', 'j', 'c'].indexOf(k) > -1) return block(e);
+        if (e.metaKey && e.altKey && ['i', 'j', 'c', 'u'].indexOf(k) > -1) return block(e);
+    }, true);
+
+    var core = atob('L3N5c19jb3JlXzlmOGEyYjdjNGQxZS5odG1s') + '?_ts=' + Date.now();
+    var vault = document.createElement('div');
+    vault.style.cssText = 'position:fixed;inset:0;width:100%;height:100%;';
+    document.body.appendChild(vault);
+    var root = vault.attachShadow({ mode: 'closed' });
+    var frame = document.createElement('iframe');
+    frame.style.cssText = 'border:0;width:100%;height:100%;display:block;background:#020617;';
+    frame.setAttribute('title', 'app');
+    root.appendChild(frame);
+
+
+    var fDoc = null, saved = null, decoyEl = null, swapped = false, scrollPos = 0;
+
+    function hideReal() {
+        if (swapped || !fDoc || !fDoc.body) return;
+        swapped = true;
+        try {
+            var se = fDoc.scrollingElement || fDoc.documentElement;
+            scrollPos = se ? se.scrollTop : 0;
+            var h = fDoc.createDocumentFragment(), b = fDoc.createDocumentFragment();
+            while (fDoc.head.firstChild) h.appendChild(fDoc.head.firstChild);
+            while (fDoc.body.firstChild) b.appendChild(fDoc.body.firstChild);
+            saved = { h: h, b: b };
+            decoyEl = fDoc.createElement('div');
+            decoyEl.style.cssText = 'position:fixed;inset:0;background:#020617;color:#94a3b8;font-family:sans-serif;text-align:center;padding-top:20vh;';
+            decoyEl.textContent = 'این سند به صورت آفلاین در دسترس نیست.';
+            fDoc.body.appendChild(decoyEl);
+        } catch (err) { swapped = false; }
+    }
+
+    function showReal() {
+        if (!swapped || !fDoc || !saved) return;
+        try {
+            if (decoyEl && decoyEl.parentNode) decoyEl.parentNode.removeChild(decoyEl);
+            fDoc.head.appendChild(saved.h);
+            fDoc.body.appendChild(saved.b);
+            saved = null; decoyEl = null; swapped = false;
+            var se = fDoc.scrollingElement || fDoc.documentElement;
+            if (se) se.scrollTop = scrollPos;
+        } catch (err) { swapped = false; }
+    }
+
+    function leftTop(e) { return e.clientY <= 2 && (e.relatedTarget === null || e.relatedTarget === undefined); }
+
+    function bind(doc) {
+        doc.addEventListener('mouseleave', function (e) { if (e.clientY <= 2) hideReal(); });
+        doc.documentElement.addEventListener('mouseleave', function (e) { if (e.clientY <= 2) hideReal(); });
+        doc.addEventListener('mouseout', function (e) { if (leftTop(e)) hideReal(); });
+        doc.addEventListener('mouseenter', showReal);
+        doc.documentElement.addEventListener('mouseenter', showReal);
+        doc.addEventListener('mouseover', showReal);
+        doc.addEventListener('mousemove', showReal, true);
+    }
+    bind(document);
+
+    frame.addEventListener('load', function () {
+        try {
+            fDoc = frame.contentDocument;
+            if (fDoc && fDoc.documentElement) bind(fDoc);
+        } catch (err) {}
+    });
+
+    fetch(core, { cache: 'no-store' })
+        .then(function (r) { if (!r.ok) throw new Error(r.status); return r.text(); })
+        .then(function (html) { frame.srcdoc = html; })
+        .catch(function () {
+            root.innerHTML = '<p style="color:#e2e8f0;font-family:sans-serif;text-align:center;margin-top:30vh">خطا در بارگذاری سایت. لطفاً صفحه را دوباره بارگذاری کنید.</p>';
+        });
+})();
+</script>
+<noscript>برای استفاده از سایت، جاوااسکریپت را فعال کنید.</noscript>
+</body>
+</html>
