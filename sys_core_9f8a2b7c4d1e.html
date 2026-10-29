@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+<!-- اضافه کردن ورکر مستقیم برای حل خطای CORS درون فریم -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js"></script>
     <!-- ================= شروع کد ضد اینسپکت و قفل سورس ================= -->
 <script>
     (function () {
@@ -1482,7 +1485,7 @@
             const reader = new FileReader();
             reader.onload = (e) => resolve(e.target.result);
             reader.onerror = () => reject(new Error("خطا در سیستم خواندن فایل متنی"));
-            reader.readAsText(file);
+            reader.readAsText(file, "UTF-8");
         });
     }
 
@@ -1491,9 +1494,13 @@
             const reader = new FileReader();
             reader.onload = function (e) {
                 const arrayBuffer = e.target.result;
-                mammoth.extractRawText({ arrayBuffer: arrayBuffer })
+                if (!window.mammoth) {
+                    reject(new Error("کتابخانه پردازش ورد بارگذاری نشده است."));
+                    return;
+                }
+                window.mammoth.extractRawText({ arrayBuffer: arrayBuffer })
                     .then(result => resolve(result.value))
-                    .catch(err => reject(new Error("فرمت فایل نامعتبر است یا آسیب دیده است. لطفاً فایل را مجدداً با پسوند .docx ذخیره و آپلود کنید.")));
+                    .catch(err => reject(new Error("فرمت فایل ناخوانا است یا فایل آسیب دیده است.")));
             };
             reader.onerror = () => reject(new Error("خطای سیستمی بارگذاری فایل ورد"));
             reader.readAsArrayBuffer(file);
@@ -1504,11 +1511,14 @@
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
             reader.onload = function (e) {
-                const arrayBuffer = e.target.result;
+                const typedarray = new Uint8Array(e.target.result);
                 
-                pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
-                
-                pdfjsLib.getDocument({ data: arrayBuffer }).promise
+                // غیرفعال کردن لود ورکر از دامنه خارجی برای حل محدودیت مرورگر
+                if (window.pdfjsLib) {
+                    window.pdfjsLib.GlobalWorkerOptions.workerSrc = '';
+                }
+
+                window.pdfjsLib.getDocument({ data: typedarray }).promise
                     .then(async (pdf) => {
                         let fullText = "";
                         for (let i = 1; i <= pdf.numPages; i++) {
@@ -1518,14 +1528,14 @@
                                 const pageText = textContent.items.map(item => item.str).join(" ");
                                 fullText += pageText + "\n";
                             } catch (pageErr) {
-                                console.warn(`خطا در پردازش صفحه ${i}`, pageErr);
+                                console.warn(`خطا در صفحه ${i}`, pageErr);
                             }
                         }
                         resolve(fullText);
                     })
-                    .catch(err => reject(new Error("فایل پی‌دی‌اف اسکن شده است یا ساختار حفاظتی دارد. لطفاً متن آن را مستقیماً کپی و پیست کنید.")));
+                    .catch(err => reject(new Error("فایل پی‌دی‌اف اسکن تصویری است یا رمزگذاری شده است. لطفاً متن آن را مستقیماً Paste کنید.")));
             };
-            reader.onerror = () => reject(new Error("خطای سیستم در دسترسی به محتوای فایل پی‌دی‌اف"));
+            reader.onerror = () => reject(new Error("خطا در دسترسی به محتوای فایل پی‌دی‌اف"));
             reader.readAsArrayBuffer(file);
         });
     }
