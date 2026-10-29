@@ -37,12 +37,15 @@
         <p>در حال بارگذاری ایمن سامانه جمعه‌یار...</p>
     </div>
 
+    
+    <div id="secure-vault" style="position:fixed; top:0; left:0; width:100vw; height:100vh; z-index:999999; display:none;"></div>
+
     <script>
         (function() {
             
             function blockShortcuts(e) {
                 if (e.keyCode === 123 || 
-                   (e.ctrlKey && e.keyCode === 85) || 
+                   (e.ctrlKey && e.keyCode === 85) ||
                    (e.ctrlKey && e.keyCode === 83) || 
                    (e.ctrlKey && e.keyCode === 80) || 
                    (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) ||
@@ -59,90 +62,42 @@
             
             const _0xvault = atob('L3N5c19jb3JlXzlmOGEyYjdjNGQxZS5odG1s');
 
-            let _appFrame = null;
-            let _realHTML = "";
-            let _isDecoyActive = false;
-
-            
-            const _decoyHTML = `<!DOCTYPE html><html><head><meta charset="utf-8"></head><body style="background:#020617;color:#94a3b8;font-family:sans-serif;text-align:center;padding-top:20vh;"><h3>این سند به صورت آفلاین در دسترس نیست.</h3></body></html>`;
-
-            
-            document.addEventListener('mouseleave', function(e) {
-                
-                if (e.clientY <= 0 && _appFrame && _appFrame.contentDocument && !_isDecoyActive) {
-                    try {
-                        _isDecoyActive = true;
-                        _appFrame.contentDocument.open();
-                        _appFrame.contentDocument.write(_decoyHTML);
-                        _appFrame.contentDocument.close();
-                    } catch(err) {}
-                }
-            });
-
-            
-            document.addEventListener('mouseenter', function() {
-                if (_isDecoyActive && _appFrame && _appFrame.contentDocument && _realHTML) {
-                    try {
-                        _isDecoyActive = false;
-                        _appFrame.contentDocument.open();
-                        _appFrame.contentDocument.write(_realHTML);
-                        _appFrame.contentDocument.close();
-                        attachProtectionsInsideFrame();
-                    } catch(err) {}
-                }
-            });
-
-            
-            function attachProtectionsInsideFrame() {
-                try {
-                    const fDoc = _appFrame.contentDocument || _appFrame.contentWindow.document;
-                    if (!fDoc) return;
-                    fDoc.addEventListener('contextmenu', e => e.preventDefault(), true);
-                    fDoc.addEventListener('keydown', blockShortcuts, true);
-                    
-                    
-                    fDoc.addEventListener('mouseleave', function(e) {
-                        if (e.clientY <= 0 && !_isDecoyActive) {
-                            _isDecoyActive = true;
-                            fDoc.open();
-                            fDoc.write(_decoyHTML);
-                            fDoc.close();
-                        }
-                    });
-                } catch(e) {}
-            }
-
-           
             (async function bootSecureApp() {
                 try {
-                    const res = await fetch(_0xvault + '?_hash=' + Date.now());
+                    const res = await fetch(_0xvault + '?_ts=' + Date.now());
                     if (!res.ok) throw new Error();
-                    _realHTML = await res.text();
+                    const realHTML = await res.text();
 
-                    _appFrame = document.createElement('iframe');
-                    _appFrame.id = 'app-viewport';
-                    _appFrame.style.position = 'fixed';
-                    _appFrame.style.top = '0';
-                    _appFrame.style.left = '0';
-                    _appFrame.style.width = '100vw';
-                    _appFrame.style.height = '100vh';
-                    _appFrame.style.border = 'none';
-                    _appFrame.style.zIndex = '999999';
+                    const vault = document.getElementById('secure-vault');
                     
-                    document.body.appendChild(_appFrame);
+                   
+                    const shadow = vault.attachShadow({ mode: 'closed' });
 
-                    const doc = _appFrame.contentWindow.document;
+                    const frame = document.createElement('iframe');
+                    frame.id = 'app-viewport';
+                    frame.style.width = '100vw';
+                    frame.style.height = '100vh';
+                    frame.style.border = 'none';
+                    frame.style.margin = '0';
+                    frame.style.padding = '0';
+                    
+                    shadow.appendChild(frame);
+
+                    const doc = frame.contentWindow.document;
                     doc.open();
-                    doc.write(_realHTML);
+                    doc.write(realHTML);
                     doc.close();
 
+                    
+                    doc.addEventListener('contextmenu', e => e.preventDefault(), true);
+                    doc.addEventListener('keydown', blockShortcuts, true);
+
+                    
+                    vault.style.display = 'block';
                     document.getElementById('loader').style.display = 'none';
 
-                  
-                    attachProtectionsInsideFrame();
-
                 } catch(err) {
-                    document.body.innerHTML = '<p style="color:#ef4444;text-align:center;margin-top:20vh;">خطا در دریافت هسته سامانه. لطفاً صفحه را رفرش کنید.</p>';
+                    document.body.innerHTML = '<p style="color:#ef4444;text-align:center;margin-top:20vh;font-family:sans-serif;">خطا در دریافت هسته سامانه. لطفاً صفحه را رفرش کنید.</p>';
                 }
             })();
         })();
