@@ -33,6 +33,13 @@
 
 <script>
 (function () {
+    // ======== تنظیمات (قابل تغییر) ========
+    var DEVTOOLS_GUARD = true;   // false = تشخیص DevTools خاموش
+    var DEV_SIDE_MAX   = 0.97;   // DevTools کنار صفحه: هرچه این عدد کمتر باشد کمتر حساس است (مثلاً 0.9)
+    var DEV_BOTTOM_MIN = 1.5;    // DevTools پایین صفحه: هرچه این عدد بیشتر باشد کمتر حساس است (مثلاً 1.7)
+    var ONLY_TOP_EDGE  = false;  // true = فقط خروج ماوس از لبه بالا صفحه قلابی را نشان می‌دهد
+    // ======================================
+
     function blockShortcuts(e) {
         var k = (e.key || '').toLowerCase(), c = e.ctrlKey || e.metaKey;
         if (e.keyCode === 123 || k === 'f12' ||
@@ -46,19 +53,24 @@
     document.addEventListener('keydown', blockShortcuts, true);
 
     var vault = atob('L3N5c19jb3JlXzlmOGEyYjdjNGQxZS5odG1s');
-    var frame = null, fDoc = null;
+    var frame = null, fDoc = null, revealed = false, bootedAt = 0, coreLoaded = false;
     var saved = null, decoyEl = null, swapped = false, scrollPos = 0;
-    var mouseOut = false, devOpen = false;
-    var DEVTOOLS_GUARD = true;   // اگر DevTools کنار صفحه باز شود، محتوا موقتاً پنهان می‌شود (false = خاموش)
-    var DEV_GAP = 200;           // اختلاف اندازه پنجره و صفحه (پیکسل) برای تشخیص DevTools چسبیده
 
-    // ---- جایگزینی غیرمخرب: محتوای واقعی حذف/بازنویسی نمی‌شود ----
-    // هنگام خروج ماوس از لبه بالا (رفتن به منوی کروم)، عنصرهای واقعی فقط موقتاً از سند برداشته و
-    // در حافظه نگه داشته می‌شوند و یک صفحه قلابی جایشان می‌نشیند. با برگشت ماوس همان عنصرها
-    // (با همه رویدادها، متن‌ها و انیمیشن‌ها) عیناً برمی‌گردند. هیچ اسکریپتی دوباره اجرا نمی‌شود.
+    // دستگاه‌های لمسی ماوس ندارند؛ برای آن‌ها صفحه قلابی بر اساس خروج ماوس نیست
+    var hoverDevice = !(window.matchMedia && window.matchMedia('(hover: none)').matches);
+    // وضعیت اولیه: تا وقتی ماوس داخل کادر سایت دیده نشود، صفحه قلابی است
+    var mouseOut = hoverDevice;
+    var devOpen = false;
+
+    // ---------- جابه‌جایی غیرمخرب محتوا ----------
+    // عنصرهای واقعی فقط موقتاً از سند برداشته و در حافظه نگه داشته می‌شوند (حذف یا بازنویسی نمی‌شوند)
+    // سایت وقتی آماده است که کاملاً بارگذاری شده و رویداد load خودش هم اجرا شده باشد
+    function coreReady() {
+        return !!fDoc && fDoc.readyState === 'complete' && (coreLoaded || Date.now() - bootedAt > 2000);
+    }
+
     function hideReal() {
-        if (swapped || !fDoc || !fDoc.body || fDoc.readyState !== 'complete') return;
-        swapped = true;
+        if (swapped || !fDoc || !fDoc.body || !coreReady()) return;
         try {
             var se = fDoc.scrollingElement || fDoc.documentElement;
             scrollPos = se ? se.scrollTop : 0;
@@ -70,66 +82,94 @@
             decoyEl.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:#020617;color:#94a3b8;font-family:sans-serif;text-align:center;padding-top:20vh;';
             decoyEl.textContent = 'این سند به صورت آفلاین در دسترس نیست.';
             fDoc.body.appendChild(decoyEl);
-        } catch (err) { swapped = false; }
+            swapped = true;
+        } catch (err) { swapped = !!saved; }
     }
 
     function showReal() {
         if (!swapped || !fDoc || !saved) return;
         try {
             if (decoyEl && decoyEl.parentNode) decoyEl.parentNode.removeChild(decoyEl);
-            fDoc.head.appendChild(saved.h);
+            fDoc.head.appendChild(saved.h);   // قطعه خالی‌شده بی‌خطر است؛ در تلاش بعدی دوباره امتحان می‌شود
             fDoc.body.appendChild(saved.b);
             saved = null; decoyEl = null; swapped = false;
             var se = fDoc.scrollingElement || fDoc.documentElement;
             if (se) se.scrollTop = scrollPos;
-        } catch (err) { swapped = false; }
+        } catch (err) { /* دوباره تلاش می‌شود */ }
     }
 
-    function onLeave(e) { if (e.clientY <= 0) { mouseOut = true; hideReal(); } }
-    function onOut(e) { if (!e.relatedTarget && e.clientY <= 0) { mouseOut = true; hideReal(); } }
-    function onEnter() { mouseOut = false; if (!devOpen) showReal(); }
+    function revealFrame() {
+        if (revealed || !frame) return;
+        revealed = true;
+        frame.style.visibility = 'visible';
+        var l = document.getElementById('loader');
+        if (l) l.style.display = 'none';
+    }
+
+    // وضعیت مطلوب از روی دو پرچم محاسبه می‌شود و مرتب با وضعیت واقعی تطبیق داده می‌شود؛
+    // پس حتی اگر رویدادی از دست برود یا خطایی رخ دهد، به‌زودی صحیح می‌شود.
+    function reconcile() {
+        if (!fDoc) return;
+        var wantHidden = mouseOut || (DEVTOOLS_GUARD && devOpen);
+        if (wantHidden && !swapped) hideReal();
+        else if (!wantHidden && swapped) showReal();
+        if (!revealed && (coreReady() || Date.now() - bootedAt > 8000)) revealFrame();
+    }
+
+    function viewSize(e) {
+        var v = (e && e.view) || window;
+        return { w: v.innerWidth || window.innerWidth, h: v.innerHeight || window.innerHeight };
+    }
+    function popupActive() {
+        try { var a = fDoc && fDoc.activeElement; return !!(a && a.tagName === 'SELECT'); } catch (err) { return false; }
+    }
+
+    function onInside(e) {
+        if (e && typeof e.clientX === 'number') {
+            var s = viewSize(e);
+            if (!(e.clientX > 0 && e.clientY > 0 && e.clientX < s.w - 1 && e.clientY < s.h - 1)) return;
+        }
+        mouseOut = false;
+        reconcile();
+    }
+
+    function onLeave(e) {
+        var s = viewSize(e);
+        var top = e.clientY <= 0;
+        var edge = top || e.clientX <= 0 || e.clientX >= s.w - 1 || e.clientY >= s.h - 1;
+        if (ONLY_TOP_EDGE ? !top : !edge) return;
+        if (popupActive()) return;      // باز بودن لیست کشویی (select) نباید صفحه را عوض کند
+        mouseOut = true;
+        reconcile();
+    }
 
     function bind(doc) {
+        ['mousemove', 'mouseover', 'mousedown', 'pointermove', 'pointerdown', 'wheel', 'click'].forEach(function (t) {
+            doc.addEventListener(t, onInside, true);
+        });
+        doc.addEventListener('touchstart', function () { mouseOut = false; reconcile(); }, true);
+        doc.documentElement.addEventListener('mouseenter', onInside);
         doc.addEventListener('mouseleave', onLeave);
         doc.documentElement.addEventListener('mouseleave', onLeave);
-        doc.addEventListener('mouseout', onOut);
-        doc.addEventListener('mouseenter', onEnter);
-        doc.documentElement.addEventListener('mouseenter', onEnter);
-        doc.addEventListener('mouseover', onEnter);
-        doc.addEventListener('mousemove', onEnter, true);
+        doc.addEventListener('mouseout', function (e) { if (!e.relatedTarget) onLeave(e); });
     }
 
-    // ---- تشخیص DevTools چسبیده به پنجره (کنار یا پایین صفحه) ----
-    // محتوا حذف نمی‌شود؛ فقط تا بسته شدن DevTools پنهان می‌ماند و بعد خودکار برمی‌گردد.
-    // با زوم مرورگر، innerWidth کوچک می‌شود ولی outerWidth ثابت می‌ماند؛ پس اختلاف خام فریبنده است.
-    // برای همین هر بار زوم عوض شود (devicePixelRatio تغییر کند) نسبت پنجره به صفحه دوباره کالیبره می‌شود
-    // و فقط انحراف از این نسبت (یعنی کوچک شدن ناگهانی صفحه توسط DevTools) حساب می‌شود.
-    var baseDpr = 0, baseRX = 1, baseRY = 1;
-    function calibrate() {
-        baseDpr = window.devicePixelRatio || 1;
-        baseRX = window.outerWidth / Math.max(1, window.innerWidth);
-        baseRY = window.outerHeight / Math.max(1, window.innerHeight);
-    }
-    calibrate();
-
+    // ---------- تشخیص DevTools چسبیده (مستقل از زوم) ----------
+    // زوم هر دو بعد را یکسان تغییر می‌دهد، پس نسبت (عرض صفحه/عرض پنجره) به (ارتفاع صفحه/ارتفاع پنجره) با زوم عوض نمی‌شود.
+    // DevTools کنار صفحه فقط عرض را کم می‌کند و پایین صفحه فقط ارتفاع را؛ پس این نسبت جابه‌جا می‌شود.
     function devtoolsLikelyOpen() {
-        var touch = (navigator.maxTouchPoints || 0) > 0 && window.innerWidth <= 1024;
-        if (touch) return false;
-        var dpr = window.devicePixelRatio || 1;
-        if (Math.abs(dpr - baseDpr) > 0.01 && !devOpen) { calibrate(); return false; }
-        var gapX = window.outerWidth - window.innerWidth * baseRX;
-        var gapY = window.outerHeight - window.innerHeight * baseRY;
-        return gapX > DEV_GAP || gapY > DEV_GAP;
-    }
-    if (DEVTOOLS_GUARD) {
-        setInterval(function () {
-            devOpen = devtoolsLikelyOpen();
-            if (devOpen) hideReal();
-            else if (!mouseOut) showReal();
-        }, 400);
+        if ((navigator.maxTouchPoints || 0) > 0 && window.innerWidth <= 1024) return false;
+        var W = window.outerWidth, H = window.outerHeight, iw = window.innerWidth, ih = window.innerHeight;
+        if (!W || !H || !iw || !ih) return false;
+        var a = (iw / W) / (ih / H);
+        return a < DEV_SIDE_MAX || a > DEV_BOTTOM_MIN;
     }
 
     bind(document);
+    setInterval(function () {
+        if (DEVTOOLS_GUARD) devOpen = devtoolsLikelyOpen();
+        reconcile();
+    }, 150);
 
     (async function boot() {
         try {
@@ -139,7 +179,7 @@
 
             frame = document.createElement('iframe');
             frame.id = 'app-viewport';
-            frame.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;border:none;z-index:999999;';
+            frame.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;border:none;z-index:999999;visibility:hidden;';
             document.body.appendChild(frame);
 
             var doc = frame.contentWindow.document;
@@ -149,12 +189,14 @@
             html = null;
 
             fDoc = frame.contentDocument || frame.contentWindow.document;
-            document.getElementById('loader').style.display = 'none';
+            bootedAt = Date.now();
+            frame.contentWindow.addEventListener('load', function () { coreLoaded = true; setTimeout(reconcile, 60); });
 
             // قفل‌ها و ردیاب ماوس باید بعد از doc.write بسته شوند (open همه شنونده‌ها را پاک می‌کند)
             fDoc.addEventListener('contextmenu', function (e) { e.preventDefault(); }, true);
             fDoc.addEventListener('keydown', blockShortcuts, true);
             bind(fDoc);
+            reconcile();
         } catch (err) {
             document.body.innerHTML = '<p style="color:#ef4444;text-align:center;margin-top:20vh;">خطا در دریافت هسته سامانه. لطفاً صفحه را رفرش کنید.</p>';
         }
