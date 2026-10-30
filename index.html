@@ -33,12 +33,12 @@
 
 <script>
 (function () {
-    // ======== تنظیمات (قابل تغییر) ========
-    var DEVTOOLS_GUARD = true;   // false = تشخیص DevTools خاموش
-    var DEV_SIDE_MAX   = 0.97;   // DevTools کنار صفحه: هرچه این عدد کمتر باشد کمتر حساس است (مثلاً 0.9)
-    var DEV_BOTTOM_MIN = 1.5;    // DevTools پایین صفحه: هرچه این عدد بیشتر باشد کمتر حساس است (مثلاً 1.7)
-    var ONLY_TOP_EDGE  = false;  // true = فقط خروج ماوس از لبه بالا صفحه قلابی را نشان می‌دهد
-    // ======================================
+   
+    var DEVTOOLS_GUARD = true;   
+    var DEV_SIDE_MAX   = 0.97;   
+    var DEV_BOTTOM_MIN = 1.5;    
+    var ONLY_TOP_EDGE  = false;  
+    
 
     function blockShortcuts(e) {
         var k = (e.key || '').toLowerCase(), c = e.ctrlKey || e.metaKey;
@@ -56,15 +56,13 @@
     var frame = null, fDoc = null, revealed = false, bootedAt = 0, coreLoaded = false;
     var saved = null, decoyEl = null, swapped = false, scrollPos = 0;
 
-    // دستگاه‌های لمسی ماوس ندارند؛ برای آن‌ها صفحه قلابی بر اساس خروج ماوس نیست
+    
     var hoverDevice = !(window.matchMedia && window.matchMedia('(hover: none)').matches);
-    // وضعیت اولیه: تا وقتی ماوس داخل کادر سایت دیده نشود، صفحه قلابی است
+    
     var mouseOut = hoverDevice;
     var devOpen = false;
 
-    // ---------- جابه‌جایی غیرمخرب محتوا ----------
-    // عنصرهای واقعی فقط موقتاً از سند برداشته و در حافظه نگه داشته می‌شوند (حذف یا بازنویسی نمی‌شوند)
-    // سایت وقتی آماده است که کاملاً بارگذاری شده و رویداد load خودش هم اجرا شده باشد
+    
     function coreReady() {
         return !!fDoc && fDoc.readyState === 'complete' && (coreLoaded || Date.now() - bootedAt > 2000);
     }
@@ -80,7 +78,11 @@
             saved = { h: h, b: b };
             decoyEl = fDoc.createElement('div');
             decoyEl.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:#020617;color:#94a3b8;font-family:sans-serif;text-align:center;padding-top:20vh;';
-            decoyEl.textContent = 'این سند به صورت آفلاین در دسترس نیست.';
+            decoyEl.innerHTML = '<div style="max-width:440px;margin:0 auto;padding:0 20px;line-height:2.1;">' +
+                '<div style="font-size:20px;color:#e2e8f0;margin-bottom:6px;">سایت در حال حاضر نمایش داده نمی‌شود</div>' +
+                '<div>برای نمایش سایت، نشانگر ماوس را روی همین صفحه ببرید.</div>' +
+                '<div style="margin-top:10px;font-size:13px;opacity:.75;">می‌توانید ماوس را از صفحه خارج کنید و دوباره برگردانید؛ با بازگشت ماوس، سایت دوباره نمایش داده می‌شود و میتوانید به کار خود ادامه دهید. اگر ابزار توسعه‌دهنده (DevTools) باز است، لطفاً آن را ببندید.</div>' +
+                '</div>';
             fDoc.body.appendChild(decoyEl);
             swapped = true;
         } catch (err) { swapped = !!saved; }
@@ -90,7 +92,7 @@
         if (!swapped || !fDoc || !saved) return;
         try {
             if (decoyEl && decoyEl.parentNode) decoyEl.parentNode.removeChild(decoyEl);
-            fDoc.head.appendChild(saved.h);   // قطعه خالی‌شده بی‌خطر است؛ در تلاش بعدی دوباره امتحان می‌شود
+            fDoc.head.appendChild(saved.h);   
             fDoc.body.appendChild(saved.b);
             saved = null; decoyEl = null; swapped = false;
             var se = fDoc.scrollingElement || fDoc.documentElement;
@@ -106,8 +108,7 @@
         if (l) l.style.display = 'none';
     }
 
-    // وضعیت مطلوب از روی دو پرچم محاسبه می‌شود و مرتب با وضعیت واقعی تطبیق داده می‌شود؛
-    // پس حتی اگر رویدادی از دست برود یا خطایی رخ دهد، به‌زودی صحیح می‌شود.
+    
     function reconcile() {
         if (!fDoc) return;
         var wantHidden = mouseOut || (DEVTOOLS_GUARD && devOpen);
@@ -138,7 +139,7 @@
         var top = e.clientY <= 0;
         var edge = top || e.clientX <= 0 || e.clientX >= s.w - 1 || e.clientY >= s.h - 1;
         if (ONLY_TOP_EDGE ? !top : !edge) return;
-        if (popupActive()) return;      // باز بودن لیست کشویی (select) نباید صفحه را عوض کند
+        if (popupActive()) return;      
         mouseOut = true;
         reconcile();
     }
@@ -154,9 +155,7 @@
         doc.addEventListener('mouseout', function (e) { if (!e.relatedTarget) onLeave(e); });
     }
 
-    // ---------- تشخیص DevTools چسبیده (مستقل از زوم) ----------
-    // زوم هر دو بعد را یکسان تغییر می‌دهد، پس نسبت (عرض صفحه/عرض پنجره) به (ارتفاع صفحه/ارتفاع پنجره) با زوم عوض نمی‌شود.
-    // DevTools کنار صفحه فقط عرض را کم می‌کند و پایین صفحه فقط ارتفاع را؛ پس این نسبت جابه‌جا می‌شود.
+    
     function devtoolsLikelyOpen() {
         if ((navigator.maxTouchPoints || 0) > 0 && window.innerWidth <= 1024) return false;
         var W = window.outerWidth, H = window.outerHeight, iw = window.innerWidth, ih = window.innerHeight;
@@ -192,7 +191,7 @@
             bootedAt = Date.now();
             frame.contentWindow.addEventListener('load', function () { coreLoaded = true; setTimeout(reconcile, 60); });
 
-            // قفل‌ها و ردیاب ماوس باید بعد از doc.write بسته شوند (open همه شنونده‌ها را پاک می‌کند)
+            
             fDoc.addEventListener('contextmenu', function (e) { e.preventDefault(); }, true);
             fDoc.addEventListener('keydown', blockShortcuts, true);
             bind(fDoc);
